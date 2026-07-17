@@ -1,0 +1,2030 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chroniques Bibliques — Joseph, Gouverneur d'Égypte</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0d1527;
+    --navy-2: #1b263e;
+    --gold: #d4af37;
+    --gold-soft: #f3e5ab;
+    --clay: #a3382b;
+    --sand: #e6d3a7;
+    --sand-lt: #f9f5eb;
+    --ink: #1a1510;
+    --grey: #7c7468;
+    --green-ok: #2e6243;
+    --glass: rgba(255, 255, 255, 0.75);
+    font-size: 16px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; min-height: 100vh; }
+  body {
+    font-family: 'Work Sans', sans-serif;
+    background: radial-gradient(circle at top, #1c2a47 0%, #080c16 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 10px;
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+  .stage {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: center;
+    max-width: 1200px;
+    width: 100%;
+  }
+
+  /* ---------- Phone Frame ---------- */
+  .phone {
+    width: 380px;
+    height: 800px;
+    background: #080b11;
+    border-radius: 46px;
+    padding: 14px;
+    box-shadow: 
+      0 25px 60px -15px rgba(0,0,0,0.8), 
+      0 0 0 4px #1b2536,
+      0 0 0 6px var(--gold);
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .screen {
+    width: 100%;
+    height: 100%;
+    border-radius: 34px;
+    overflow: hidden;
+    position: relative;
+    background: var(--sand-lt);
+    display: flex;
+    flex-direction: column;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.15);
+  }
+  .notch {
+    position: absolute;
+    top: 0; left: 50%; transform: translateX(-50%);
+    width: 130px; height: 26px;
+    background: #080b11;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+    z-index: 99;
+  }
+
+  /* ---------- Top Bar ---------- */
+  .topbar {
+    background: linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 100%);
+    color: var(--sand-lt);
+    padding: 34px 16px 12px;
+    position: relative;
+    border-bottom: 2px solid var(--gold);
+    flex-shrink: 0;
+    z-index: 80;
+  }
+  .topbar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  .topbar h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: .02em;
+    margin: 0;
+    color: var(--gold-soft);
+  }
+  .sound-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--gold-soft);
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.2s;
+  }
+  .sound-btn:hover {
+    background: rgba(255,255,255,0.1);
+  }
+  .sound-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+  }
+  .topbar .sub {
+    font-size: .74rem;
+    color: var(--sand);
+    opacity: .85;
+    font-style: italic;
+  }
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    margin-top: 10px;
+  }
+  .stat-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    font-size: .58rem;
+    color: var(--sand-lt);
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    padding: 4px 2px;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  .stat-chip.updated {
+    background: var(--gold);
+    color: var(--navy);
+    transform: scale(1.1);
+  }
+  .stat-chip span {
+    font-size: 0.72rem;
+    color: var(--gold-soft);
+    font-weight: 700;
+  }
+  .stat-chip.updated span {
+    color: var(--navy);
+  }
+
+  /* ---------- Scrollable Body Area ---------- */
+  .body-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    position: relative;
+    background: 
+      radial-gradient(ellipse at 50% 0%, rgba(230, 211, 167, 0.15), transparent 75%),
+      var(--sand-lt);
+  }
+  .body-area::-webkit-scrollbar { width: 4px; }
+  .body-area::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 2px; }
+
+  /* ---------- Floating Text Canvas ---------- */
+  .floating-container {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 100;
+    overflow: hidden;
+  }
+  .floating-text {
+    position: absolute;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--clay);
+    text-shadow: 0 2px 4px rgba(255,255,255,0.8);
+    animation: floatUp 1.8s forwards ease-out;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(0) scale(0.8); opacity: 0; }
+    15% { opacity: 1; transform: translateY(-10px) scale(1.1); }
+    100% { transform: translateY(-60px) scale(1); opacity: 0; }
+  }
+
+  /* ---------- Bottom Tab Bar ---------- */
+  .tabbar {
+    height: 76px;
+    background: var(--navy);
+    border-top: 2px solid var(--gold);
+    display: flex;
+    flex-shrink: 0;
+    z-index: 80;
+  }
+  .tab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    color: #8fa0bf;
+    background: none;
+    border: none;
+    font-family: 'Work Sans', sans-serif;
+    font-size: .6rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .tab svg { width: 18px; height: 18px; stroke: #8fa0bf; fill: none; transition: all 0.2s ease; }
+  .tab.active { color: var(--gold-soft); }
+  .tab.active svg { stroke: var(--gold-soft); transform: scale(1.1); }
+  .tab .dot {
+    width: 4px; height: 4px; border-radius: 50%;
+    background: var(--gold-soft);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .tab.active .dot { opacity: 1; }
+
+  /* ---------- Views ---------- */
+  .view {
+    display: none;
+    padding: 16px 14px 24px;
+    min-height: 100%;
+    animation: reveal 0.4s ease both;
+  }
+  .view.active { display: block; }
+  @keyframes reveal {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ================= VIEW: MAP ================= */
+  .map-scroll {
+    padding: 10px 4px;
+  }
+  .map-intro {
+    background: #fff;
+    border: 1px solid rgba(139, 58, 47, 0.15);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    text-align: center;
+  }
+  .map-intro h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    margin: 0 0 4px;
+    color: var(--clay);
+  }
+  .map-intro p {
+    margin: 0; font-size: 0.72rem; color: var(--grey); line-height: 1.35;
+  }
+  .map-path {
+    position: relative;
+    padding-left: 36px;
+  }
+  .map-path::before {
+    content: "";
+    position: absolute;
+    left: 15px; top: 10px; bottom: 10px;
+    width: 2px;
+    background: repeating-linear-gradient(180deg, var(--gold) 0 6px, transparent 6px 12px);
+  }
+  .stop {
+    position: relative;
+    margin-bottom: 24px;
+    transition: all 0.3s;
+  }
+  .stop-marker {
+    position: absolute;
+    left: -37px; top: 2px;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-size: .68rem;
+    font-weight: 700;
+    border: 2px solid var(--gold);
+    background: var(--sand-lt);
+    color: var(--clay);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 5;
+    transition: all 0.2s;
+  }
+  .stop.done .stop-marker { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+  .stop.current { cursor: pointer; }
+  .stop.current .stop-marker { 
+    background: var(--clay); color: var(--sand-lt); border-color: var(--clay); 
+    box-shadow: 0 0 0 6px rgba(163,56,43,0.18);
+    animation: pulse 1.5s infinite alternate;
+  }
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
+  }
+  .stop.locked { opacity: 0.45; }
+  .stop.locked .stop-marker { background: #d3cbb7; color: #948d7d; border-color: #beb59e; }
+  .stop-card {
+    background: #fff;
+    border: 1px solid rgba(139, 58, 47, 0.15);
+    border-left: 4px solid var(--gold);
+    border-radius: 10px;
+    padding: 10px 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    transition: all 0.2s;
+  }
+  .stop.current:hover .stop-card {
+    transform: translateX(3px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    border-left-color: var(--clay);
+  }
+  .stop-card h3 {
+    font-family: 'Cinzel', serif;
+    font-size: .84rem;
+    margin: 0 0 2px;
+    color: var(--navy);
+  }
+  .stop-card p {
+    margin: 0;
+    font-size: .7rem;
+    color: var(--grey);
+    line-height: 1.3;
+  }
+  .stop-tag {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: .56rem;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+    color: var(--clay);
+    background: rgba(163, 56, 43, 0.08);
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+
+  /* ================= VIEW: DIALOGUE ================= */
+  .scene {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .scene-caption {
+    text-align: center;
+    color: var(--clay);
+    font-family: 'Cinzel', serif;
+    font-size: .72rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+  .actors {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    height: 150px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    padding-bottom: 6px;
+  }
+  .actor-container {
+    text-align: center;
+    width: 100px;
+    transition: all 0.3s;
+  }
+  .actor-figure {
+    opacity: 0.5;
+    transform: scale(0.9);
+    transition: all 0.3s ease;
+  }
+  .actor-figure.speaking {
+    opacity: 1;
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 8px rgba(212,175,55,0.45));
+  }
+  .actor-name {
+    text-align: center;
+    color: var(--navy);
+    font-size: .68rem;
+    margin-top: 4px;
+    font-weight: 700;
+    letter-spacing: .02em;
+  }
+  .dialogue-box {
+    background: linear-gradient(150deg, #fffcf4 0%, #fbf6e8 100%);
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+    padding: 12px 14px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .dialogue-speaker {
+    font-family: 'Cinzel', serif;
+    font-size: .76rem;
+    color: var(--clay);
+    font-weight: 700;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .dialogue-text {
+    font-size: .78rem;
+    line-height: 1.45;
+    color: var(--ink);
+    margin: 0 0 14px;
+    min-height: 50px;
+  }
+  .choices {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .choice-btn {
+    text-align: left;
+    background: #fff;
+    border: 1px solid rgba(24, 35, 56, 0.15);
+    border-left: 4px solid var(--navy);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-family: 'Work Sans', sans-serif;
+    font-size: .72rem;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+  }
+  .choice-btn:hover {
+    background: var(--sand-lt);
+    border-left-color: var(--clay);
+    transform: translateY(-1px);
+  }
+  .choice-btn .choice-tag {
+    display: block;
+    font-size: .58rem;
+    color: var(--grey);
+    margin-top: 2px;
+    font-style: italic;
+  }
+  .choice-feedback {
+    margin-top: 8px;
+    font-size: .7rem;
+    color: var(--green-ok);
+    text-align: center;
+    font-weight: 600;
+    min-height: 16px;
+  }
+
+  /* ================= VIEW: PUZZLE ================= */
+  .puzzle-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100%;
+  }
+  .puzzle-intro {
+    font-size: .74rem;
+    color: var(--ink);
+    line-height: 1.4;
+    margin: 0 0 14px;
+    padding: 10px;
+    background: #fff;
+    border-radius: 10px;
+    border: 1px dashed var(--gold);
+  }
+  
+  /* Puzzle Type: Word Order */
+  .word-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 10px 0;
+    justify-content: center;
+  }
+  .word-chip {
+    background: #fff;
+    border: 1px solid var(--gold);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 0.72rem;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.15s;
+  }
+  .word-chip:hover {
+    background: var(--sand);
+  }
+  .word-chip.selected-out {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+  .word-slot {
+    border: 1px solid rgba(0,0,0,0.1);
+    background: rgba(0,0,0,0.03);
+    min-height: 80px;
+    border-radius: 8px;
+    padding: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Puzzle Type: Matching */
+  .puzzle-cols {
+    display: flex;
+    gap: 10px;
+  }
+  .puzzle-col { flex: 1; }
+  .puzzle-col h4 {
+    font-family: 'Cinzel', serif;
+    font-size: .68rem;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--navy);
+    margin: 0 0 8px;
+    text-align: center;
+  }
+  .symbol-card {
+    background: #fff;
+    border: 2px solid var(--gold);
+    border-radius: 8px;
+    padding: 8px;
+    text-align: center;
+    margin-bottom: 8px;
+    cursor: pointer;
+    font-size: .68rem;
+    color: var(--ink);
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .symbol-card.selected {
+    border-color: var(--clay);
+    background: var(--sand);
+    transform: scale(1.02);
+  }
+  .symbol-card.matched {
+    border-color: var(--green-ok);
+    background: #edf7ed;
+    color: var(--green-ok);
+    cursor: default;
+    opacity: 0.8;
+  }
+  .symbol-card.wrong {
+    animation: shake 0.35s ease;
+    border-color: var(--clay);
+  }
+
+  /* Puzzle Type: Text Input & Multi-select */
+  .puzzle-input-wrap {
+    margin: 15px 0;
+  }
+  .puzzle-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--gold);
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-family: 'Work Sans', sans-serif;
+    outline: none;
+    text-align: center;
+  }
+  .puzzle-input:focus {
+    border-color: var(--clay);
+    box-shadow: 0 0 0 2px rgba(163,56,43,0.1);
+  }
+  .options-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin: 10px 0;
+  }
+  .option-card {
+    background: #fff;
+    border: 1px solid var(--gold);
+    border-radius: 8px;
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 0.72rem;
+    font-weight: 500;
+    transition: all 0.15s;
+  }
+  .option-card.selected {
+    background: var(--clay);
+    color: #fff;
+    border-color: var(--clay);
+  }
+
+  /* Puzzle Actions */
+  .puzzle-actions {
+    margin-top: 12px;
+  }
+  .btn-primary {
+    width: 100%;
+    background: var(--clay);
+    color: var(--sand-lt);
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .btn-primary:hover {
+    background: #8e2b20;
+  }
+  .btn-secondary {
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--navy);
+    border-radius: 8px;
+    padding: 8px;
+    font-size: 0.7rem;
+    cursor: pointer;
+    margin-top: 6px;
+    font-weight: 500;
+  }
+  .puzzle-status {
+    margin-top: 12px;
+    text-align: center;
+    font-size: .72rem;
+    color: var(--navy);
+    font-weight: 700;
+  }
+  .progress-bar-wrap {
+    height: 6px;
+    background: #e5dcc6;
+    border-radius: 4px;
+    margin-top: 6px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-soft));
+    transition: width 0.3s ease;
+  }
+
+  /* ================= VIEW: JOURNAL ================= */
+  .radar-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 12px 10px 4px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    border: 1px solid rgba(139, 58, 47, 0.12);
+    margin-bottom: 16px;
+  }
+  .radar-card h3 {
+    font-family: 'Cinzel', serif;
+    font-size: .8rem;
+    color: var(--navy);
+    margin: 0 0 6px;
+  }
+  #radarShape {
+    transition: points 0.5s ease;
+  }
+  .wisdom-title {
+    font-family: 'Cinzel', serif;
+    font-size: .8rem;
+    color: var(--clay);
+    margin: 14px 0 8px;
+    font-weight: 700;
+  }
+  .wisdom-card {
+    background: #fff;
+    border-left: 3px solid var(--clay);
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin-bottom: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  }
+  .wisdom-card.locked {
+    opacity: .4;
+    border-left-color: #c4ba9c;
+  }
+  .wisdom-ref {
+    font-size: .56rem;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: var(--clay);
+    font-weight: 700;
+  }
+  .wisdom-card.locked .wisdom-ref { color: var(--grey); }
+  .wisdom-verse {
+    font-size: .72rem;
+    font-style: italic;
+    color: var(--ink);
+    margin: 3px 0 0;
+    line-height: 1.35;
+  }
+
+  /* ================= VIEW: CODEX ================= */
+  .codex-search-wrap {
+    margin-bottom: 12px;
+  }
+  .codex-search {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--gold);
+    border-radius: 8px;
+    font-size: 0.76rem;
+    outline: none;
+    font-family: 'Work Sans', sans-serif;
+  }
+  .codex-scroll {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .codex-card {
+    background: #fffcf4;
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+  }
+  .codex-card h4 {
+    margin: 0 0 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    color: var(--clay);
+  }
+  .codex-card p {
+    margin: 0;
+    font-size: 0.7rem;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+  .codex-card p mark {
+    background: var(--gold-soft);
+    color: var(--ink);
+    padding: 0 2px;
+    border-radius: 2px;
+  }
+
+  /* ---------- Side Notes Panel ---------- */
+  .notes {
+    width: 300px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    color: var(--sand-lt);
+    backdrop-filter: blur(10px);
+  }
+  .notes h2 {
+    font-family: 'Cinzel', serif;
+    color: var(--gold-soft);
+    font-size: 1.1rem;
+    margin: 0 0 10px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    padding-bottom: 6px;
+  }
+  .notes p {
+    font-size: .78rem;
+    color: #b8c4d9;
+    line-height: 1.5;
+    margin: 0 0 12px;
+  }
+  .notes-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .btn-reset {
+    background: rgba(163,56,43,0.3);
+    border: 1px solid var(--clay);
+    color: #ffa399;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.72rem;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-reset:hover {
+    background: rgba(163,56,43,0.6);
+  }
+  .notes .tag {
+    display: inline-block;
+    font-size: .64rem;
+    color: var(--gold-soft);
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    padding: 3px 8px;
+    border-radius: 10px;
+    margin: 0 4px 6px 0;
+  }
+  @media (max-width: 760px) {
+    .notes { width: 100%; max-width: 380px; order: 2; }
+  }
+
+  /* Utilities */
+  .icon-outline { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .hidden { display: none !important; }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+  .by-djata-x {
+    position: absolute;
+    bottom: 82px;
+    right: 12px;
+    font-size: 0.52rem;
+    font-weight: 700;
+    color: var(--clay);
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    padding: 2px 6px;
+    border-radius: 4px;
+    opacity: 0.85;
+    z-index: 99;
+    pointer-events: none;
+    font-family: 'Work Sans', sans-serif;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="screen">
+
+      <!-- Topbar Header -->
+      <div class="topbar">
+        <div class="topbar-header">
+          <h1>Chroniques Bibliques</h1>
+          <button class="sound-btn" id="soundBtn" onclick="toggleMute()" title="Désactiver le son">
+            <svg viewBox="0 0 24 24" id="volumeIcon">
+              <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+            </svg>
+          </button>
+        </div>
+        <div class="sub" id="levelSub">Chapitre 1 — Joseph en Égypte</div>
+        
+        <!-- Live Stats Panel -->
+        <div class="stats-row" id="statsRow">
+          <div class="stat-chip" title="Foi">Foi<span id="stat-Foi">3</span></div>
+          <div class="stat-chip" title="Sagesse">Sag.<span id="stat-Sagesse">4</span></div>
+          <div class="stat-chip" title="Courage">Cour.<span id="stat-Courage">2</span></div>
+          <div class="stat-chip" title="Discernement">Disc.<span id="stat-Discernement">3</span></div>
+          <div class="stat-chip" title="Compassion">Comp.<span id="stat-Compassion">2</span></div>
+        </div>
+      </div>
+
+      <!-- Main Body (Holds Floating Animation layer & Views) -->
+      <div class="body-area">
+        <div class="floating-container" id="floatingContainer"></div>
+
+        <!-- VIEW: MAP -->
+        <div class="view active" id="view-map">
+          <div class="map-scroll">
+            <div class="map-intro">
+              <h2>Carte du Récit</h2>
+              <p>Progresse à travers la vie de Joseph en Égypte. Relève les défis et résous les énigmes pour guider ses choix.</p>
+            </div>
+            <div class="map-path" id="mapPath"></div>
+          </div>
+        </div>
+
+        <!-- VIEW: DIALOGUE -->
+        <div class="view" id="view-dialogue">
+          <div class="scene">
+            <div class="scene-caption" id="dialogueScene">Lieu inconnu</div>
+            <div class="actors">
+              <div class="actor-container">
+                <div class="actor-figure" id="figJoseph">
+                  <svg width="80" height="130" viewBox="0 0 86 150">
+                    <ellipse cx="43" cy="26" rx="17" ry="19" fill="#caa06b"/>
+                    <path d="M20 30 Q43 8 66 30 L66 20 Q43 2 20 20 Z" fill="#3a2a1e"/>
+                    <path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#c9a227"/>
+                    <path d="M18 60 Q43 40 68 60 L66 78 Q43 62 20 78 Z" fill="#8b3a2f"/>
+                  </svg>
+                </div>
+                <div class="actor-name">Joseph</div>
+              </div>
+              <div class="actor-container">
+                <div class="actor-figure" id="figPartner">
+                  <!-- Dynamic Avatar -->
+                </div>
+                <div class="actor-name" id="partnerName">Allié</div>
+              </div>
+            </div>
+            <div class="dialogue-box">
+              <div>
+                <div class="dialogue-speaker" id="dialogueSpeaker">Narrateur</div>
+                <p class="dialogue-text" id="dialogueText" onclick="skipTypewriting()">Chargement du récit...</p>
+              </div>
+              <div>
+                <div class="choices" id="choiceList"></div>
+                <div class="choice-feedback" id="choiceFeedback"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIEW: PUZZLE -->
+        <div class="view" id="view-puzzle">
+          <div class="puzzle-wrap">
+            <div>
+              <p class="puzzle-intro" id="puzzleIntro">Résous cette énigme pour continuer.</p>
+              
+              <!-- Dynamic Puzzle Slot -->
+              <div id="puzzleInteractive"></div>
+            </div>
+
+            <div class="puzzle-actions">
+              <div class="puzzle-status" id="puzzleStatus">0 / 0 résolu</div>
+              <div class="progress-bar-wrap"><div class="progress-bar-fill" id="puzzleProgress"></div></div>
+              <button class="btn-primary" style="margin-top:10px;" id="puzzleSubmitBtn" onclick="submitPuzzle()">Valider la réponse</button>
+              <button class="btn-secondary" id="puzzleHelpBtn" onclick="openCodexHelp()">Consulter le Codex</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIEW: JOURNAL -->
+        <div class="view" id="view-journal">
+          <div class="journal-wrap">
+            <div class="radar-card">
+              <h3>Valeurs de Joseph</h3>
+              <svg width="230" height="210" viewBox="0 0 230 210">
+                <!-- Background Grid -->
+                <polygon points="115,20 195,75 165,175 65,175 35,75" fill="none" stroke="#d8cba0" stroke-width="1"/>
+                <polygon points="115,55 165,90 145,150 85,150 65,90" fill="none" stroke="#d8cba0" stroke-width="1"/>
+                <polygon points="115,90 135,105 125,125 105,125 95,105" fill="none" stroke="#d8cba0" stroke-width="0.5" stroke-dasharray="2"/>
+                <!-- Dynamic Shape -->
+                <polygon id="radarShape" points="115,105 115,105 115,105 115,105 115,105" fill="rgba(212, 175, 55, 0.35)" stroke="var(--clay)" stroke-width="2.5"/>
+                <!-- Labels -->
+                <text x="115" y="14" text-anchor="middle" font-size="9" fill="#1b263e" font-family="Work Sans" font-weight="700">Foi</text>
+                <text x="203" y="74" text-anchor="start" font-size="9" fill="#1b263e" font-family="Work Sans" font-weight="700">Sagesse</text>
+                <text x="178" y="190" text-anchor="middle" font-size="9" fill="#1b263e" font-family="Work Sans" font-weight="700">Courage</text>
+                <text x="52" y="190" text-anchor="middle" font-size="9" fill="#1b263e" font-family="Work Sans" font-weight="700">Discern.</text>
+                <text x="27" y="74" text-anchor="end" font-size="9" fill="#1b263e" font-family="Work Sans" font-weight="700">Compass.</text>
+              </svg>
+            </div>
+            
+            <div class="wisdom-title">Journal de progression</div>
+            <div id="wisdomList"></div>
+          </div>
+        </div>
+
+        <!-- VIEW: CODEX -->
+        <div class="view" id="view-codex">
+          <div class="codex-wrap">
+            <div class="codex-search-wrap">
+              <input type="text" class="codex-search" id="codexSearchInput" placeholder="Rechercher un mot clé ou verset..." oninput="filterCodex()">
+            </div>
+            <div class="codex-scroll" id="codexList"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom Tabbar controls -->
+      <div class="tabbar">
+        <button class="tab active" data-view="view-map" onclick="switchTab(this)">
+          <svg viewBox="0 0 24 24" class="icon-outline"><path d="M9 4l-6 3v13l6-3 6 3 6-3V4l-6 3-6-3z"/><path d="M9 4v13M15 7v13"/></svg>
+          Carte
+          <span class="dot"></span>
+        </button>
+        <button class="tab" data-view="view-dialogue" id="tabDialogue" onclick="switchTab(this)">
+          <svg viewBox="0 0 24 24" class="icon-outline"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Récit
+          <span class="dot"></span>
+        </button>
+        <button class="tab" data-view="view-puzzle" id="tabPuzzle" onclick="switchTab(this)">
+          <svg viewBox="0 0 24 24" class="icon-outline"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg>
+          Énigme
+          <span class="dot"></span>
+        </button>
+        <button class="tab" data-view="view-journal" onclick="switchTab(this)">
+          <svg viewBox="0 0 24 24" class="icon-outline"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+          Journal
+          <span class="dot"></span>
+        </button>
+        <button class="tab" data-view="view-codex" id="tabCodex" onclick="switchTab(this)">
+          <svg viewBox="0 0 24 24" class="icon-outline"><path d="M12 21c-1.5-1-5.5-1-7-1s-3 1-3 1V4s1.5-1 3-1 5.5 1 7 1M12 21c1.5-1 5.5-1 7-1s3 1 3 1V4s-1.5-1-3-1-5.5 1-7 1M12 4v17"/></svg>
+          Codex
+          <span class="dot"></span>
+        </button>
+      </div>
+      <div class="by-djata-x">By Djata X</div>
+    </div>
+  </div>
+
+  <!-- External Side Information Panel -->
+  <div class="notes">
+    <h2>Chroniques Bibliques</h2>
+    <p>Une aventure interactive inspirée de l'histoire de Joseph (Genèse 37-45). Prenez des décisions morales et résolvez des énigmes en vous appuyant sur le Codex biblique.</p>
+    
+    <div class="notes-actions">
+      <div style="font-size:0.7rem; color: var(--gold-soft); font-weight: 600; margin-bottom: 2px;">OPTIONS DE JEU :</div>
+      <button class="btn-reset" onclick="resetGameData()">Réinitialiser ma progression</button>
+    </div>
+
+    <div style="margin-top: 18px;">
+      <span class="tag">Graphique Radar réactif</span>
+      <span class="tag">Synthétiseur Audio natif</span>
+      <span class="tag">Moteur de Dialogue</span>
+      <span class="tag">Base de données Codex</span>
+      <span class="tag">Persistance locale</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ================= BIBLE & CODEX DATABASE =================
+  const codexDatabase = [
+    { title: "Genèse 37:3 (L'amour de Jacob)", text: "Israël aimait Joseph plus que tous ses autres fils, parce qu'il l'avait eu dans sa vieillesse ; et il lui fit une tunique de plusieurs couleurs." },
+    { title: "Genèse 37:21-22 (L'avis de Ruben)", text: "Ruben entendit cela, et il le délivra de leurs mains. Il dit : Ne lui ôtons pas la vie. Ruben leur dit : Ne répandez point de sang ; jetez-le dans cette citerne qui est au désert, et ne mettez pas la main sur lui. Il avait dessein de le délivrer de leurs mains pour le faire retourner vers son père." },
+    { title: "Genèse 37:25 (Les Marchands de Galaad)", text: "Ils s'assirent ensuite pour manger. Ayant levé les yeux, ils virent une caravane d'Ismaélites venant de Galaad ; leurs chameaux étaient chargés d'aromates, de baume et de myrrhe, qu'ils transportaient en Égypte." },
+    { title: "Psaumes 27:10 (Le secours divin)", text: "Car mon père et ma mère m'abandonnent, mais l'Éternel me recueillera." },
+    { title: "Genèse 39:9 (La réponse à la tentation)", text: "Il n'est pas plus grand que moi dans cette maison, et il ne m'a rien interdit, excepté toi, parce que tu es sa femme. Comment ferais-je un aussi grand mal et pécherais-je contre Dieu ?" },
+    { title: "Genèse 40:12-13 (Le songe de l'Échanson)", text: "Joseph lui dit : Voici l'explication. Les trois rameaux sont trois jours. Encore trois jours, et Pharaon relèvera ta tête et te rétablira dans ta charge ; tu présenteras la coupe à Pharaon, comme tu le faisais auparavant." },
+    { title: "Genèse 40:18-19 (Le songe du Panetier)", text: "Joseph répondit et dit : Voici l'explication. Les trois corbeilles sont trois jours. Encore trois jours, et Pharaon enlèvera ta tête de dessus toi, te fera pendre à un bois, et les oiseaux mangeront ta chair." },
+    { title: "Genèse 41:26-27 (L'explication des vaches)", text: "Les sept vaches grasses sont sept années, et les sept épis pleins sont sept années : c'est un seul songe. Les sept vaches décharnées et laides qui montaient derrière les premières sont sept années ; et les sept épis vides, brûlés par le vent d'est, seront sept années de famine." },
+    { title: "Genèse 41:34 (Le stockage du blé)", text: "Que Pharaon établisse des commissaires sur le pays, pour lever un cinquième des récoltes de l'Égypte pendant les sept années d'abondance." },
+    { title: "Genèse 44:12 (La coupe d'argent)", text: "L'intendant chercha, commençant par le plus âgé et finissant par le plus jeune ; et la coupe fut trouvée dans le sac de Benjamin." }
+  ];
+
+  // ================= CHAPTERS & STORY DATABASE =================
+  const chapters = {
+    1: {
+      title: "Canaan — le puits",
+      tag: "Foi",
+      desc: "La trahison des frères.",
+      location: "Le désert de Dothan",
+      partnerName: "Juda",
+      partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150">
+                    <ellipse cx="43" cy="26" rx="17" ry="19" fill="#9e7c53"/>
+                    <path d="M20 30 Q43 8 66 30 L66 20 Q43 2 20 20 Z" fill="#2d1f14"/>
+                    <path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#8b3a2f"/>
+                  </svg>`,
+      dialogues: [
+        { speaker: "Narrateur", text: "Tes frères, jaloux de ta tunique multicolore et de tes songes, t'ont jeté au fond d'un puits asséché. Ils discutent maintenant de ton sort..." },
+        { speaker: "Juda", text: "« Que gagnerons-nous à tuer notre frère et à cacher son sang ? Venez, vendons-le à ces marchands d'Ismaël, et ne mettons pas la main sur lui... »" },
+        { speaker: "Narrateur", text: "Entendant ces mots depuis la citerne sombre, tu ressens une peur immense, mais aussi une lueur d'espoir. Que décides-tu de faire ?" }
+      ],
+      choices: [
+        { text: "Crier vers Dieu en silence et accepter ton destin", stat: "Foi", val: 1 },
+        { text: "Tenter de négocier avec Juda en invoquant l'amour paternel", stat: "Compassion", val: 1 },
+        { text: "Garder ton silence avec dignité et courage", stat: "Courage", val: 1 }
+      ],
+      puzzle: {
+        intro: "Avant que les marchands n'arrivent, remets dans le bon ordre le verset de réconfort (Psaume 27:10) gravé sur la pierre. Clique sur les mots pour reconstituer la phrase.",
+        type: "word-order",
+        words: ["Car", "mon", "père", "et", "ma", "mère", "m'abandonnent,", "Mais", "l'Éternel", "me", "recueillera."],
+        correct: ["Car", "mon", "père", "et", "ma", "mère", "m'abandonnent,", "Mais", "l'Éternel", "me", "recueillera."]
+      }
+    },
+    2: {
+      title: "La caravane",
+      tag: "Courage",
+      desc: "Survivre au voyage en terre étrangère.",
+      location: "Le désert du Sinaï",
+      partnerName: "Marchand",
+      partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150">
+                    <ellipse cx="43" cy="26" rx="17" ry="19" fill="#a87f58"/>
+                    <rect x="23" y="5" width="40" height="10" rx="3" fill="#e8d9b5"/>
+                    <path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#4a5f4c"/>
+                  </svg>`,
+      dialogues: [
+        { speaker: "Marchand", text: "« Te voilà captif, jeune hébreu. Le désert est brûlant et impitoyable. Si tu te rends utile, nous desserrerons tes liens. Connais-tu nos cargaisons ? »" },
+        { speaker: "Narrateur", text: "Pour gagner le respect des marchands et éviter un sort funeste dans le désert, aide-les à inventorier les trésors de Galaad." }
+      ],
+      choices: [
+        { text: "Travailler avec diligence et mémoriser les routes du désert", stat: "Sagesse", val: 1 },
+        { text: "Endurer le trajet pénible sans te plaindre", stat: "Courage", val: 1 }
+      ],
+      puzzle: {
+        intro: "Selon Genèse 37:25, les marchands Ismaélites transportent trois produits précieux vers l'Égypte. Sélectionne ces 3 produits dans la liste.",
+        type: "multi-select",
+        options: ["Blé", "Aromates", "Or", "Baume", "Encens", "Myrrhe", "Soie"],
+        correct: ["Aromates", "Baume", "Myrrhe"]
+      }
+    },
+    3: {
+      title: "Maison de Potiphar",
+      tag: "Obéissance",
+      desc: "Gérer la confiance et la tentation.",
+      location: "Le domaine royal",
+      partnerName: "Potiphar",
+      partnerSvg: `<svg width="80" height="130" viewBox="0 0 90 150">
+                    <ellipse cx="45" cy="24" rx="18" ry="20" fill="#8c5a3c"/>
+                    <rect x="24" y="4" width="42" height="14" rx="4" fill="#1b2338"/>
+                    <path d="M16 58 Q45 36 74 58 L80 148 L10 148 Z" fill="#233252"/>
+                  </svg>`,
+      dialogues: [
+        { speaker: "Potiphar", text: "« Joseph, ton Dieu est avec toi. Tout ce que tu touches prospère. À partir de ce jour, tu es l'intendant suprême de ma maison. »" },
+        { speaker: "Narrateur", text: "Quelques mois plus tard, la femme de Potiphar te tend un piège et tente de te séduire. Seule avec toi, elle te saisit par ta tunique..." },
+        { speaker: "Femme de Potiphar", text: "« Viens avec moi, personne ne le saura ! »" }
+      ],
+      choices: [
+        { text: "Fuir immédiatement en laissant ton vêtement", stat: "Sagesse", val: 1 },
+        { text: "Lui expliquer calmement ton refus et ton respect pour Dieu et ton maître", stat: "Foi", val: 1 }
+      ],
+      puzzle: {
+        intro: "Pour prouver ton intégrité, écris le mot manquant du passage de Genèse 39:9. Aide-toi du Codex au besoin.",
+        type: "fill-blank",
+        question: "« Comment ferais-je un aussi grand ___ et pécherais-je contre Dieu ? »",
+        answer: "mal"
+      }
+    },
+    4: {
+      title: "La prison royale",
+      tag: "Sagesse",
+      desc: "Interpréter les songes des prisonniers.",
+      location: "Les geôles du roi",
+      partnerName: "L'Échanson",
+      partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150">
+                    <ellipse cx="43" cy="26" rx="17" ry="19" fill="#caa06b"/>
+                    <path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#695f53"/>
+                  </svg>`,
+      dialogues: [
+        { speaker: "L'Échanson", text: "« Joseph, nous avons fait des songes mystérieux en prison. Devant moi, il y avait un cep de vigne à trois rameaux qui bourgeonnaient... »" },
+        { speaker: "Le Panetier", text: "« Et moi, j'avais trois corbeilles de pain blanc sur la tête, et des oiseaux venaient y manger... »" },
+        { speaker: "Narrateur", text: "Ils implorent une explication. L'interprétation vient de Dieu. Comment leur réponds-tu ?" }
+      ],
+      choices: [
+        { text: "Annoncer la vérité avec compassion et espérance", stat: "Compassion", val: 1 },
+        { text: "Exposer clairement le message divin, même s'il est sombre", stat: "Discernement", val: 1 }
+      ],
+      puzzle: {
+        intro: "Associe correctement chaque élément de rêve à son interprétation (Sélectionne une carte à gauche puis sa correspondance à droite).",
+        type: "matching",
+        pairs: [
+          { left: "Trois rameaux de vigne", right: "Trois jours avant la grâce", id: "1" },
+          { left: "Trois corbeilles de pain", right: "Trois jours avant la sentence", id: "2" },
+          { left: "Oiseaux mangeant le pain", right: "Le Panetier sera pendu", id: "3" }
+        ]
+      }
+    },
+    5: {
+      title: "Songe de Pharaon",
+      tag: "Discernement",
+      desc: "Proposer un plan pour l'Égypte.",
+      location: "Le Palais Impérial",
+      partnerName: "Pharaon",
+      partnerSvg: `<svg width="80" height="130" viewBox="0 0 90 150">
+                    <ellipse cx="45" cy="24" rx="18" ry="20" fill="#8c5a3c"/>
+                    <rect x="24" y="4" width="42" height="14" rx="4" fill="#c9a227"/>
+                    <path d="M16 58 Q45 36 74 58 L80 148 L10 148 Z" fill="#233252"/>
+                  </svg>`,
+      dialogues: [
+        { speaker: "Pharaon", text: "« J'ai fait des rêves qu'aucun magicien ne peut expliquer. On m'a dit que tu possèdes la sagesse d'interpréter les songes. »" },
+        { speaker: "Joseph", text: "« Ce n'est pas moi, c'est Dieu qui donnera une réponse favorable à Pharaon. Raconte-moi tes songes... »" }
+      ],
+      choices: [
+        { text: "Expliquer les songes et proposer un plan d'action immédiat pour stocker la nourriture", stat: "Sagesse", val: 2 },
+        { text: "Attribuer humblement toute l'explication à la prescience de Dieu", stat: "Foi", val: 2 }
+      ],
+      puzzle: {
+        intro: "Associe les deux parties du double songe de Pharaon à leur sens caché.",
+        type: "matching",
+        pairs: [
+          { left: "7 vaches grasses & épis pleins", right: "7 ans d'abondance", id: "1" },
+          { left: "7 vaches maigres & épis vides", right: "7 ans de famine sévère", id: "2" },
+          { left: "Le songe répété deux fois", right: "La chose est fermement résolue par Dieu", id: "3" }
+        ]
+      }
+    },
+    6: {
+      title: "Les sept ans de disette",
+      tag: "Leadership",
+      desc: "Administrer les réserves de blé.",
+      location: "Greniers d'Égypte",
+      partnerName: "Intendant",
+      partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150">
+                    <ellipse cx="43" cy="26" rx="17" ry="19" fill="#caa06b"/>
+                    <path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#506b67"/>
+                  </svg>`,
+      dialogues: [
+        { speaker: "Intendant", text: "« Les sept années d'abondance sont finies. La famine frappe l'Égypte et toutes les nations. Les peuples crient pour du pain. »" },
+        { speaker: "Narrateur", text: "En tant que second de Pharaon, tu dois administrer les stocks. Comment gères-tu les demandes de nourriture ?" }
+      ],
+      choices: [
+        { text: "Distribuer généreusement les récoltes à tous ceux qui demandent", stat: "Compassion", val: 1 },
+        { text: "Vendre le blé avec méthode et rigueur pour préserver les stocks", stat: "Discernement", val: 1 }
+      ],
+      puzzle: {
+        intro: "Saisis la proportion des récoltes de l'Égypte que Joseph conseilla de stocker chaque année (Genèse 41:34). Écris le mot en lettres sans accent.",
+        type: "fill-blank",
+        question: "« Lever un ___ des récoltes pendant les sept années d'abondance. »",
+        answer: "cinquieme"
+      }
+    },
+    7: {
+      title: "Le dénouement",
+      tag: "Foi",
+      desc: "Vengeance ou pardon — le choix final.",
+      location: "La salle du trône",
+      partnerName: "Juda esclave",
+      partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150">
+                    <ellipse cx="43" cy="26" rx="17" ry="19" fill="#9e7c53"/>
+                    <path d="M20 30 Q43 8 66 30 L66 20 Q43 2 20 20 Z" fill="#2d1f14"/>
+                    <path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#756149"/>
+                  </svg>`,
+      dialogues: [
+        { speaker: "Narrateur", text: "Tes frères sont revenus acheter du blé. Tu as fait cacher ta coupe d'argent dans le sac de Benjamin. L'intendant l'a trouvée ! Tes frères tremblent de peur..." },
+        { speaker: "Juda", text: "« Prends-moi à sa place pour que le jeune garçon reparte avec mon père. Je ne pourrais voir la douleur de mon père si l'enfant manquait... »" },
+        { speaker: "Narrateur", text: "Juda, qui t'avait autrefois vendu, est prêt à se sacrifier pour son frère. Le moment est venu de lever le voile." }
+      ],
+      choices: [
+        { text: "Te révéler en pleurant et leur offrir un pardon inconditionnel", stat: "Compassion", val: 2 },
+        { text: "Leur expliquer que c'est Dieu qui t'a envoyé en Égypte pour leur sauver la vie", stat: "Foi", val: 2 }
+      ],
+      puzzle: {
+        intro: "Saisis le nom du plus jeune frère de Joseph dans le sac duquel la coupe d'argent a été dissimulée.",
+        type: "fill-blank",
+        question: "« La coupe fut trouvée dans le sac de ___. »",
+        answer: "benjamin"
+      }
+    }
+  };
+
+  // ================= STATE MANAGEMENT =================
+  let state = {
+    currentLevel: 1,
+    stats: { Foi: 3, Sagesse: 4, Courage: 2, Discernement: 3, Compassion: 2 },
+    wisdomUnlocked: [1],
+    soundEnabled: true
+  };
+
+  // ================= LAZY AUDIO SYNTHESIZER =================
+  let audioCtx = null;
+
+  function initAudio() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+  }
+
+  function playSound(type) {
+    if (!state.soundEnabled) return;
+    initAudio();
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    const now = audioCtx.currentTime;
+
+    if (type === 'click') {
+      // Short woody tap
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(400, now);
+      osc.frequency.exponentialRampToValueAtTime(150, now + 0.08);
+      gain.gain.setValueAtTime(0.3, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+      osc.start(now);
+      osc.stop(now + 0.08);
+    } else if (type === 'success') {
+      // Golden major chord arpeggio
+      const notes = [261.63, 329.63, 392.00, 523.25]; // C4, E4, G4, C5
+      notes.forEach((freq, idx) => {
+        const subOsc = audioCtx.createOscillator();
+        const subGain = audioCtx.createGain();
+        subOsc.connect(subGain);
+        subGain.connect(audioCtx.destination);
+        subOsc.type = 'sine';
+        subOsc.frequency.setValueAtTime(freq, now + idx * 0.08);
+        subGain.gain.setValueAtTime(0.18, now + idx * 0.08);
+        subGain.gain.exponentialRampToValueAtTime(0.005, now + idx * 0.08 + 0.4);
+        subOsc.start(now + idx * 0.08);
+        subOsc.stop(now + idx * 0.08 + 0.4);
+      });
+    } else if (type === 'error') {
+      // Short buzz
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(130, now);
+      osc.frequency.linearRampToValueAtTime(90, now + 0.25);
+      gain.gain.setValueAtTime(0.2, now);
+      gain.gain.linearRampToValueAtTime(0.01, now + 0.25);
+      osc.start(now);
+      osc.stop(now + 0.25);
+    } else if (type === 'unlock') {
+      // Mystical chime sweep
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(300, now);
+      osc.frequency.exponentialRampToValueAtTime(1200, now + 0.5);
+      gain.gain.setValueAtTime(0.15, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+      osc.start(now);
+      osc.stop(now + 0.5);
+    } else if (type === 'speech') {
+      // Soft synthetic talk click
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(150 + Math.random() * 80, now);
+      gain.gain.setValueAtTime(0.08, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+      osc.start(now);
+      osc.stop(now + 0.04);
+    }
+  }
+
+  function toggleMute() {
+    state.soundEnabled = !state.soundEnabled;
+    const btn = document.getElementById('soundBtn');
+    const icon = document.getElementById('volumeIcon');
+    if (state.soundEnabled) {
+      icon.innerHTML = `<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>`;
+      btn.setAttribute('title', 'Désactiver le son');
+      playSound('click');
+    } else {
+      icon.innerHTML = `<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.21.05-.42.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>`;
+      btn.setAttribute('title', 'Activer le son');
+    }
+    saveState();
+  }
+
+  // ================= STATE MANAGEMENT AND STORAGE =================
+  const STORAGE_KEY = "chronicles_bibliques_save";
+
+  function loadState() {
+    try {
+      const data = localStorage.getItem(STORAGE_KEY);
+      if (data) {
+        state = JSON.parse(data);
+      }
+    } catch(e) {
+      console.warn("Could not load save state from localStorage", e);
+    }
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch(e) {
+      console.warn("Could not save state to localStorage", e);
+    }
+  }
+
+  function resetGameData() {
+    if (confirm("Voulez-vous vraiment réinitialiser toute votre progression et recommencer au début ?")) {
+      state = {
+        currentLevel: 1,
+        stats: { Foi: 3, Sagesse: 4, Courage: 2, Discernement: 3, Compassion: 2 },
+        wisdomUnlocked: [1],
+        soundEnabled: state.soundEnabled
+      };
+      saveState();
+      playSound('unlock');
+      initGame();
+      switchTab(document.querySelector('.tab[data-view="view-map"]'));
+    }
+  }
+
+  // ================= UI CONTROL: NAVIGATION =================
+  function switchTab(btn) {
+    playSound('click');
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    btn.classList.add('active');
+    
+    const targetViewId = btn.getAttribute('data-view');
+    document.getElementById(targetViewId).classList.add('active');
+    
+    // Scroll top body
+    document.querySelector('.body-area').scrollTop = 0;
+  }
+
+  // ================= RENDER MAP PATH =================
+  function renderMap() {
+    const mapPath = document.getElementById('mapPath');
+    mapPath.innerHTML = '';
+    
+    Object.keys(chapters).forEach(numStr => {
+      const lvl = parseInt(numStr);
+      const ch = chapters[lvl];
+      
+      let lvlState = 'locked';
+      if (lvl < state.currentLevel) lvlState = 'done';
+      else if (lvl === state.currentLevel) lvlState = 'current';
+
+      const el = document.createElement('div');
+      el.className = `stop ${lvlState}`;
+      el.innerHTML = `
+        <div class="stop-marker">${lvl}</div>
+        <div class="stop-card">
+          <h3>${ch.title}</h3>
+          <p>${ch.desc}</p>
+          <span class="stop-tag">${ch.tag}</span>
+        </div>
+      `;
+
+      if (lvlState === 'current') {
+        el.addEventListener('click', () => {
+          startChapter(lvl);
+        });
+      }
+      mapPath.appendChild(el);
+    });
+  }
+
+  // ================= LEVEL NARRATIVE FLOW =================
+  let currentDialogIndex = 0;
+  let activeLevelData = null;
+  let typewritingTimer = null;
+  let isWriting = false;
+  let textToType = "";
+  let typedLength = 0;
+
+  function startChapter(lvl) {
+    activeLevelData = chapters[lvl];
+    currentDialogIndex = 0;
+    document.getElementById('dialogueScene').textContent = activeLevelData.location;
+    
+    // Set up Dynamic Partner Figure
+    const figPartner = document.getElementById('figPartner');
+    figPartner.innerHTML = activeLevelData.partnerSvg;
+    document.getElementById('partnerName').textContent = activeLevelData.partnerName;
+
+    // Switch view to dialogue
+    switchTab(document.getElementById('tabDialogue'));
+    
+    loadDialogueStep();
+  }
+
+  function loadDialogueStep() {
+    const step = activeLevelData.dialogues[currentDialogIndex];
+    document.getElementById('dialogueSpeaker').textContent = step.speaker;
+    
+    // Toggle Speaking Highlight animations
+    const jFig = document.getElementById('figJoseph');
+    const pFig = document.getElementById('figPartner');
+    jFig.classList.remove('speaking');
+    pFig.classList.remove('speaking');
+
+    if (step.speaker === "Joseph") {
+      jFig.classList.add('speaking');
+    } else if (step.speaker !== "Narrateur") {
+      pFig.classList.add('speaking');
+    }
+
+    // Choices and feedback clear
+    document.getElementById('choiceList').innerHTML = '';
+    document.getElementById('choiceFeedback').textContent = '';
+
+    // Start Typewriter effect
+    textToType = step.text;
+    typedLength = 0;
+    isWriting = true;
+    
+    const textEl = document.getElementById('dialogueText');
+    textEl.innerHTML = '';
+    
+    if (typewritingTimer) clearInterval(typewritingTimer);
+    typewritingTimer = setInterval(() => {
+      if (typedLength < textToType.length) {
+        textEl.textContent += textToType[typedLength];
+        typedLength++;
+        if (typedLength % 2 === 0) playSound('speech');
+      } else {
+        clearInterval(typewritingTimer);
+        isWriting = false;
+        onDialogueTextComplete();
+      }
+    }, 20);
+  }
+
+  function skipTypewriting() {
+    if (isWriting) {
+      clearInterval(typewritingTimer);
+      isWriting = false;
+      document.getElementById('dialogueText').textContent = textToType;
+      onDialogueTextComplete();
+    }
+  }
+
+  function onDialogueTextComplete() {
+    // Check if we are at the last dialogue node of the chapter to show choices
+    if (currentDialogIndex === activeLevelData.dialogues.length - 1) {
+      renderChoices();
+    } else {
+      // Just normal narration progression
+      const choiceList = document.getElementById('choiceList');
+      const nextBtn = document.createElement('button');
+      nextBtn.className = 'choice-btn';
+      nextBtn.innerHTML = 'Continuer le récit...';
+      nextBtn.onclick = () => {
+        playSound('click');
+        currentDialogIndex++;
+        loadDialogueStep();
+      };
+      choiceList.appendChild(nextBtn);
+    }
+  }
+
+  function renderChoices() {
+    const list = document.getElementById('choiceList');
+    list.innerHTML = '';
+    
+    activeLevelData.choices.forEach(c => {
+      const btn = document.createElement('button');
+      btn.className = 'choice-btn';
+      btn.innerHTML = `
+        ${c.text}
+        <span class="choice-tag">+${c.val} ${c.stat}</span>
+      `;
+      btn.onclick = () => handleChoiceSelect(c);
+      list.appendChild(btn);
+    });
+  }
+
+  function handleChoiceSelect(choice) {
+    playSound('success');
+    // Disable clicks
+    document.querySelectorAll('.choice-btn').forEach(b => b.style.pointerEvents = 'none');
+    
+    // Add Stats
+    state.stats[choice.stat] += choice.val;
+    saveState();
+    updateStatsGrid();
+    updateRadarChart();
+
+    // Floating stat animation
+    triggerFloatingText(`+${choice.val} ${choice.stat}`);
+
+    document.getElementById('choiceFeedback').textContent = `Choix validé ! Progression vers l'énigme.`;
+
+    setTimeout(() => {
+      setupPuzzle();
+      switchTab(document.getElementById('tabPuzzle'));
+    }, 1200);
+  }
+
+  function triggerFloatingText(text) {
+    const container = document.getElementById('floatingContainer');
+    const el = document.createElement('div');
+    el.className = 'floating-text';
+    el.textContent = text;
+    el.style.left = '45%';
+    el.style.top = '60%';
+    container.appendChild(el);
+    setTimeout(() => el.remove(), 2000);
+  }
+
+  // ================= PUZZLE SYSTEM =================
+  let selectedCards = [];
+  let solvedItems = 0;
+  let wordOrderSelection = [];
+
+  function setupPuzzle() {
+    const p = activeLevelData.puzzle;
+    document.getElementById('puzzleIntro').textContent = p.intro;
+    
+    const container = document.getElementById('puzzleInteractive');
+    container.innerHTML = '';
+    
+    document.getElementById('puzzleSubmitBtn').classList.add('hidden');
+    document.getElementById('puzzleHelpBtn').classList.remove('hidden');
+
+    solvedItems = 0;
+    selectedCards = [];
+    updatePuzzleProgress(0, 1);
+
+    if (p.type === 'word-order') {
+      // Slot for ordered words
+      const slot = document.createElement('div');
+      slot.className = 'word-slot';
+      slot.id = 'wordSlot';
+      slot.textContent = 'Déposez les mots ici...';
+      container.appendChild(slot);
+
+      // Shuffled words buttons
+      const pool = document.createElement('div');
+      pool.className = 'word-container';
+      
+      // Shuffle helper
+      const shuffled = [...p.words].sort(() => Math.random() - 0.5);
+      wordOrderSelection = [];
+
+      shuffled.forEach((w, idx) => {
+        const chip = document.createElement('div');
+        chip.className = 'word-chip';
+        chip.textContent = w;
+        chip.dataset.idx = idx;
+        chip.onclick = () => {
+          playSound('click');
+          if (!chip.classList.contains('selected-out')) {
+            chip.classList.add('selected-out');
+            wordOrderSelection.push({ text: w, chipRef: chip });
+            renderWordSlot();
+          }
+        };
+        pool.appendChild(chip);
+      });
+      container.appendChild(pool);
+      
+      document.getElementById('puzzleSubmitBtn').classList.remove('hidden');
+      document.getElementById('puzzleStatus').textContent = "Organise la phrase.";
+
+    } else if (p.type === 'multi-select') {
+      const grid = document.createElement('div');
+      grid.className = 'options-grid';
+      p.options.forEach(opt => {
+        const card = document.createElement('div');
+        card.className = 'option-card';
+        card.textContent = opt;
+        card.onclick = () => {
+          playSound('click');
+          card.classList.toggle('selected');
+        };
+        grid.appendChild(card);
+      });
+      container.appendChild(grid);
+      
+      document.getElementById('puzzleSubmitBtn').classList.remove('hidden');
+      document.getElementById('puzzleStatus').textContent = "Sélectionne 3 éléments.";
+
+    } else if (p.type === 'fill-blank') {
+      const wrap = document.createElement('div');
+      wrap.className = 'puzzle-input-wrap';
+      wrap.innerHTML = `
+        <p style="font-size:0.8rem; text-align:center; font-style:italic; margin-bottom:8px;">${p.question}</p>
+        <input type="text" id="blankInput" class="puzzle-input" placeholder="Tape ta réponse ici..." autocomplete="off">
+      `;
+      container.appendChild(wrap);
+      
+      document.getElementById('puzzleSubmitBtn').classList.remove('hidden');
+      document.getElementById('puzzleStatus').textContent = "Trouve le mot exact.";
+
+    } else if (p.type === 'matching') {
+      const cols = document.createElement('div');
+      cols.className = 'puzzle-cols';
+      
+      const leftCol = document.createElement('div');
+      leftCol.className = 'puzzle-col';
+      leftCol.innerHTML = '<h4>Vision</h4>';
+      
+      const rightCol = document.createElement('div');
+      rightCol.className = 'puzzle-col';
+      rightCol.innerHTML = '<h4>Signification</h4>';
+
+      // Shuffling cards
+      const leftItems = p.pairs.map(pair => ({ text: pair.left, id: pair.id }));
+      const rightItems = p.pairs.map(pair => ({ text: pair.right, id: pair.id }));
+      
+      leftItems.sort(() => Math.random() - 0.5);
+      rightItems.sort(() => Math.random() - 0.5);
+
+      leftItems.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'symbol-card';
+        card.textContent = item.text;
+        card.dataset.id = item.id;
+        card.dataset.side = 'left';
+        card.onclick = () => handleMatchingSelect(card);
+        leftCol.appendChild(card);
+      });
+
+      rightItems.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'symbol-card';
+        card.textContent = item.text;
+        card.dataset.id = item.id;
+        card.dataset.side = 'right';
+        card.onclick = () => handleMatchingSelect(card);
+        rightCol.appendChild(card);
+      });
+
+      cols.appendChild(leftCol);
+      cols.appendChild(rightCol);
+      container.appendChild(cols);
+
+      document.getElementById('puzzleStatus').textContent = `0 / ${p.pairs.length} correspondances`;
+    }
+  }
+
+  function renderWordSlot() {
+    const slot = document.getElementById('wordSlot');
+    slot.innerHTML = '';
+    
+    if (wordOrderSelection.length === 0) {
+      slot.textContent = 'Déposez les mots ici... (Cliquez sur un mot placé pour le retirer)';
+      return;
+    }
+
+    wordOrderSelection.forEach((wObj, idx) => {
+      const c = document.createElement('div');
+      c.className = 'word-chip';
+      c.textContent = wObj.text;
+      c.onclick = (e) => {
+        e.stopPropagation();
+        playSound('click');
+        wObj.chipRef.classList.remove('selected-out');
+        wordOrderSelection.splice(idx, 1);
+        renderWordSlot();
+      };
+      slot.appendChild(c);
+    });
+  }
+
+  function handleMatchingSelect(card) {
+    if (card.classList.contains('matched')) return;
+    playSound('click');
+
+    const side = card.dataset.side;
+    
+    // Clear selection on the same side
+    document.querySelectorAll(`.symbol-card[data-side="${side}"]`).forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+
+    // Find if matching card on other side is selected
+    const otherSide = side === 'left' ? 'right' : 'left';
+    const activeOther = document.querySelector(`.symbol-card[data-side="${otherSide}"].selected`);
+    
+    if (activeOther) {
+      if (card.dataset.id === activeOther.dataset.id) {
+        // Success match
+        playSound('success');
+        card.classList.remove('selected');
+        activeOther.classList.remove('selected');
+        card.classList.add('matched');
+        activeOther.classList.add('matched');
+        
+        solvedItems++;
+        const total = activeLevelData.puzzle.pairs.length;
+        updatePuzzleProgress(solvedItems, total);
+        document.getElementById('puzzleStatus').textContent = `${solvedItems} / ${total} correspondances`;
+
+        if (solvedItems === total) {
+          triggerPuzzleVictory();
+        }
+      } else {
+        // Wrong match
+        playSound('error');
+        card.classList.add('wrong');
+        activeOther.classList.add('wrong');
+        
+        setTimeout(() => {
+          card.classList.remove('wrong', 'selected');
+          activeOther.classList.remove('wrong', 'selected');
+        }, 400);
+      }
+    }
+  }
+
+  function updatePuzzleProgress(curr, max) {
+    const progress = (curr / max) * 100;
+    document.getElementById('puzzleProgress').style.width = `${progress}%`;
+  }
+
+  function submitPuzzle() {
+    const p = activeLevelData.puzzle;
+
+    if (p.type === 'word-order') {
+      const sentence = wordOrderSelection.map(w => w.text).join(' ');
+      const target = p.correct.join(' ');
+      if (sentence === target) {
+        playSound('success');
+        updatePuzzleProgress(1, 1);
+        triggerPuzzleVictory();
+      } else {
+        playSound('error');
+        document.getElementById('puzzleStatus').textContent = "Ordre incorrect, réessaye !";
+        // Reset slot
+        wordOrderSelection.forEach(w => w.chipRef.classList.remove('selected-out'));
+        wordOrderSelection = [];
+        renderWordSlot();
+      }
+    } else if (p.type === 'multi-select') {
+      const selected = Array.from(document.querySelectorAll('.option-card.selected')).map(c => c.textContent);
+      const isCorrect = selected.length === p.correct.length && selected.every(val => p.correct.includes(val));
+      
+      if (isCorrect) {
+        playSound('success');
+        updatePuzzleProgress(1, 1);
+        triggerPuzzleVictory();
+      } else {
+        playSound('error');
+        document.getElementById('puzzleStatus').textContent = "Mauvaise cargaison. Cherche les indices !";
+        document.querySelectorAll('.option-card.selected').forEach(c => c.classList.remove('selected'));
+      }
+    } else if (p.type === 'fill-blank') {
+      const val = document.getElementById('blankInput').value.trim().toLowerCase();
+      // Clean accents for safety
+      const cleanVal = val.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      
+      if (cleanVal === p.answer) {
+        playSound('success');
+        updatePuzzleProgress(1, 1);
+        triggerPuzzleVictory();
+      } else {
+        playSound('error');
+        document.getElementById('puzzleStatus').textContent = "Ce n'est pas le bon mot.";
+        document.getElementById('blankInput').value = '';
+      }
+    }
+  }
+
+  function openCodexHelp() {
+    switchTab(document.getElementById('tabCodex'));
+  }
+
+  function triggerPuzzleVictory() {
+    document.getElementById('puzzleStatus').textContent = "Victoire ! Énigme résolue.";
+    
+    // Add stats as bonus
+    state.stats.Discernement += 1;
+    updateStatsGrid();
+    updateRadarChart();
+    triggerFloatingText("+1 Discernement");
+
+    // Unlock next level
+    if (state.currentLevel === activeLevelData.levelNum || state.currentLevel == Object.keys(chapters).length) {
+      // Last level reached
+    }
+    
+    // Unlock wisdom fragment in state
+    if (!state.wisdomUnlocked.includes(state.currentLevel)) {
+      state.wisdomUnlocked.push(state.currentLevel);
+    }
+    
+    // Advance currentLevel
+    if (state.currentLevel < Object.keys(chapters).length + 1) {
+      state.currentLevel++;
+    }
+
+    saveState();
+    renderMap();
+    renderWisdomJournal();
+
+    setTimeout(() => {
+      alert("Félicitations ! Tu as terminé ce chapitre avec succès !");
+      switchTab(document.querySelector('.tab[data-view="view-map"]'));
+      playSound('unlock');
+    }, 1500);
+  }
+
+  // ================= STATS & DYNAMIC RADAR CHART =================
+  function updateStatsGrid() {
+    const keys = ['Foi', 'Sagesse', 'Courage', 'Discernement', 'Compassion'];
+    keys.forEach(k => {
+      const el = document.getElementById(`stat-${k}`);
+      if (el) {
+        const oldVal = parseInt(el.textContent);
+        if (oldVal !== state.stats[k]) {
+          el.textContent = state.stats[k];
+          const chip = el.parentElement;
+          chip.classList.add('updated');
+          setTimeout(() => chip.classList.remove('updated'), 1000);
+        }
+      }
+    });
+  }
+
+  function updateRadarChart() {
+    const center = { x: 115, y: 105 };
+    const maxVal = 10;
+    const rBase = 85;
+    
+    // Pentagon angles corresponding to Foi, Sagesse, Courage, Discernement, Compassion
+    const angles = [
+      -Math.PI / 2,                          // Top (Foi)
+      -Math.PI / 2 + 2 * Math.PI / 5,        // Right Top (Sagesse)
+      -Math.PI / 2 + 4 * Math.PI / 5,        // Right Bottom (Courage)
+      -Math.PI / 2 + 6 * Math.PI / 5,        // Left Bottom (Discernement)
+      -Math.PI / 2 + 8 * Math.PI / 5         // Left Top (Compassion)
+    ];
+    
+    const keys = ['Foi', 'Sagesse', 'Courage', 'Discernement', 'Compassion'];
+    const pointsStr = keys.map((k, i) => {
+      const val = state.stats[k] || 0;
+      // Clamp stat value to maxVal
+      const clampedVal = Math.min(val, maxVal);
+      const r = (clampedVal / maxVal) * rBase;
+      const x = center.x + r * Math.cos(angles[i]);
+      const y = center.y + r * Math.sin(angles[i]);
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    }).join(' ');
+
+    document.getElementById('radarShape').setAttribute('points', pointsStr);
+  }
+
+  // ================= WISDOM JOURNAL RENDER =================
+  function renderWisdomJournal() {
+    const container = document.getElementById('wisdomList');
+    container.innerHTML = '';
+
+    Object.keys(chapters).forEach(numStr => {
+      const lvl = parseInt(numStr);
+      const ch = chapters[lvl];
+      const isUnlocked = state.wisdomUnlocked.includes(lvl) || lvl < state.currentLevel;
+
+      const card = document.createElement('div');
+      card.className = `wisdom-card ${isUnlocked ? '' : 'locked'}`;
+
+      if (isUnlocked) {
+        // Resolve verse text from Codex database dynamically
+        let verseText = "« L'intégrité face à l'épreuve révèle le plan parfait de l'Éternel. »";
+        if (lvl === 1) verseText = "« La jalousie ronge les os. » (Proverbe 14:30) - Un avertissement gravé dans la solitude.";
+        else if (lvl === 2) verseText = "« Les richesses de Galaad ne valent rien face à la pureté d'un cœur intègre. »";
+        else if (lvl === 3) verseText = "« L'intégrité gardée dans le secret a plus de prix que le pouvoir gagné par compromission. »";
+        else if (lvl === 4) verseText = "« À Dieu seul appartiennent les révélations ; au juste d'en dispenser le discernement. »";
+        else if (lvl === 5) verseText = "« Discerner la disette au milieu de l'abondance, c'est préserver la vie des siens. »";
+        else if (lvl === 6) verseText = "« Administrer avec justice, c'est accomplir le plan d'amour de Dieu pour les nations. »";
+        else if (lvl === 7) verseText = "« Vous aviez médité de me faire du mal, mais Dieu l'a changé en bien. (Genèse 50:20) »";
+
+        card.innerHTML = `
+          <div class="wisdom-ref">Chapitre ${lvl} — ${ch.title}</div>
+          <p class="wisdom-verse">${verseText}</p>
+        `;
+      } else {
+        card.innerHTML = `
+          <div class="wisdom-ref">Chapitre ${lvl} — Verrouillé</div>
+          <p class="wisdom-verse">Termine cette étape pour révéler son enseignement.</p>
+        `;
+      }
+      container.appendChild(card);
+    });
+  }
+
+  // ================= CODEX FILTERING =================
+  function renderCodex() {
+    const list = document.getElementById('codexList');
+    list.innerHTML = '';
+    
+    codexDatabase.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'codex-card';
+      card.innerHTML = `
+        <h4>${item.title}</h4>
+        <p>${item.text}</p>
+      `;
+      list.appendChild(card);
+    });
+  }
+
+  function filterCodex() {
+    const query = document.getElementById('codexSearchInput').value.trim().toLowerCase();
+    const list = document.getElementById('codexList');
+    list.innerHTML = '';
+
+    // Clean accents query
+    const cleanQuery = query.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    codexDatabase.forEach(item => {
+      const cleanTitle = item.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      const cleanText = item.text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      
+      if (cleanTitle.includes(cleanQuery) || cleanText.includes(cleanQuery)) {
+        // Highlight logic
+        let innerHTMLText = item.text;
+        if (query.length > 2) {
+          const regex = new RegExp(`(${query})`, 'gi');
+          innerHTMLText = item.text.replace(regex, '<mark>$1</mark>');
+        }
+
+        const card = document.createElement('div');
+        card.className = 'codex-card';
+        card.innerHTML = `
+          <h4>${item.title}</h4>
+          <p>${innerHTMLText}</p>
+        `;
+        list.appendChild(card);
+      }
+    });
+  }
+
+  // ================= INITIALIZATION =================
+  function initGame() {
+    loadState();
+    
+    // Inject level numeric values for reference
+    Object.keys(chapters).forEach(k => {
+      chapters[k].levelNum = parseInt(k);
+    });
+
+    updateStatsGrid();
+    updateRadarChart();
+    renderMap();
+    renderWisdomJournal();
+    renderCodex();
+
+    // Sound button UI sync
+    const btn = document.getElementById('soundBtn');
+    const icon = document.getElementById('volumeIcon');
+    if (!state.soundEnabled) {
+      icon.innerHTML = `<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.21.05-.42.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>`;
+      btn.setAttribute('title', 'Activer le son');
+    }
+  }
+
+  // Run on load
+  window.addEventListener('DOMContentLoaded', initGame);
+</script>
+</body>
+</html>
