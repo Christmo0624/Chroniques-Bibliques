@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chroniques Bibliques — Joseph, Gouverneur d'Égypte</title>
+<title>Chroniques Bibliques — L'Aventure Continue</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -82,7 +82,7 @@
   .topbar {
     background: linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 100%);
     color: var(--sand-lt);
-    padding: 34px 16px 12px;
+    padding: 34px 14px 12px;
     position: relative;
     border-bottom: 2px solid var(--gold);
     flex-shrink: 0;
@@ -96,9 +96,9 @@
   }
   .topbar h1 {
     font-family: 'Cinzel', serif;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 700;
-    letter-spacing: .02em;
+    letter-spacing: .01em;
     margin: 0;
     color: var(--gold-soft);
   }
@@ -114,53 +114,45 @@
     border-radius: 50%;
     transition: background 0.2s;
   }
-  .sound-btn:hover {
-    background: rgba(255,255,255,0.1);
-  }
-  .sound-btn svg {
-    width: 18px;
-    height: 18px;
-    fill: currentColor;
-  }
+  .sound-btn:hover { background: rgba(255,255,255,0.1); }
+  .sound-btn svg { width: 16px; height: 16px; fill: currentColor; }
   .topbar .sub {
-    font-size: .74rem;
+    font-size: .72rem;
     color: var(--sand);
     opacity: .85;
     font-style: italic;
   }
   .stats-row {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 4px;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
     margin-top: 10px;
   }
   .stat-chip {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2px;
-    font-size: .58rem;
+    gap: 1px;
+    font-size: .52rem;
     color: var(--sand-lt);
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    padding: 4px 2px;
-    border-radius: 6px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    padding: 4px 1px;
+    border-radius: 4px;
     font-weight: 600;
     transition: all 0.3s ease;
   }
   .stat-chip.updated {
     background: var(--gold);
     color: var(--navy);
-    transform: scale(1.1);
+    transform: scale(1.08);
   }
   .stat-chip span {
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     color: var(--gold-soft);
     font-weight: 700;
   }
-  .stat-chip.updated span {
-    color: var(--navy);
-  }
+  .stat-chip.updated span { color: var(--navy); }
 
   /* ---------- Scrollable Body Area ---------- */
   .body-area {
@@ -168,11 +160,11 @@
     overflow-y: auto;
     position: relative;
     background: 
-      radial-gradient(ellipse at 50% 0%, rgba(230, 211, 167, 0.15), transparent 75%),
+      radial-gradient(ellipse at 50% 0%, rgba(230, 211, 167, 0.12), transparent 75%),
       var(--sand-lt);
   }
   .body-area::-webkit-scrollbar { width: 4px; }
-  .body-area::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 2px; }
+  .body-area::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 2px; }
 
   /* ---------- Floating Text Canvas ---------- */
   .floating-container {
@@ -186,7 +178,7 @@
     position: absolute;
     font-family: 'Cinzel', serif;
     font-weight: 700;
-    font-size: 0.9rem;
+    font-size: 0.86rem;
     color: var(--clay);
     text-shadow: 0 2px 4px rgba(255,255,255,0.8);
     animation: floatUp 1.8s forwards ease-out;
@@ -195,6 +187,36 @@
     0% { transform: translateY(0) scale(0.8); opacity: 0; }
     15% { opacity: 1; transform: translateY(-10px) scale(1.1); }
     100% { transform: translateY(-60px) scale(1); opacity: 0; }
+  }
+
+  /* ---------- Book Selector Widget ---------- */
+  .book-selector-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    border: 1px solid rgba(212, 175, 55, 0.6);
+    border-radius: 10px;
+    padding: 8px 12px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  }
+  .book-selector-container label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--clay);
+  }
+  .book-select {
+    background: transparent;
+    border: none;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--navy);
+    outline: none;
+    cursor: pointer;
+    width: 65%;
   }
 
   /* ---------- Bottom Tab Bar ---------- */
@@ -217,7 +239,7 @@
     background: none;
     border: none;
     font-family: 'Work Sans', sans-serif;
-    font-size: .6rem;
+    font-size: .56rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -247,31 +269,8 @@
   }
 
   /* ================= VIEW: MAP ================= */
-  .map-scroll {
-    padding: 10px 4px;
-  }
-  .map-intro {
-    background: #fff;
-    border: 1px solid rgba(139, 58, 47, 0.15);
-    border-radius: 12px;
-    padding: 12px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-    text-align: center;
-  }
-  .map-intro h2 {
-    font-family: 'Cinzel', serif;
-    font-size: 0.9rem;
-    margin: 0 0 4px;
-    color: var(--clay);
-  }
-  .map-intro p {
-    margin: 0; font-size: 0.72rem; color: var(--grey); line-height: 1.35;
-  }
-  .map-path {
-    position: relative;
-    padding-left: 36px;
-  }
+  .map-scroll { padding: 8px 4px; }
+  .map-path { position: relative; padding-left: 36px; margin-top: 10px; }
   .map-path::before {
     content: "";
     position: absolute;
@@ -279,11 +278,7 @@
     width: 2px;
     background: repeating-linear-gradient(180deg, var(--gold) 0 6px, transparent 6px 12px);
   }
-  .stop {
-    position: relative;
-    margin-bottom: 24px;
-    transition: all 0.3s;
-  }
+  .stop { position: relative; margin-bottom: 22px; transition: all 0.3s; }
   .stop-marker {
     position: absolute;
     left: -37px; top: 2px;
@@ -291,7 +286,7 @@
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-family: 'Cinzel', serif;
-    font-size: .68rem;
+    font-size: .66rem;
     font-weight: 700;
     border: 2px solid var(--gold);
     background: var(--sand-lt);
@@ -318,7 +313,7 @@
     border: 1px solid rgba(139, 58, 47, 0.15);
     border-left: 4px solid var(--gold);
     border-radius: 10px;
-    padding: 10px 12px;
+    padding: 8px 12px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.04);
     transition: all 0.2s;
   }
@@ -329,36 +324,26 @@
   }
   .stop-card h3 {
     font-family: 'Cinzel', serif;
-    font-size: .84rem;
+    font-size: .8rem;
     margin: 0 0 2px;
     color: var(--navy);
   }
-  .stop-card p {
-    margin: 0;
-    font-size: .7rem;
-    color: var(--grey);
-    line-height: 1.3;
-  }
+  .stop-card p { margin: 0; font-size: .68rem; color: var(--grey); line-height: 1.3; }
   .stop-tag {
     display: inline-block;
-    margin-top: 6px;
-    font-size: .56rem;
-    letter-spacing: .03em;
+    margin-top: 5px;
+    font-size: .54rem;
+    letter-spacing: .02em;
     text-transform: uppercase;
     color: var(--clay);
     background: rgba(163, 56, 43, 0.08);
-    padding: 2px 6px;
+    padding: 1px 5px;
     border-radius: 10px;
-    font-weight: 600;
+    font-weight: 700;
   }
 
   /* ================= VIEW: DIALOGUE ================= */
-  .scene {
-    min-height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
+  .scene { min-height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
   .scene-caption {
     text-align: center;
     color: var(--clay);
@@ -378,29 +363,14 @@
     border-bottom: 1px solid rgba(0,0,0,0.06);
     padding-bottom: 6px;
   }
-  .actor-container {
-    text-align: center;
-    width: 100px;
-    transition: all 0.3s;
-  }
-  .actor-figure {
-    opacity: 0.5;
-    transform: scale(0.9);
-    transition: all 0.3s ease;
-  }
+  .actor-container { text-align: center; width: 100px; transition: all 0.3s; }
+  .actor-figure { opacity: 0.5; transform: scale(0.9); transition: all 0.3s ease; }
   .actor-figure.speaking {
     opacity: 1;
     transform: scale(1.05);
     filter: drop-shadow(0 0 8px rgba(212,175,55,0.45));
   }
-  .actor-name {
-    text-align: center;
-    color: var(--navy);
-    font-size: .68rem;
-    margin-top: 4px;
-    font-weight: 700;
-    letter-spacing: .02em;
-  }
+  .actor-name { text-align: center; color: var(--navy); font-size: .68rem; margin-top: 4px; font-weight: 700; }
   .dialogue-box {
     background: linear-gradient(150deg, #fffcf4 0%, #fbf6e8 100%);
     border: 1px solid var(--gold);
@@ -421,18 +391,8 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
-  .dialogue-text {
-    font-size: .78rem;
-    line-height: 1.45;
-    color: var(--ink);
-    margin: 0 0 14px;
-    min-height: 50px;
-  }
-  .choices {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
+  .dialogue-text { font-size: .76rem; line-height: 1.45; color: var(--ink); margin: 0 0 14px; min-height: 50px; }
+  .choices { display: flex; flex-direction: column; gap: 6px; }
   .choice-btn {
     text-align: left;
     background: #fff;
@@ -441,42 +401,20 @@
     border-radius: 8px;
     padding: 8px 10px;
     font-family: 'Work Sans', sans-serif;
-    font-size: .72rem;
+    font-size: .7rem;
     color: var(--ink);
     cursor: pointer;
     transition: all 0.2s ease;
     font-weight: 500;
   }
-  .choice-btn:hover {
-    background: var(--sand-lt);
-    border-left-color: var(--clay);
-    transform: translateY(-1px);
-  }
-  .choice-btn .choice-tag {
-    display: block;
-    font-size: .58rem;
-    color: var(--grey);
-    margin-top: 2px;
-    font-style: italic;
-  }
-  .choice-feedback {
-    margin-top: 8px;
-    font-size: .7rem;
-    color: var(--green-ok);
-    text-align: center;
-    font-weight: 600;
-    min-height: 16px;
-  }
+  .choice-btn:hover { background: var(--sand-lt); border-left-color: var(--clay); transform: translateY(-1px); }
+  .choice-btn .choice-tag { display: block; font-size: .56rem; color: var(--grey); margin-top: 2px; font-style: italic; }
+  .choice-feedback { margin-top: 8px; font-size: .7rem; color: var(--green-ok); text-align: center; font-weight: 600; min-height: 16px; }
 
   /* ================= VIEW: PUZZLE ================= */
-  .puzzle-wrap {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 100%;
-  }
+  .puzzle-wrap { display: flex; flex-direction: column; justify-content: space-between; min-height: 100%; }
   .puzzle-intro {
-    font-size: .74rem;
+    font-size: .72rem;
     color: var(--ink);
     line-height: 1.4;
     margin: 0 0 14px;
@@ -487,30 +425,19 @@
   }
   
   /* Puzzle Type: Word Order */
-  .word-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin: 10px 0;
-    justify-content: center;
-  }
+  .word-container { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; justify-content: center; }
   .word-chip {
     background: #fff;
     border: 1px solid var(--gold);
     border-radius: 6px;
     padding: 6px 10px;
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     cursor: pointer;
     user-select: none;
     transition: all 0.15s;
   }
-  .word-chip:hover {
-    background: var(--sand);
-  }
-  .word-chip.selected-out {
-    opacity: 0.3;
-    pointer-events: none;
-  }
+  .word-chip:hover { background: var(--sand); }
+  .word-chip.selected-out { opacity: 0.3; pointer-events: none; }
   .word-slot {
     border: 1px solid rgba(0,0,0,0.1);
     background: rgba(0,0,0,0.03);
@@ -526,10 +453,7 @@
   }
 
   /* Puzzle Type: Matching */
-  .puzzle-cols {
-    display: flex;
-    gap: 10px;
-  }
+  .puzzle-cols { display: flex; gap: 10px; }
   .puzzle-col { flex: 1; }
   .puzzle-col h4 {
     font-family: 'Cinzel', serif;
@@ -548,32 +472,17 @@
     text-align: center;
     margin-bottom: 8px;
     cursor: pointer;
-    font-size: .68rem;
+    font-size: .66rem;
     color: var(--ink);
     transition: all 0.15s;
     user-select: none;
   }
-  .symbol-card.selected {
-    border-color: var(--clay);
-    background: var(--sand);
-    transform: scale(1.02);
-  }
-  .symbol-card.matched {
-    border-color: var(--green-ok);
-    background: #edf7ed;
-    color: var(--green-ok);
-    cursor: default;
-    opacity: 0.8;
-  }
-  .symbol-card.wrong {
-    animation: shake 0.35s ease;
-    border-color: var(--clay);
-  }
+  .symbol-card.selected { border-color: var(--clay); background: var(--sand); transform: scale(1.02); }
+  .symbol-card.matched { border-color: var(--green-ok); background: #edf7ed; color: var(--green-ok); cursor: default; opacity: 0.8; }
+  .symbol-card.wrong { animation: shake 0.35s ease; border-color: var(--clay); }
 
   /* Puzzle Type: Text Input & Multi-select */
-  .puzzle-input-wrap {
-    margin: 15px 0;
-  }
+  .puzzle-input-wrap { margin: 15px 0; }
   .puzzle-input {
     width: 100%;
     padding: 10px;
@@ -584,16 +493,8 @@
     outline: none;
     text-align: center;
   }
-  .puzzle-input:focus {
-    border-color: var(--clay);
-    box-shadow: 0 0 0 2px rgba(163,56,43,0.1);
-  }
-  .options-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-    margin: 10px 0;
-  }
+  .puzzle-input:focus { border-color: var(--clay); box-shadow: 0 0 0 2px rgba(163,56,43,0.1); }
+  .options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 10px 0; }
   .option-card {
     background: #fff;
     border: 1px solid var(--gold);
@@ -601,20 +502,14 @@
     padding: 8px;
     text-align: center;
     cursor: pointer;
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-weight: 500;
     transition: all 0.15s;
   }
-  .option-card.selected {
-    background: var(--clay);
-    color: #fff;
-    border-color: var(--clay);
-  }
+  .option-card.selected { background: var(--clay); color: #fff; border-color: var(--clay); }
 
   /* Puzzle Actions */
-  .puzzle-actions {
-    margin-top: 12px;
-  }
+  .puzzle-actions { margin-top: 12px; }
   .btn-primary {
     width: 100%;
     background: var(--clay);
@@ -630,9 +525,7 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
-  .btn-primary:hover {
-    background: #8e2b20;
-  }
+  .btn-primary:hover { background: #8e2b20; }
   .btn-secondary {
     width: 100%;
     background: transparent;
@@ -645,26 +538,9 @@
     margin-top: 6px;
     font-weight: 500;
   }
-  .puzzle-status {
-    margin-top: 12px;
-    text-align: center;
-    font-size: .72rem;
-    color: var(--navy);
-    font-weight: 700;
-  }
-  .progress-bar-wrap {
-    height: 6px;
-    background: #e5dcc6;
-    border-radius: 4px;
-    margin-top: 6px;
-    overflow: hidden;
-  }
-  .progress-bar-fill {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, var(--gold), var(--gold-soft));
-    transition: width 0.3s ease;
-  }
+  .puzzle-status { margin-top: 12px; text-align: center; font-size: .7rem; color: var(--navy); font-weight: 700; }
+  .progress-bar-wrap { height: 6px; background: #e5dcc6; border-radius: 4px; margin-top: 6px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--gold), var(--gold-soft)); transition: width 0.3s ease; }
 
   /* ================= VIEW: JOURNAL ================= */
   .radar-card {
@@ -676,54 +552,17 @@
     border: 1px solid rgba(139, 58, 47, 0.12);
     margin-bottom: 16px;
   }
-  .radar-card h3 {
-    font-family: 'Cinzel', serif;
-    font-size: .8rem;
-    color: var(--navy);
-    margin: 0 0 6px;
-  }
-  #radarShape {
-    transition: points 0.5s ease;
-  }
-  .wisdom-title {
-    font-family: 'Cinzel', serif;
-    font-size: .8rem;
-    color: var(--clay);
-    margin: 14px 0 8px;
-    font-weight: 700;
-  }
-  .wisdom-card {
-    background: #fff;
-    border-left: 3px solid var(--clay);
-    border-radius: 8px;
-    padding: 8px 10px;
-    margin-bottom: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-  }
-  .wisdom-card.locked {
-    opacity: .4;
-    border-left-color: #c4ba9c;
-  }
-  .wisdom-ref {
-    font-size: .56rem;
-    text-transform: uppercase;
-    letter-spacing: .04em;
-    color: var(--clay);
-    font-weight: 700;
-  }
+  .radar-card h3 { font-family: 'Cinzel', serif; font-size: .8rem; color: var(--navy); margin: 0 0 6px; }
+  #radarShape { transition: points 0.5s ease; }
+  .wisdom-title { font-family: 'Cinzel', serif; font-size: .8rem; color: var(--clay); margin: 14px 0 8px; font-weight: 700; }
+  .wisdom-card { background: #fff; border-left: 3px solid var(--clay); border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+  .wisdom-card.locked { opacity: .4; border-left-color: #c4ba9c; }
+  .wisdom-ref { font-size: .56rem; text-transform: uppercase; letter-spacing: .04em; color: var(--clay); font-weight: 700; }
   .wisdom-card.locked .wisdom-ref { color: var(--grey); }
-  .wisdom-verse {
-    font-size: .72rem;
-    font-style: italic;
-    color: var(--ink);
-    margin: 3px 0 0;
-    line-height: 1.35;
-  }
+  .wisdom-verse { font-size: .72rem; font-style: italic; color: var(--ink); margin: 3px 0 0; line-height: 1.35; }
 
   /* ================= VIEW: CODEX ================= */
-  .codex-search-wrap {
-    margin-bottom: 12px;
-  }
+  .codex-search-wrap { margin-bottom: 12px; }
   .codex-search {
     width: 100%;
     padding: 8px 12px;
@@ -733,35 +572,31 @@
     outline: none;
     font-family: 'Work Sans', sans-serif;
   }
-  .codex-scroll {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .codex-card {
-    background: #fffcf4;
-    border: 1px solid rgba(212, 175, 55, 0.25);
-    border-radius: 8px;
-    padding: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-  }
-  .codex-card h4 {
-    margin: 0 0 4px;
-    font-family: 'Cinzel', serif;
-    font-size: 0.72rem;
+  .codex-scroll { display: flex; flex-direction: column; gap: 10px; }
+  .codex-card { background: #fffcf4; border: 1px solid rgba(212, 175, 55, 0.25); border-radius: 8px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+  .codex-card h4 { margin: 0 0 4px; font-family: 'Cinzel', serif; font-size: 0.72rem; color: var(--clay); }
+  .codex-card p { margin: 0; font-size: 0.7rem; line-height: 1.4; color: var(--ink); }
+  .codex-card p mark { background: var(--gold-soft); color: var(--ink); padding: 0 2px; border-radius: 2px; }
+
+  /* ---------- Watermark branding ---------- */
+  .by-djata-x {
+    position: absolute;
+    bottom: 82px;
+    right: 12px;
+    font-size: 0.52rem;
+    font-weight: 700;
     color: var(--clay);
-  }
-  .codex-card p {
-    margin: 0;
-    font-size: 0.7rem;
-    line-height: 1.4;
-    color: var(--ink);
-  }
-  .codex-card p mark {
-    background: var(--gold-soft);
-    color: var(--ink);
-    padding: 0 2px;
-    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    padding: 2px 6px;
+    border-radius: 4px;
+    opacity: 0.85;
+    z-index: 99;
+    pointer-events: none;
+    font-family: 'Work Sans', sans-serif;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   }
 
   /* ---------- Side Notes Panel ---------- */
@@ -782,18 +617,8 @@
     border-bottom: 1px solid rgba(212, 175, 55, 0.2);
     padding-bottom: 6px;
   }
-  .notes p {
-    font-size: .78rem;
-    color: #b8c4d9;
-    line-height: 1.5;
-    margin: 0 0 12px;
-  }
-  .notes-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 14px;
-  }
+  .notes p { font-size: .78rem; color: #b8c4d9; line-height: 1.5; margin: 0 0 12px; }
+  .notes-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
   .btn-reset {
     background: rgba(163,56,43,0.3);
     border: 1px solid var(--clay);
@@ -805,9 +630,7 @@
     cursor: pointer;
     transition: all 0.2s;
   }
-  .btn-reset:hover {
-    background: rgba(163,56,43,0.6);
-  }
+  .btn-reset:hover { background: rgba(163,56,43,0.6); }
   .notes .tag {
     display: inline-block;
     font-size: .64rem;
@@ -830,25 +653,6 @@
     25% { transform: translateX(-5px); }
     75% { transform: translateX(5px); }
   }
-  .by-djata-x {
-    position: absolute;
-    bottom: 82px;
-    right: 12px;
-    font-size: 0.52rem;
-    font-weight: 700;
-    color: var(--clay);
-    background: rgba(255, 255, 255, 0.7);
-    border: 1px solid rgba(212, 175, 55, 0.4);
-    padding: 2px 6px;
-    border-radius: 4px;
-    opacity: 0.85;
-    z-index: 99;
-    pointer-events: none;
-    font-family: 'Work Sans', sans-serif;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  }
 </style>
 </head>
 <body>
@@ -868,29 +672,42 @@
             </svg>
           </button>
         </div>
-        <div class="sub" id="levelSub">Chapitre 1 — Joseph en Égypte</div>
+        <div class="sub" id="levelSub">Livre I — Les Origines</div>
         
-        <!-- Live Stats Panel -->
+        <!-- Live 7 Stats Panel -->
         <div class="stats-row" id="statsRow">
           <div class="stat-chip" title="Foi">Foi<span id="stat-Foi">3</span></div>
           <div class="stat-chip" title="Sagesse">Sag.<span id="stat-Sagesse">4</span></div>
           <div class="stat-chip" title="Courage">Cour.<span id="stat-Courage">2</span></div>
           <div class="stat-chip" title="Discernement">Disc.<span id="stat-Discernement">3</span></div>
           <div class="stat-chip" title="Compassion">Comp.<span id="stat-Compassion">2</span></div>
+          <div class="stat-chip" title="Leadership">Lead.<span id="stat-Leadership">0</span></div>
+          <div class="stat-chip" title="Obéissance">Obé.<span id="stat-Obéissance">0</span></div>
         </div>
       </div>
 
-      <!-- Main Body (Holds Floating Animation layer & Views) -->
+      <!-- Main Body -->
       <div class="body-area">
         <div class="floating-container" id="floatingContainer"></div>
 
         <!-- VIEW: MAP -->
         <div class="view active" id="view-map">
           <div class="map-scroll">
-            <div class="map-intro">
-              <h2>Carte du Récit</h2>
-              <p>Progresse à travers la vie de Joseph en Égypte. Relève les défis et résous les énigmes pour guider ses choix.</p>
+            
+            <!-- Book Selector Dropdown -->
+            <div class="book-selector-container">
+              <label for="bookSelect">LIVRE ACTIF :</label>
+              <select id="bookSelect" class="book-select" onchange="changeBook(parseInt(this.value))">
+                <option value="1">Livre I : Les Origines</option>
+                <option value="2">Livre II : Les Patriarches</option>
+                <option value="3">Livre III : L'Exode & Conquête</option>
+                <option value="4">Livre IV : Les Juges</option>
+                <option value="5">Livre V : Les Rois</option>
+                <option value="6">Livre VI : Prophètes & Exil</option>
+                <option value="7">Livre VII : L'Accomplissement</option>
+              </select>
             </div>
+
             <div class="map-path" id="mapPath"></div>
           </div>
         </div>
@@ -909,12 +726,10 @@
                     <path d="M18 60 Q43 40 68 60 L66 78 Q43 62 20 78 Z" fill="#8b3a2f"/>
                   </svg>
                 </div>
-                <div class="actor-name">Joseph</div>
+                <div class="actor-name">Héros</div>
               </div>
               <div class="actor-container">
-                <div class="actor-figure" id="figPartner">
-                  <!-- Dynamic Avatar -->
-                </div>
+                <div class="actor-figure" id="figPartner"></div>
                 <div class="actor-name" id="partnerName">Allié</div>
               </div>
             </div>
@@ -936,11 +751,8 @@
           <div class="puzzle-wrap">
             <div>
               <p class="puzzle-intro" id="puzzleIntro">Résous cette énigme pour continuer.</p>
-              
-              <!-- Dynamic Puzzle Slot -->
               <div id="puzzleInteractive"></div>
             </div>
-
             <div class="puzzle-actions">
               <div class="puzzle-status" id="puzzleStatus">0 / 0 résolu</div>
               <div class="progress-bar-wrap"><div class="progress-bar-fill" id="puzzleProgress"></div></div>
@@ -954,24 +766,13 @@
         <div class="view" id="view-journal">
           <div class="journal-wrap">
             <div class="radar-card">
-              <h3>Valeurs de Joseph</h3>
-              <svg width="230" height="210" viewBox="0 0 230 210">
-                <!-- Background Grid -->
-                <polygon points="115,20 195,75 165,175 65,175 35,75" fill="none" stroke="#d8cba0" stroke-width="1"/>
-                <polygon points="115,55 165,90 145,150 85,150 65,90" fill="none" stroke="#d8cba0" stroke-width="1"/>
-                <polygon points="115,90 135,105 125,125 105,125 95,105" fill="none" stroke="#d8cba0" stroke-width="0.5" stroke-dasharray="2"/>
-                <!-- Dynamic Shape -->
-                <polygon id="radarShape" points="115,105 115,105 115,105 115,105 115,105" fill="rgba(212, 175, 55, 0.35)" stroke="var(--clay)" stroke-width="2.5"/>
-                <!-- Labels -->
-                <text x="115" y="14" text-anchor="middle" font-size="9" fill="#1b263e" font-family="Work Sans" font-weight="700">Foi</text>
-                <text x="203" y="74" text-anchor="start" font-size="9" fill="#1b263e" font-family="Work Sans" font-weight="700">Sagesse</text>
-                <text x="178" y="190" text-anchor="middle" font-size="9" fill="#1b263e" font-family="Work Sans" font-weight="700">Courage</text>
-                <text x="52" y="190" text-anchor="middle" font-size="9" fill="#1b263e" font-family="Work Sans" font-weight="700">Discern.</text>
-                <text x="27" y="74" text-anchor="end" font-size="9" fill="#1b263e" font-family="Work Sans" font-weight="700">Compass.</text>
+              <h3>Valeurs Spirituelles</h3>
+              <svg width="230" height="210" viewBox="0 0 230 210" id="radarSvg">
+                <!-- Dynamic Heptagon dynamic shape -->
+                <polygon id="radarShape" points="" fill="rgba(212, 175, 55, 0.35)" stroke="var(--clay)" stroke-width="2.5"/>
               </svg>
             </div>
-            
-            <div class="wisdom-title">Journal de progression</div>
+            <div class="wisdom-title">Fragments de sagesse débloqués</div>
             <div id="wisdomList"></div>
           </div>
         </div>
@@ -1023,15 +824,15 @@
   <!-- External Side Information Panel -->
   <div class="notes">
     <h2>Chroniques Bibliques</h2>
-    <p>Une aventure interactive inspirée de l'histoire de Joseph (Genèse 37-45). Prenez des décisions morales et résolvez des énigmes en vous appuyant sur le Codex biblique.</p>
+    <p>Une aventure interactive inspirée de la Genèse aux Évangiles. Prenez des décisions morales et résolvez des énigmes en vous appuyant sur le Codex biblique.</p>
     
     <div class="notes-actions">
       <div style="font-size:0.7rem; color: var(--gold-soft); font-weight: 600; margin-bottom: 2px;">OPTIONS DE JEU :</div>
-      <button class="btn-reset" onclick="resetGameData()">Réinitialiser ma progression</button>
+      <button class="btn-reset" onclick="resetGameData()">Réinitialiser la progression</button>
     </div>
 
     <div style="margin-top: 18px;">
-      <span class="tag">Graphique Radar réactif</span>
+      <span class="tag">Radar Heptagone</span>
       <span class="tag">Synthétiseur Audio natif</span>
       <span class="tag">Moteur de Dialogue</span>
       <span class="tag">Base de données Codex</span>
@@ -1043,217 +844,516 @@
 <script>
   // ================= BIBLE & CODEX DATABASE =================
   const codexDatabase = [
-    { title: "Genèse 37:3 (L'amour de Jacob)", text: "Israël aimait Joseph plus que tous ses autres fils, parce qu'il l'avait eu dans sa vieillesse ; et il lui fit une tunique de plusieurs couleurs." },
-    { title: "Genèse 37:21-22 (L'avis de Ruben)", text: "Ruben entendit cela, et il le délivra de leurs mains. Il dit : Ne lui ôtons pas la vie. Ruben leur dit : Ne répandez point de sang ; jetez-le dans cette citerne qui est au désert, et ne mettez pas la main sur lui. Il avait dessein de le délivrer de leurs mains pour le faire retourner vers son père." },
-    { title: "Genèse 37:25 (Les Marchands de Galaad)", text: "Ils s'assirent ensuite pour manger. Ayant levé les yeux, ils virent une caravane d'Ismaélites venant de Galaad ; leurs chameaux étaient chargés d'aromates, de baume et de myrrhe, qu'ils transportaient en Égypte." },
-    { title: "Psaumes 27:10 (Le secours divin)", text: "Car mon père et ma mère m'abandonnent, mais l'Éternel me recueillera." },
-    { title: "Genèse 39:9 (La réponse à la tentation)", text: "Il n'est pas plus grand que moi dans cette maison, et il ne m'a rien interdit, excepté toi, parce que tu es sa femme. Comment ferais-je un aussi grand mal et pécherais-je contre Dieu ?" },
-    { title: "Genèse 40:12-13 (Le songe de l'Échanson)", text: "Joseph lui dit : Voici l'explication. Les trois rameaux sont trois jours. Encore trois jours, et Pharaon relèvera ta tête et te rétablira dans ta charge ; tu présenteras la coupe à Pharaon, comme tu le faisais auparavant." },
-    { title: "Genèse 40:18-19 (Le songe du Panetier)", text: "Joseph répondit et dit : Voici l'explication. Les trois corbeilles sont trois jours. Encore trois jours, et Pharaon enlèvera ta tête de dessus toi, te fera pendre à un bois, et les oiseaux mangeront ta chair." },
-    { title: "Genèse 41:26-27 (L'explication des vaches)", text: "Les sept vaches grasses sont sept années, et les sept épis pleins sont sept années : c'est un seul songe. Les sept vaches décharnées et laides qui montaient derrière les premières sont sept années ; et les sept épis vides, brûlés par le vent d'est, seront sept années de famine." },
-    { title: "Genèse 41:34 (Le stockage du blé)", text: "Que Pharaon établisse des commissaires sur le pays, pour lever un cinquième des récoltes de l'Égypte pendant les sept années d'abondance." },
-    { title: "Genèse 44:12 (La coupe d'argent)", text: "L'intendant chercha, commençant par le plus âgé et finissant par le plus jeune ; et la coupe fut trouvée dans le sac de Benjamin." }
+    { title: "Genèse 2:16-17 (Le commandement)", text: "L'Éternel Dieu donna cet ordre à l'homme : Tu pourras manger de tous les arbres du jardin ; mais tu ne mangeras pas de l'arbre de la connaissance du bien et du mal..." },
+    { title: "Genèse 3:4-5 (Le murmure)", text: "Alors le serpent dit à la femme : Vous ne mourrez point ; mais Dieu sait que, le jour où vous en mangerez, vos yeux s'ouvriront, et que vous serez comme des dieux..." },
+    { title: "Genèse 3:15 (Le Proto-Évangile)", text: "Je mettrai inimitié entre toi et la femme, entre ta postérité et sa postérité : celle-ci t'écrasera la tête, et tu lui blesseras le talon." },
+    { title: "Genèse 5:24 (Hénoch)", text: "Hénoch marcha avec Dieu ; puis il ne parut plus, parce que Dieu le prit." },
+    { title: "Hébreux 11:5 (Le témoignage)", text: "C'est par la foi qu'Hénoch fut enlevé pour qu'il ne vît point la mort... car avant son enlèvement, il avait reçu le témoignage qu'il était agréable à Dieu." },
+    { title: "Genèse 6:15 (Les dimensions de l'Arche)", text: "Et voici comment tu la feras : l'arche aura trois cents coudées de longueur, cinquante coudées de largeur, et trente coudées de hauteur." },
+    { title: "Genèse 6:22 (Obéissance de Noé)", text: "C'est ce que fit Noé : il exécuta tout ce que Dieu lui avait ordonné." },
+    { title: "Genèse 9:13 (L'Arc de l'Alliance)", text: "J'ai placé mon arc dans la nue, et il servira de signe d'alliance entre moi et la terre." },
+    { title: "Genèse 12:1 (L'appel d'Abram)", text: "L'Éternel dit à Abram : Va-t'en de ton pays, de ta patrie, et de la maison de ton père, dans le pays que je te montrerai." },
+    { title: "Genèse 13:9 (Le choix d'Abram)", text: "Ne sépare-toi pas de moi : si tu vas à gauche, j'irai à droite ; si tu vas à droite, j'irai à gauche." },
+    { title: "Genèse 15:6 (La Foi d'Abraham)", text: "Abram eut confiance en l'Éternel, qui le lui compta comme justice." },
+    { title: "Genèse 22:8 (Le bélier de Morija)", text: "Abraham dit : Mon fils, Dieu se pourvoira lui-même de l'agneau pour l'holocauste. Et ils marchèrent tous deux ensemble." },
+    { title: "Genèse 24:14 (Le signe de Rébecca)", text: "Que la jeune fille à laquelle je dirai : Penche ta cruche, je te prie... et qui répondra : Bois, et je donnerai aussi à boire à tes chameaux, soit celle que tu as destinée à ton serviteur Isaac !" },
+    { title: "Genèse 28:12 (L'échelle de Béthel)", text: "Il eut un songe. Et voici, une échelle était appuyée sur la terre, et son sommet touchait au ciel. Et voici, les anges de Dieu montaient et descendaient par cette échelle." },
+    { title: "Genèse 32:28 (La lutte de Jacob)", text: "Ton nom ne sera plus Jacob, mais tu seras appelé Israël ; car tu as lutté avec Dieu et avec des hommes, et tu as été vainqueur." },
+    { title: "Genèse 33:10 (La réconciliation)", text: "Jacob dit : J'ai vu ton visage comme on voit le visage de Dieu, et tu m'as accueilli favorablement." },
+    { title: "Genèse 37:25 (Les Marchands de Galaad)", text: "Ils virent une caravane d'Ismaélites venant de Galaad ; leurs chameaux étaient chargés d'aromates, de baume et de myrrhe, qu'ils transportaient en Égypte." },
+    { title: "Genèse 39:9 (La fuite devant le mal)", text: "Comment ferais-je un aussi grand mal et pécherais-je contre Dieu ?" },
+    { title: "Genèse 41:34 (L'intendance en Égypte)", text: "Que Pharaon établisse des commissaires sur le pays, pour lever un cinquième des récoltes de l'Égypte pendant les sept années d'abondance." },
+    { title: "Genèse 44:12 (La coupe d'argent)", text: "L'intendant chercha, commençant par le plus âgé et finissant par le plus jeune ; et la coupe fut trouvée dans le sac de Benjamin." },
+    { title: "Exode 3:14 (Le Nom Divin)", text: "Dieu dit à Moïse : Je suis celui qui suis. Et il dit : C'est ainsi que tu répondras aux enfants d'Israël : Celui qui s'appelle 'Je suis' m'envoie vers vous." },
+    { title: "Exode 14:13 (La foi de Moïse)", text: "Ne craignez rien, restez en place, et regardez la délivrance que l'Éternel va vous accorder en ce jour." },
+    { title: "Exode 20:3 (La Loi)", text: "Tu n'auras pas d'autres dieux devant ma face." },
+    { title: "Josué 1:9 (Le courage de la conquête)", text: "Fortifie-toi et prends courage ? Ne t'effraye point et ne t'épouvante point, car l'Éternel, ton Dieu, est avec toi dans tout ce que tu entreprendras." },
+    { title: "Josué 2:18 (Le cordon rouge)", text: "Attache ce cordon de fil écarlate à la fenêtre par laquelle tu nous as fait descendre, et rassemble dans ta maison ton père, ta mère..." },
+    { title: "Juges 4:14 (L'ordre de Débora)", text: "Lève-toi, car voici le jour où l'Éternel livre Sisera entre tes mains." },
+    { title: "Juges 7:6 (Le tri de Gédéon)", text: "Le nombre de ceux qui lapèrent l'eau dans leur main en la portant à la bouche fut de trois cents hommes." },
+    { title: "Juges 16:28 (Le cri de Samson)", text: "Seigneur Éternel ! souviens-toi de moi, je te prie ; ô Dieu ! donne-moi de la force seulement cette fois..." },
+    { title: "1 Samuel 15:22 (Le rejet de Saül)", text: "L'obéissance vaut mieux que les sacrifices, et l'observation de sa parole vaut mieux que la graisse des béliers." },
+    { title: "1 Samuel 17:45 (David contre Goliath)", text: "Je marche contre toi au nom de l'Éternel des armées." },
+    { title: "2 Samuel 12:13 (Repentance de David)", text: "David dit à Nathan : J'ai péché contre l'Éternel !" },
+    { title: "1 Rois 3:9 (La demande de Salomon)", text: "Accorde donc à ton serviteur un cœur intelligent pour juger ton peuple, pour discerner le bien du mal." },
+    { title: "1 Rois 19:12 (Élie à Horeb)", text: "Après le feu, un murmure doux et léger. Dès qu'Élie l'entendit, il s'enveloppa le visage de son manteau." },
+    { title: "Esther 4:14 (Le courage d'Esther)", text: "Et qui sait si ce n'est pas pour un temps comme celui-ci que tu es parvenue à la royauté ?" },
+    { title: "Daniel 6:22 (Daniel aux lions)", text: "Mon Dieu a envoyé son ange et a fermé la gueule des lions..." },
+    { title: "Jean 1:29 (Jean-Baptiste)", text: "Le lendemain, il vit Jésus venant à lui, et il dit : Voici l'Agneau de Dieu, qui ôte le péché du monde." },
+    { title: "Jean 3:30 (Humilité)", text: "Il faut qu'il croisse, et que je diminue." },
+    { title: "Luc 2:52 (Enfance de Jésus)", text: "Et Jésus croissait en sagesse, en stature, et en grâce, devant Dieu et devant les hommes." },
+    { title: "Matthieu 5:44 (La Loi d'Amour)", text: "Aimez vos ennemis, bénissez ceux qui vous maudissent, faites du bien à ceux qui vous haïssent..." },
+    { title: "Luc 22:42 (Gethsémané)", text: "Père, si tu voulais éloigner de moi cette coupe ! Toutefois, que ma volonté se fasse, et non la tienne." },
+    { title: "Luc 23:34 (Pardon de la Croix)", text: "Jésus dit : Père, pardonne-leur, car ils ne savent ce qu'ils font." },
+    { title: "Matthieu 28:19 (La Grande Mission)", text: "Allez, faites de toutes les nations des disciples..." }
   ];
 
-  // ================= CHAPTERS & STORY DATABASE =================
-  const chapters = {
+  // ================= SCALABLE 7 BOOKS & 22 CHAPTERS DATABASE =================
+  const gameDatabase = {
     1: {
-      title: "Canaan — le puits",
-      tag: "Foi",
-      desc: "La trahison des frères.",
-      location: "Le désert de Dothan",
-      partnerName: "Juda",
-      partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150">
-                    <ellipse cx="43" cy="26" rx="17" ry="19" fill="#9e7c53"/>
-                    <path d="M20 30 Q43 8 66 30 L66 20 Q43 2 20 20 Z" fill="#2d1f14"/>
-                    <path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#8b3a2f"/>
-                  </svg>`,
-      dialogues: [
-        { speaker: "Narrateur", text: "Tes frères, jaloux de ta tunique multicolore et de tes songes, t'ont jeté au fond d'un puits asséché. Ils discutent maintenant de ton sort..." },
-        { speaker: "Juda", text: "« Que gagnerons-nous à tuer notre frère et à cacher son sang ? Venez, vendons-le à ces marchands d'Ismaël, et ne mettons pas la main sur lui... »" },
-        { speaker: "Narrateur", text: "Entendant ces mots depuis la citerne sombre, tu ressens une peur immense, mais aussi une lueur d'espoir. Que décides-tu de faire ?" }
-      ],
-      choices: [
-        { text: "Crier vers Dieu en silence et accepter ton destin", stat: "Foi", val: 1 },
-        { text: "Tenter de négocier avec Juda en invoquant l'amour paternel", stat: "Compassion", val: 1 },
-        { text: "Garder ton silence avec dignité et courage", stat: "Courage", val: 1 }
-      ],
-      puzzle: {
-        intro: "Avant que les marchands n'arrivent, remets dans le bon ordre le verset de réconfort (Psaume 27:10) gravé sur la pierre. Clique sur les mots pour reconstituer la phrase.",
-        type: "word-order",
-        words: ["Car", "mon", "père", "et", "ma", "mère", "m'abandonnent,", "Mais", "l'Éternel", "me", "recueillera."],
-        correct: ["Car", "mon", "père", "et", "ma", "mère", "m'abandonnent,", "Mais", "l'Éternel", "me", "recueillera."]
-      }
+      id: 1, title: "Livre I : Les Origines", sub: "Du commencement au Déluge",
+      chapters: [
+        {
+          id: "1_1", num: 1, title: "Adam & Ève", tag: "Obéissance", desc: "La création et la première limite.", location: "Éden",
+          partnerName: "Ève",
+          partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150"><ellipse cx="43" cy="26" rx="17" ry="19" fill="#dfbba2"/><path d="M18 32 Q43 14 68 32 L68 15 Q43 5 18 15 Z" fill="#6d543b"/><path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#4d5f50"/></svg>`,
+          dialogues: [
+            { speaker: "Narrateur", text: "Au milieu d'un Éden luxuriant, l'Éternel vous a donné la garde du jardin, avec une seule consigne : ne pas consommer le fruit de l'arbre de la connaissance du bien et du mal." },
+            { speaker: "Ève", text: "« Regarde ce fruit, Adam. Le serpent prétend qu'en le mangeant nous serons comme des dieux. Crois-tu que Dieu nous cache quelque chose ? »" },
+            { speaker: "Narrateur", text: "Le doute est semé. Quelle est votre décision face à cette première épreuve de fidélité ?" }
+          ],
+          choices: [
+            { text: "Refuser fermement et rappeler la consigne de vie", stat: "Obéissance", val: 2 },
+            { text: "Céder par curiosité et partager le fruit", stat: "Discernement", val: 1 }
+          ],
+          puzzle: {
+            intro: "Déchiffre la promesse de restauration gravée dans les sables d'Éden. Remets les mots du verset (Genèse 3:15) dans l'ordre.",
+            type: "word-order",
+            words: ["Je", "mettrai", "inimitié", "entre", "toi", "et", "la", "femme,", "entre", "ta", "postérité", "et", "sa", "postérité."],
+            correct: ["Je", "mettrai", "inimitié", "entre", "toi", "et", "la", "femme,", "entre", "ta", "postérité", "et", "sa", "postérité."]
+          }
+        },
+        {
+          id: "1_2", num: 2, title: "Hénoch", tag: "Foi", desc: "Marcher fidèlement chaque jour.", location: "Désert de Canaan",
+          partnerName: "Contemporain",
+          partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150"><ellipse cx="43" cy="26" rx="17" ry="19" fill="#cca06b"/><path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#6d5a3b"/></svg>`,
+          dialogues: [
+            { speaker: "Narrateur", text: "La violence se propage sur la terre. Les hommes oublient leur Créateur. Hénoch choisit une voie différente : marcher quotidiennement avec Dieu dans la fidélité." },
+            { speaker: "Contemporain", text: "« Pourquoi te retires-tu de nos fêtes, Hénoch ? Dieu est silencieux. Vis ta vie selon tes plaisirs ! »" }
+          ],
+          choices: [
+            { text: "Déclarer calmement sa résolution de plaire à Dieu d'abord", stat: "Foi", val: 2 },
+            { text: "Leur prêcher la justice avec courage", stat: "Courage", val: 2 }
+          ],
+          puzzle: {
+            intro: "Saisis le verbe manquant pour définir la vie d'Hénoch selon Genèse 5:24.",
+            type: "fill-blank",
+            question: "« Hénoch ___ avec Dieu ; puis il ne parut plus, parce que Dieu le prit. »",
+            answer: "marcha"
+          }
+        },
+        {
+          id: "1_3", num: 3, title: "Noé", tag: "Obéissance", desc: "L'arche de l'alliance.", location: "Mont Ararat",
+          partnerName: "Le Moqueur",
+          partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150"><ellipse cx="43" cy="26" rx="17" ry="19" fill="#9e7c53"/><path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#7a3b2d"/></svg>`,
+          dialogues: [
+            { speaker: "Narrateur", text: "La terre est corrompue. Dieu vous ordonne de bâtir une arche immense sur la terre ferme pour préserver la vie. Le chantier dure des décennies." },
+            { speaker: "Le Moqueur", text: "« Hé, Noé ! Un navire en plein désert ? Tu as perdu la raison ! Il n'y a pas un nuage dans le ciel ! »" }
+          ],
+          choices: [
+            { text: "Continuer de scier le bois avec patience et foi", stat: "Obéissance", val: 2 },
+            { text: "Leur expliquer patiemment le jugement à venir", stat: "Compassion", val: 1 }
+          ],
+          puzzle: {
+            intro: "Sélectionne les 3 produits précieux que Dieu demanda d'embarquer pour sceller la vie (Aromates, Baume, Myrrhe - Genèse 37:25 / Galaad).",
+            type: "multi-select",
+            options: ["Soie", "Aromates", "Or", "Baume", "Encens", "Myrrhe", "Blé"],
+            correct: ["Aromates", "Baume", "Myrrhe"]
+          }
+        }
+      ]
     },
     2: {
-      title: "La caravane",
-      tag: "Courage",
-      desc: "Survivre au voyage en terre étrangère.",
-      location: "Le désert du Sinaï",
-      partnerName: "Marchand",
-      partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150">
-                    <ellipse cx="43" cy="26" rx="17" ry="19" fill="#a87f58"/>
-                    <rect x="23" y="5" width="40" height="10" rx="3" fill="#e8d9b5"/>
-                    <path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#4a5f4c"/>
-                  </svg>`,
-      dialogues: [
-        { speaker: "Marchand", text: "« Te voilà captif, jeune hébreu. Le désert est brûlant et impitoyable. Si tu te rends utile, nous desserrerons tes liens. Connais-tu nos cargaisons ? »" },
-        { speaker: "Narrateur", text: "Pour gagner le respect des marchands et éviter un sort funeste dans le désert, aide-les à inventorier les trésors de Galaad." }
-      ],
-      choices: [
-        { text: "Travailler avec diligence et mémoriser les routes du désert", stat: "Sagesse", val: 1 },
-        { text: "Endurer le trajet pénible sans te plaindre", stat: "Courage", val: 1 }
-      ],
-      puzzle: {
-        intro: "Selon Genèse 37:25, les marchands Ismaélites transportent trois produits précieux vers l'Égypte. Sélectionne ces 3 produits dans la liste.",
-        type: "multi-select",
-        options: ["Blé", "Aromates", "Or", "Baume", "Encens", "Myrrhe", "Soie"],
-        correct: ["Aromates", "Baume", "Myrrhe"]
-      }
+      id: 2, title: "Livre II : Les Patriarches", sub: "D'Abraham à Joseph en Égypte",
+      chapters: [
+        {
+          id: "2_1", num: 1, title: "Abraham", tag: "Foi", desc: "L'appel vers l'inconnu.", location: "Mont Morija",
+          partnerName: "Isaac jeune",
+          partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150"><ellipse cx="43" cy="26" rx="15" ry="17" fill="#dfbba2"/><path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#506b67"/></svg>`,
+          dialogues: [
+            { speaker: "Narrateur", text: "Dieu appelle Abram à quitter Haran pour un pays inconnu. Plus tard, l'alliance est scellée par l'épreuve de foi suprême sur le mont Morija." },
+            { speaker: "Isaac", text: "« Mon père, voici le feu et le bois ; mais où est l'agneau pour l'holocauste ? »" }
+          ],
+          choices: [
+            { text: "Déclarer avec foi que Dieu pourvoira à l'agneau", stat: "Foi", val: 2 },
+            { text: "Démontrer une obéissance absolue et calme", stat: "Obéissance", val: 2 }
+          ],
+          puzzle: {
+            intro: "Quelle fut la déclaration de foi d'Abraham (Genèse 22:8) ? Saisis le mot manquant.",
+            type: "fill-blank",
+            question: "« Mon fils, Dieu se ___ lui-même de l'agneau pour l'holocauste. »",
+            answer: "pourvoira"
+          }
+        },
+        {
+          id: "2_2", num: 2, title: "Isaac & Rébecca", tag: "Obéissance", desc: "La recherche de l'épouse.", location: "Puits de Charan",
+          partnerName: "Éliézer",
+          partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150"><ellipse cx="43" cy="26" rx="17" ry="19" fill="#a87f58"/><path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#3a5c53"/></svg>`,
+          dialogues: [
+            { speaker: "Narrateur", text: "Abraham envoie son serviteur Éliézer trouver une épouse pour Isaac en Mésopotamie. Arrivé au puits, Éliézer prie pour un signe de bienveillance." },
+            { speaker: "Éliézer", text: "« Seigneur, que celle qui me donnera à boire et abreuvera aussi mes chameaux soit celle que Tu as choisie. »" }
+          ],
+          choices: [
+            { text: "Accueillir ce signe comme l'accomplissement de la promesse", stat: "Discernement", val: 2 },
+            { text: "Bénir Rébecca pour sa compassion", stat: "Compassion", val: 2 }
+          ],
+          puzzle: {
+            intro: "Quelle jeune fille manifesta la compassion requise au puits pour désigner l'épouse d'Isaac (Genèse 24:15) ?",
+            type: "fill-blank",
+            question: "« Voici, ___ sortait, sa cruche sur l'épaule. »",
+            answer: "rebecca"
+          }
+        },
+        {
+          id: "2_3", num: 3, title: "Jacob", tag: "Sagesse", desc: "La lutte de Péniel.", location: "Péniel",
+          partnerName: "L'Ange",
+          partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150"><ellipse cx="43" cy="26" rx="17" ry="19" fill="#fbf6e8" stroke="var(--gold)"/><path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="rgba(212,175,55,0.2)"/></svg>`,
+          dialogues: [
+            { speaker: "Narrateur", text: "Jacob retourne affronter son frère Ésaü qu'il a autrefois trompé. Pendant la nuit, un homme mystérieux lutte avec lui près du torrent du Jabbok." },
+            { speaker: "L'Ange", text: "« Laisse-moi aller, car l'aurore se lève. »" }
+          ],
+          choices: [
+            { text: "Répondre avec courage : Je ne te laisserai point aller, que tu ne m'aies béni !", stat: "Courage", val: 2 },
+            { text: "Accepter la blessure et demander humblement la bénédiction", stat: "Obéissance", val: 2 }
+          ],
+          puzzle: {
+            intro: "Quel nouveau nom de victoire spirituelle Jacob reçut-il après avoir lutté (Genèse 32:28) ?",
+            type: "fill-blank",
+            question: "« Ton nom ne sera plus Jacob, mais tu seras appelé ___. »",
+            answer: "israel"
+          }
+        },
+        {
+          id: "2_4", num: 4, title: "Joseph", tag: "Sagesse", desc: "Gouverner l'Égypte.", location: "Palais de Pharaon",
+          partnerName: "Pharaon",
+          partnerSvg: `<svg width="80" height="130" viewBox="0 0 90 150"><ellipse cx="45" cy="24" rx="18" ry="20" fill="#8c5a3c"/><rect x="24" y="4" width="42" height="14" rx="4" fill="#c9a227"/><path d="M16 58 Q45 36 74 58 L80 148 L10 148 Z" fill="#233252"/></svg>`,
+          dialogues: [
+            { speaker: "Pharaon", text: "« Joseph, puisque ton Dieu t'a fait connaître tout cela, il n'y a personne qui soit aussi intelligent et aussi sage que toi. Gère mon empire. »" },
+            { speaker: "Joseph", text: "« Ce n'est pas moi, Pharaon ! C'est Dieu qui donnera une réponse favorable. »" }
+          ],
+          choices: [
+            { text: "Organiser méthodiquement le stockage pour la disette à venir", stat: "Sagesse", val: 2 },
+            { text: "Pardonner de tout cœur à tes frères venus chercher du blé", stat: "Compassion", val: 2 }
+          ],
+          puzzle: {
+            intro: "Associe les deux parties du rêve de Pharaon à son interprétation exacte.",
+            type: "matching",
+            pairs: [
+              { left: "7 vaches grasses & épis pleins", right: "7 ans d'abondance", id: "1" },
+              { left: "7 vaches maigres & épis vides", right: "7 ans de famine sévère", id: "2" },
+              { left: "Le songe répété deux fois", right: "La chose est résolue par Dieu", id: "3" }
+            ]
+          }
+        }
+      ]
     },
     3: {
-      title: "Maison de Potiphar",
-      tag: "Obéissance",
-      desc: "Gérer la confiance et la tentation.",
-      location: "Le domaine royal",
-      partnerName: "Potiphar",
-      partnerSvg: `<svg width="80" height="130" viewBox="0 0 90 150">
-                    <ellipse cx="45" cy="24" rx="18" ry="20" fill="#8c5a3c"/>
-                    <rect x="24" y="4" width="42" height="14" rx="4" fill="#1b2338"/>
-                    <path d="M16 58 Q45 36 74 58 L80 148 L10 148 Z" fill="#233252"/>
-                  </svg>`,
-      dialogues: [
-        { speaker: "Potiphar", text: "« Joseph, ton Dieu est avec toi. Tout ce que tu touches prospère. À partir de ce jour, tu es l'intendant suprême de ma maison. »" },
-        { speaker: "Narrateur", text: "Quelques mois plus tard, la femme de Potiphar te tend un piège et tente de te séduire. Seule avec toi, elle te saisit par ta tunique..." },
-        { speaker: "Femme de Potiphar", text: "« Viens avec moi, personne ne le saura ! »" }
-      ],
-      choices: [
-        { text: "Fuir immédiatement en laissant ton vêtement", stat: "Sagesse", val: 1 },
-        { text: "Lui expliquer calmement ton refus et ton respect pour Dieu et ton maître", stat: "Foi", val: 1 }
-      ],
-      puzzle: {
-        intro: "Pour prouver ton intégrité, écris le mot manquant du passage de Genèse 39:9. Aide-toi du Codex au besoin.",
-        type: "fill-blank",
-        question: "« Comment ferais-je un aussi grand ___ et pécherais-je contre Dieu ? »",
-        answer: "mal"
-      }
+      id: 3, title: "Livre III : L'Exode & Conquête", sub: "Moïse et Josué",
+      chapters: [
+        {
+          id: "3_1", num: 1, title: "Moïse", tag: "Leadership", desc: "Le passage de la Mer Rouge.", location: "Rives du Sinaï",
+          partnerName: "Aaron",
+          partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150"><ellipse cx="43" cy="26" rx="17" ry="19" fill="#9e7c53"/><path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#3b4d45"/></svg>`,
+          dialogues: [
+            { speaker: "Narrateur", text: "Les chars égyptiens approchent. Devant vous se trouve la mer Rouge, derrière vous l'armée. Le peuple panique." },
+            { speaker: "Aaron", text: "« Moïse, qu'allons-nous faire ? C'est la fin ! »" }
+          ],
+          choices: [
+            { text: "Rassurer le peuple avec courage : Regardez la délivrance de Dieu !", stat: "Courage", val: 2 },
+            { text: "Lever le bâton sur les eaux et ordonner d'avancer", stat: "Leadership", val: 2 }
+          ],
+          puzzle: {
+            intro: "Saisis le mot de loi fondamental gravé en tête des dix commandements au Sinaï (Exode 20:3).",
+            type: "fill-blank",
+            question: "« Tu n'auras pas d'autres ___ devant ma face. »",
+            answer: "dieux"
+          }
+        },
+        {
+          id: "3_2", num: 2, title: "Josué", tag: "Courage", desc: "Les murailles de Jéricho.", location: "Jéricho",
+          partnerName: "Rahab",
+          partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150"><ellipse cx="43" cy="26" rx="17" ry="19" fill="#dfbba2"/><path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#8c3a2f"/></svg>`,
+          dialogues: [
+            { speaker: "Narrateur", text: "La forteresse de Jéricho bloque l'entrée en Terre Promise. Dieu vous ordonne d'en faire le tour en silence avec l'arche." },
+            { speaker: "Josué", text: "« Fortifions-nous et prenons courage. Obéissons à la marche. »" }
+          ],
+          choices: [
+            { text: "Marcher silencieusement pendant sept jours dans la foi", stat: "Obéissance", val: 2 },
+            { text: "Épargner la maison de Rahab repérée par le cordon écarlate", stat: "Compassion", val: 2 }
+          ],
+          puzzle: {
+            intro: "Quel repère visuel Rahab plaça-t-elle à sa fenêtre pour sauver sa famille (Josué 2:18) ?",
+            type: "fill-blank",
+            question: "« Attache ce cordon de fil ___ à la fenêtre par laquelle tu nous as fait descendre. »",
+            answer: "ecarlate"
+          }
+        }
+      ]
     },
     4: {
-      title: "La prison royale",
-      tag: "Sagesse",
-      desc: "Interpréter les songes des prisonniers.",
-      location: "Les geôles du roi",
-      partnerName: "L'Échanson",
-      partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150">
-                    <ellipse cx="43" cy="26" rx="17" ry="19" fill="#caa06b"/>
-                    <path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#695f53"/>
-                  </svg>`,
-      dialogues: [
-        { speaker: "L'Échanson", text: "« Joseph, nous avons fait des songes mystérieux en prison. Devant moi, il y avait un cep de vigne à trois rameaux qui bourgeonnaient... »" },
-        { speaker: "Le Panetier", text: "« Et moi, j'avais trois corbeilles de pain blanc sur la tête, et des oiseaux venaient y manger... »" },
-        { speaker: "Narrateur", text: "Ils implorent une explication. L'interprétation vient de Dieu. Comment leur réponds-tu ?" }
-      ],
-      choices: [
-        { text: "Annoncer la vérité avec compassion et espérance", stat: "Compassion", val: 1 },
-        { text: "Exposer clairement le message divin, même s'il est sombre", stat: "Discernement", val: 1 }
-      ],
-      puzzle: {
-        intro: "Associe correctement chaque élément de rêve à son interprétation (Sélectionne une carte à gauche puis sa correspondance à droite).",
-        type: "matching",
-        pairs: [
-          { left: "Trois rameaux de vigne", right: "Trois jours avant la grâce", id: "1" },
-          { left: "Trois corbeilles de pain", right: "Trois jours avant la sentence", id: "2" },
-          { left: "Oiseaux mangeant le pain", right: "Le Panetier sera pendu", id: "3" }
-        ]
-      }
+      id: 4, title: "Livre IV : Les Juges", sub: "Débora, Gédéon et Samson",
+      chapters: [
+        {
+          id: "4_1", num: 1, title: "Débora", tag: "Leadership", desc: "Le conseil et la prophétie.", location: "Palmier de Débora",
+          partnerName: "Barak",
+          partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150"><ellipse cx="43" cy="26" rx="17" ry="19" fill="#9e7c53"/><path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#3b4c5c"/></svg>`,
+          dialogues: [
+            { speaker: "Débora", text: "« L'Éternel ordonne de marcher vers le mont Thabor. Pourquoi hésites-tu, Barak ? »" },
+            { speaker: "Barak", text: "« Si tu viens avec moi, je marcherai. Sinon, je n'irai pas. »" }
+          ],
+          choices: [
+            { text: "Accepter avec courage de l'accompagner et guider l'armée", stat: "Leadership", val: 2 },
+            { text: "Lui rappeler avec sagesse que la gloire reviendra à une femme", stat: "Sagesse", val: 2 }
+          ],
+          puzzle: {
+            intro: "Où Débora siégeait-elle pour rendre la justice en Israël (Juges 4:5) ?",
+            type: "fill-blank",
+            question: "« Elle siégeait sous le ___ de Débora... »",
+            answer: "palmier"
+          }
+        },
+        {
+          id: "4_2", num: 2, title: "Gédéon", tag: "Foi", desc: "La sélection des 300.", location: "Source de Harod",
+          partnerName: "Purah",
+          partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150"><ellipse cx="43" cy="26" rx="17" ry="19" fill="#cca06b"/><path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#4c503b"/></svg>`,
+          dialogues: [
+            { speaker: "Narrateur", text: "Dieu vous demande de réduire votre armée pour prouver que la victoire vient de Lui seul. Vous observez les hommes s'abreuver à la source." },
+            { speaker: "Purah", text: "« Chef Gédéon, la plupart s'agenouillent et boivent directement sans surveiller l'horizon. »" }
+          ],
+          choices: [
+            { text: "Ne retenir que les 300 hommes qui lapent l'eau avec vigilance", stat: "Discernement", val: 2 },
+            { text: "Faire confiance absolue dans la promesse divine", stat: "Foi", val: 2 }
+          ],
+          puzzle: {
+            intro: "Combien d'hommes furent sélectionnés à la source de Harod pour affronter l'armée ennemie (Juges 7:6) ?",
+            type: "fill-blank",
+            question: "« ...fut de ___ cents hommes. » (Écris le nombre en lettres)",
+            answer: "trois"
+          }
+        },
+        {
+          id: "4_3", num: 3, title: "Samson", tag: "Courage", desc: "La force et le secret.", location: "Temple de Dagon",
+          partnerName: "Dalila",
+          partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150"><ellipse cx="43" cy="26" rx="17" ry="19" fill="#dfbba2"/><path d="M18 32 Q43 14 68 32 L68 15 Q43 5 18 15 Z" fill="#aa4a2f"/><path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#4d3b5f"/></svg>`,
+          dialogues: [
+            { speaker: "Dalila", text: "« Samson, tu t'es moqué de moi trois fois. Dis-moi enfin d'où vient ta force extraordinaire ! »" },
+            { speaker: "Narrateur", text: "Dalila vous tourmente chaque jour. Votre esprit est fatigué, mais vous savez que votre force vient de votre vœu de naziréat à Dieu." }
+          ],
+          choices: [
+            { text: "Résister à l'importunité et fuir la vallée de Sorek", stat: "Obéissance", val: 2 },
+            { text: "Retrouver la foi et la force lors du sacrifice final", stat: "Foi", val: 2 }
+          ],
+          puzzle: {
+            intro: "Où résidait le secret de la force spirituelle et physique de Samson (Juges 16:17) ?",
+            type: "fill-blank",
+            question: "« Le ___ n'a jamais passé sur ma tête, car je suis naziréen à Dieu... »",
+            answer: "rasoir"
+          }
+        }
+      ]
     },
     5: {
-      title: "Songe de Pharaon",
-      tag: "Discernement",
-      desc: "Proposer un plan pour l'Égypte.",
-      location: "Le Palais Impérial",
-      partnerName: "Pharaon",
-      partnerSvg: `<svg width="80" height="130" viewBox="0 0 90 150">
-                    <ellipse cx="45" cy="24" rx="18" ry="20" fill="#8c5a3c"/>
-                    <rect x="24" y="4" width="42" height="14" rx="4" fill="#c9a227"/>
-                    <path d="M16 58 Q45 36 74 58 L80 148 L10 148 Z" fill="#233252"/>
-                  </svg>`,
-      dialogues: [
-        { speaker: "Pharaon", text: "« J'ai fait des rêves qu'aucun magicien ne peut expliquer. On m'a dit que tu possèdes la sagesse d'interpréter les songes. »" },
-        { speaker: "Joseph", text: "« Ce n'est pas moi, c'est Dieu qui donnera une réponse favorable à Pharaon. Raconte-moi tes songes... »" }
-      ],
-      choices: [
-        { text: "Expliquer les songes et proposer un plan d'action immédiat pour stocker la nourriture", stat: "Sagesse", val: 2 },
-        { text: "Attribuer humblement toute l'explication à la prescience de Dieu", stat: "Foi", val: 2 }
-      ],
-      puzzle: {
-        intro: "Associe les deux parties du double songe de Pharaon à leur sens caché.",
-        type: "matching",
-        pairs: [
-          { left: "7 vaches grasses & épis pleins", right: "7 ans d'abondance", id: "1" },
-          { left: "7 vaches maigres & épis vides", right: "7 ans de famine sévère", id: "2" },
-          { left: "Le songe répété deux fois", right: "La chose est fermement résolue par Dieu", id: "3" }
-        ]
-      }
+      id: 5, title: "Livre V : Les Rois", sub: "Saül, David et Salomon",
+      chapters: [
+        {
+          id: "5_1", num: 1, title: "Samuel & Saül", tag: "Obéissance", desc: "L'obéissance et le sacrifice.", location: "Guilgal",
+          partnerName: "Saül",
+          partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150"><ellipse cx="43" cy="26" rx="17" ry="19" fill="#a87f58"/><path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#1b263e"/></svg>`,
+          dialogues: [
+            { speaker: "Samuel", text: "« Pourquoi as-tu fait le sacrifice toi-même à Guilgal sans attendre mon arrivée, Saül ? »" },
+            { speaker: "Saül", text: "« J'ai vu mon peuple se disperser, et j'ai eu peur des Philistins. Je me suis forcé à offrir l'holocauste. »" }
+          ],
+          choices: [
+            { text: "Rappeler au roi que l'obéissance vaut mieux que les sacrifices", stat: "Obéissance", val: 2 },
+            { text: "Discerner la défaillance de caractère chez Saül", stat: "Discernement", val: 2 }
+          ],
+          puzzle: {
+            intro: "Complète la célèbre sentence de Samuel face à la désobéissance de Saül (1 Samuel 15:22).",
+            type: "fill-blank",
+            question: "« L'___ vaut mieux que les sacrifices. »",
+            answer: "obeissance"
+          }
+        },
+        {
+          id: "5_2", num: 2, title: "David", tag: "Courage", desc: "Le berger face au géant.", location: "Vallée d'Éla",
+          partnerName: "Goliath",
+          partnerSvg: `<svg width="90" height="140" viewBox="0 0 90 150"><ellipse cx="45" cy="22" rx="20" ry="22" fill="#8c5a3c"/><rect x="20" y="2" width="50" height="16" fill="#7a2b20"/><path d="M10 50 Q45 25 80 50 L86 148 L4 148 Z" fill="#424c5c"/></svg>`,
+          dialogues: [
+            { speaker: "Goliath", text: "« Viens vers moi, jeune berger, et je donnerai ta chair aux oiseaux du ciel et aux bêtes de la terre ! »" },
+            { speaker: "David", text: "« Tu marches contre moi avec l'épée, la lance ; moi, je marche au nom de l'Éternel des armées ! »" }
+          ],
+          choices: [
+            { text: "Affronter le géant avec courage et une simple fronde", stat: "Courage", val: 2 },
+            { text: "Épargner Saül dans la caverne d'En-Guédi par respect pour l'oint de Dieu", stat: "Compassion", val: 2 }
+          ],
+          puzzle: {
+            intro: "Où David s'est-il abstenu de frapper Saül pour prouver son intégrité (1 Samuel 24) ?",
+            type: "fill-blank",
+            question: "« ...dans la caverne d'___. »",
+            answer: "enguedi"
+          }
+        },
+        {
+          id: "5_3", num: 3, title: "Salomon", tag: "Sagesse", desc: "Le jugement et la sagesse.", location: "Tribunal de Jérusalem",
+          partnerName: "Reine de Saba",
+          partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150"><ellipse cx="43" cy="26" rx="17" ry="19" fill="#8c5a3c"/><rect x="23" y="4" width="40" height="12" fill="#c9a227"/><path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#6d3b5f"/></svg>`,
+          dialogues: [
+            { speaker: "Narrateur", text: "Deux femmes réclament la maternité d'un même bébé devant votre tribunal. Il n'y a pas de témoins." },
+            { speaker: "Salomon", text: "« Apportez-moi une épée. Coupez l'enfant vivant en deux, et donnez la moitié à chacune. »" }
+          ],
+          choices: [
+            { text: "Observer la réaction de compassion de la vraie mère", stat: "Discernement", val: 2 },
+            { text: "Consacrer le Temple dans la nuée de la présence divine", stat: "Foi", val: 2 }
+          ],
+          puzzle: {
+            intro: "Salomon demanda à Dieu un don pour diriger son peuple (1 Rois 3:9). Saisis sa réponse.",
+            type: "fill-blank",
+            question: "« Accorde donc à ton serviteur un cœur ___ pour juger ton peuple... »",
+            answer: "intelligent"
+          }
+        }
+      ]
     },
     6: {
-      title: "Les sept ans de disette",
-      tag: "Leadership",
-      desc: "Administrer les réserves de blé.",
-      location: "Greniers d'Égypte",
-      partnerName: "Intendant",
-      partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150">
-                    <ellipse cx="43" cy="26" rx="17" ry="19" fill="#caa06b"/>
-                    <path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#506b67"/>
-                  </svg>`,
-      dialogues: [
-        { speaker: "Intendant", text: "« Les sept années d'abondance sont finies. La famine frappe l'Égypte et toutes les nations. Les peuples crient pour du pain. »" },
-        { speaker: "Narrateur", text: "En tant que second de Pharaon, tu dois administrer les stocks. Comment gères-tu les demandes de nourriture ?" }
-      ],
-      choices: [
-        { text: "Distribuer généreusement les récoltes à tous ceux qui demandent", stat: "Compassion", val: 1 },
-        { text: "Vendre le blé avec méthode et rigueur pour préserver les stocks", stat: "Discernement", val: 1 }
-      ],
-      puzzle: {
-        intro: "Saisis la proportion des récoltes de l'Égypte que Joseph conseilla de stocker chaque année (Genèse 41:34). Écris le mot en lettres sans accent.",
-        type: "fill-blank",
-        question: "« Lever un ___ des récoltes pendant les sept années d'abondance. »",
-        answer: "cinquieme"
-      }
+      id: 6, title: "Livre VI : Prophètes & Exil", sub: "Élie, Esther et Daniel",
+      chapters: [
+        {
+          id: "6_1", num: 1, title: "Élie", tag: "Foi", desc: "Le murmure doux et léger.", location: "Mont Horeb",
+          partnerName: "Achab",
+          partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150"><ellipse cx="43" cy="26" rx="17" ry="19" fill="#cca06b"/><path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#7a6349"/></svg>`,
+          dialogues: [
+            { speaker: "Narrateur", text: "Après avoir fait descendre le feu sur le mont Carmel, vous fuyez Jézabel. Épuisé, vous vous réfugiez dans une caverne sur le mont Horeb." },
+            { speaker: "Élie", text: "« C'en est assez, Éternel ! Prends mon âme, car je ne suis pas meilleur que mes pères. »" }
+          ],
+          choices: [
+            { text: "Fronter la tempête et le feu en attendant l'Éternel", stat: "Courage", val: 2 },
+            { text: "Écouter la présence de Dieu dans le murmure subtil", stat: "Discernement", val: 2 }
+          ],
+          puzzle: {
+            intro: "Sous quel arbuste Élie s'est-il assis dans son découragement extrême au désert (1 Rois 19:4) ?",
+            type: "fill-blank",
+            question: "« Il s'en alla dans le désert... et s'assit sous un ___. »",
+            answer: "genet"
+          }
+        },
+        {
+          id: "6_2", num: 2, title: "Esther", tag: "Courage", desc: "Pour un temps comme celui-ci.", location: "Palais de Suse",
+          partnerName: "Mardochée",
+          partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150"><ellipse cx="43" cy="26" rx="17" ry="19" fill="#caa06b"/><path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#3b4d5a"/></svg>`,
+          dialogues: [
+            { speaker: "Mardochée", text: "« Ne t'imagine pas que tu échapperas seule au palais, Esther. Qui sait si ce n'est pas pour un temps comme celui-ci que tu es parvenue à la royauté ? »" },
+            { speaker: "Esther", text: "« Je jeûnerai trois jours. J'entrerai chez le roi malgré la loi ; et si je dois périr, je périrai. »" }
+          ],
+          choices: [
+            { text: "Risquer sa vie et s'avancer vers le trône de Xerxès", stat: "Courage", val: 2 },
+            { text: "Inviter le roi et Haman au banquet avec sagesse", stat: "Sagesse", val: 2 }
+          ],
+          puzzle: {
+            intro: "Quel objet le roi tendit-il à Esther pour lui accorder sa grâce (Esther 5:2) ?",
+            type: "fill-blank",
+            question: "« ...le roi tendit à Esther le ___ d'or qu'il avait à la main. »",
+            answer: "sceptre"
+          }
+        },
+        {
+          id: "6_3", num: 3, title: "Daniel", tag: "Foi", desc: "Fidèle dans la fosse.", location: "La fosse aux lions",
+          partnerName: "Darius",
+          partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150"><ellipse cx="43" cy="26" rx="17" ry="19" fill="#a87f58"/><path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#6d4c3b"/></svg>`,
+          dialogues: [
+            { speaker: "Darius", text: "« Daniel, serviteur du Dieu vivant, ton Dieu que tu sers avec persévérance a-t-il pu te délivrer des lions ? »" },
+            { speaker: "Daniel", text: "« Roi, vis éternellement ! Mon Dieu a envoyé son ange et a fermé la gueule des lions... »" }
+          ],
+          choices: [
+            { text: "Continuer de prier fenêtres ouvertes malgré les décrets de mort", stat: "Foi", val: 2 },
+            { text: "Maintenir son intégrité face aux satrapes corrompus", stat: "Obéissance", val: 2 }
+          ],
+          puzzle: {
+            intro: "Où Daniel priait-il trois fois par jour, face à quelle ville (Daniel 6:10) ?",
+            type: "fill-blank",
+            question: "« ...les fenêtres de sa chambre étaient ouvertes dans la direction de ___. »",
+            answer: "jerusalem"
+          }
+        }
+      ]
     },
     7: {
-      title: "Le dénouement",
-      tag: "Foi",
-      desc: "Vengeance ou pardon — le choix final.",
-      location: "La salle du trône",
-      partnerName: "Juda esclave",
-      partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150">
-                    <ellipse cx="43" cy="26" rx="17" ry="19" fill="#9e7c53"/>
-                    <path d="M20 30 Q43 8 66 30 L66 20 Q43 2 20 20 Z" fill="#2d1f14"/>
-                    <path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#756149"/>
-                  </svg>`,
-      dialogues: [
-        { speaker: "Narrateur", text: "Tes frères sont revenus acheter du blé. Tu as fait cacher ta coupe d'argent dans le sac de Benjamin. L'intendant l'a trouvée ! Tes frères tremblent de peur..." },
-        { speaker: "Juda", text: "« Prends-moi à sa place pour que le jeune garçon reparte avec mon père. Je ne pourrais voir la douleur de mon père si l'enfant manquait... »" },
-        { speaker: "Narrateur", text: "Juda, qui t'avait autrefois vendu, est prêt à se sacrifier pour son frère. Le moment est venu de lever le voile." }
-      ],
-      choices: [
-        { text: "Te révéler en pleurant et leur offrir un pardon inconditionnel", stat: "Compassion", val: 2 },
-        { text: "Leur expliquer que c'est Dieu qui t'a envoyé en Égypte pour leur sauver la vie", stat: "Foi", val: 2 }
-      ],
-      puzzle: {
-        intro: "Saisis le nom du plus jeune frère de Joseph dans le sac duquel la coupe d'argent a été dissimulée.",
-        type: "fill-blank",
-        question: "« La coupe fut trouvée dans le sac de ___. »",
-        answer: "benjamin"
-      }
+      id: 7, title: "Livre VII : L'Accomplissement", sub: "Jean-Baptiste et Jésus-Christ",
+      chapters: [
+        {
+          id: "7_1", num: 1, title: "Jean-Baptiste", tag: "Obéissance", desc: "Préparer le chemin.", location: "Rives du Jourdain",
+          partnerName: "Disciple",
+          partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150"><ellipse cx="43" cy="26" rx="17" ry="19" fill="#caa06b"/><path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#4d535f"/></svg>`,
+          dialogues: [
+            { speaker: "Jean-Baptiste", text: "« Voici l'Agneau de Dieu, qui ôte le péché du monde. Il faut qu'il croisse, et que je diminue. »" },
+            { speaker: "Disciple", text: "« Maître, tout le monde va vers lui désormais. Que devons-nous faire ? »" }
+          ],
+          choices: [
+            { text: "S'effacer avec humilité et obéissance face au ministère de Jésus", stat: "Obéissance", val: 2 },
+            { text: "Rendre témoignage de la vérité avec courage devant Hérode", stat: "Courage", val: 2 }
+          ],
+          puzzle: {
+            intro: "Comment Jean-Baptiste définit-il son rôle dans le désert (Luc 3:4) ? Saisis le mot manquant.",
+            type: "fill-blank",
+            question: "« C'est la ___ de celui qui crie dans le désert... »",
+            answer: "voix"
+          }
+        },
+        {
+          id: "7_2", num: 2, title: "Jésus — L'Enfance", tag: "Obéissance", desc: "La Nativité.", location: "Bethléem",
+          partnerName: "Joseph",
+          partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150"><ellipse cx="43" cy="26" rx="17" ry="19" fill="#caa06b"/><path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#50676b"/></svg>`,
+          dialogues: [
+            { speaker: "Narrateur", text: "L'enfant est né dans une étable de Bethléem. L'ange avertit Joseph en songe de fuir immédiatement en Égypte." },
+            { speaker: "Joseph", text: "« Marie, prenons l'enfant. Les soldats d'Hérode approchent. Fuyons de nuit. »" }
+          ],
+          choices: [
+            { text: "Obéir sans tarder aux avertissements de l'ange", stat: "Obéissance", val: 2 },
+            { text: "Méditer tous ces mystères avec foi dans son cœur", stat: "Foi", val: 1 }
+          ],
+          puzzle: {
+            intro: "Où Marie coucha-t-elle le nouveau-né par manque de place à l'hôtellerie (Luc 2:7) ?",
+            type: "fill-blank",
+            question: "« Elle l'enveloppa de langes, et le coucha dans une ___. »",
+            answer: "mangeoire"
+          }
+        },
+        {
+          id: "7_3", num: 3, title: "Jésus — Le Ministère", tag: "Compassion", desc: "La Loi d'Amour.", location: "Mont des Béatitudes",
+          partnerName: "Pierre",
+          partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150"><ellipse cx="43" cy="26" rx="17" ry="19" fill="#dfbba2"/><path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#506b53"/></svg>`,
+          dialogues: [
+            { speaker: "Jésus", text: "« Aimez vos ennemis, bénissez ceux qui vous maudissent, faites du bien à ceux qui vous haïssent... »" },
+            { speaker: "Pierre", text: "« Seigneur, combien de fois pardonnerai-je à mon frère s'il pèche contre moi ? Jusqu'à sept fois ? »" }
+          ],
+          choices: [
+            { text: "Répondre avec sagesse : Non pas jusqu'à sept fois, mais soixante-dix fois sept fois !", stat: "Sagesse", val: 2 },
+            { text: "Guérir le malade et accueillir l'exclu par pure compassion", stat: "Compassion", val: 2 }
+          ],
+          puzzle: {
+            intro: "À quel exemple de bienveillant secours Jésus fait-il référence dans sa parabole (Luc 10:33) ?",
+            type: "fill-blank",
+            question: "« Mais un ___, qui voyageait, étant venu là, fut touché de compassion... »",
+            answer: "samaritain"
+          }
+        },
+        {
+          id: "7_4", num: 4, title: "Passion & Résurrection", tag: "Foi", desc: "L'Accomplissement final.", location: "Mont des Oliviers",
+          partnerName: "Marie de Magdala",
+          partnerSvg: `<svg width="80" height="130" viewBox="0 0 86 150"><ellipse cx="43" cy="26" rx="17" ry="19" fill="#dfbba2"/><path d="M18 32 Q43 14 68 32 L68 15 Q43 5 18 15 Z" fill="#4a5f6d"/><path d="M18 60 Q43 40 68 60 L74 148 L12 148 Z" fill="#5c4d5f"/></svg>`,
+          dialogues: [
+            { speaker: "Marie de Magdala", text: "« On a enlevé mon Seigneur du tombeau, et je ne sais où ils l'ont mis... Rabboni ! C'est Toi ! »" },
+            { speaker: "Jésus ressuscité", text: "« Ne me retiens pas, mais va vers mes frères et dis-leur : Je monte vers mon Père... Allez, faites de toutes les nations des disciples. »" }
+          ],
+          choices: [
+            { text: "Accepter la coupe de la mort à Gethsémané par obéissance", stat: "Obéissance", val: 2 },
+            { text: "Offrir le pardon absolu à tes bourreaux sur la croix", stat: "Compassion", val: 2 }
+          ],
+          puzzle: {
+            intro: "Quel est l'ordre final donné par Jésus ressuscité à ses disciples (Matthieu 28:19) ?",
+            type: "fill-blank",
+            question: "« ___, faites de toutes les nations des disciples... »",
+            answer: "allez"
+          }
+        }
+      ]
     }
   };
 
   // ================= STATE MANAGEMENT =================
   let state = {
-    currentLevel: 1,
-    stats: { Foi: 3, Sagesse: 4, Courage: 2, Discernement: 3, Compassion: 2 },
+    selectedBook: 1,
+    completedChapters: [], // array of completed chapterIds like "1_1"
+    stats: { Foi: 3, Sagesse: 4, Courage: 2, Discernement: 3, Compassion: 2, Leadership: 0, Obéissance: 0 },
     wisdomUnlocked: [1],
     soundEnabled: true
   };
@@ -1282,7 +1382,6 @@
     const now = audioCtx.currentTime;
 
     if (type === 'click') {
-      // Short woody tap
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(400, now);
       osc.frequency.exponentialRampToValueAtTime(150, now + 0.08);
@@ -1291,8 +1390,7 @@
       osc.start(now);
       osc.stop(now + 0.08);
     } else if (type === 'success') {
-      // Golden major chord arpeggio
-      const notes = [261.63, 329.63, 392.00, 523.25]; // C4, E4, G4, C5
+      const notes = [261.63, 329.63, 392.00, 523.25];
       notes.forEach((freq, idx) => {
         const subOsc = audioCtx.createOscillator();
         const subGain = audioCtx.createGain();
@@ -1306,7 +1404,6 @@
         subOsc.stop(now + idx * 0.08 + 0.4);
       });
     } else if (type === 'error') {
-      // Short buzz
       osc.type = 'sawtooth';
       osc.frequency.setValueAtTime(130, now);
       osc.frequency.linearRampToValueAtTime(90, now + 0.25);
@@ -1315,7 +1412,6 @@
       osc.start(now);
       osc.stop(now + 0.25);
     } else if (type === 'unlock') {
-      // Mystical chime sweep
       osc.type = 'sine';
       osc.frequency.setValueAtTime(300, now);
       osc.frequency.exponentialRampToValueAtTime(1200, now + 0.5);
@@ -1324,7 +1420,6 @@
       osc.start(now);
       osc.stop(now + 0.5);
     } else if (type === 'speech') {
-      // Soft synthetic talk click
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(150 + Math.random() * 80, now);
       gain.gain.setValueAtTime(0.08, now);
@@ -1349,8 +1444,8 @@
     saveState();
   }
 
-  // ================= STATE MANAGEMENT AND STORAGE =================
-  const STORAGE_KEY = "chronicles_bibliques_save";
+  // ================= STORAGE =================
+  const STORAGE_KEY = "chronicles_bibliques_save_heptagon";
 
   function loadState() {
     try {
@@ -1359,7 +1454,7 @@
         state = JSON.parse(data);
       }
     } catch(e) {
-      console.warn("Could not load save state from localStorage", e);
+      console.warn("Could not load save state", e);
     }
   }
 
@@ -1367,15 +1462,16 @@
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch(e) {
-      console.warn("Could not save state to localStorage", e);
+      console.warn("Could not save state", e);
     }
   }
 
   function resetGameData() {
-    if (confirm("Voulez-vous vraiment réinitialiser toute votre progression et recommencer au début ?")) {
+    if (confirm("Voulez-vous vraiment réinitialiser toute votre progression et recommencer au début du Livre I ?")) {
       state = {
-        currentLevel: 1,
-        stats: { Foi: 3, Sagesse: 4, Courage: 2, Discernement: 3, Compassion: 2 },
+        selectedBook: 1,
+        completedChapters: [],
+        stats: { Foi: 3, Sagesse: 4, Courage: 2, Discernement: 3, Compassion: 2, Leadership: 0, Obéissance: 0 },
         wisdomUnlocked: [1],
         soundEnabled: state.soundEnabled
       };
@@ -1386,7 +1482,7 @@
     }
   }
 
-  // ================= UI CONTROL: NAVIGATION =================
+  // ================= UI NAVIGATION =================
   function switchTab(btn) {
     playSound('click');
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -1395,9 +1491,37 @@
     
     const targetViewId = btn.getAttribute('data-view');
     document.getElementById(targetViewId).classList.add('active');
-    
-    // Scroll top body
     document.querySelector('.body-area').scrollTop = 0;
+  }
+
+  // ================= BOOK MANAGEMENT & CHRONOLOGICAL LOCKS =================
+  const chronologicalOrder = [
+    "1_1", "1_2", "1_3",
+    "2_1", "2_2", "2_3", "2_4",
+    "3_1", "3_2",
+    "4_1", "4_2", "4_3",
+    "5_1", "5_2", "5_3",
+    "6_1", "6_2", "6_3",
+    "7_1", "7_2", "7_3", "7_4"
+  ];
+
+  function isChapterUnlocked(chapId) {
+    const idx = chronologicalOrder.indexOf(chapId);
+    if (idx <= 0) return true; // first chapter is always unlocked
+    const predId = chronologicalOrder[idx - 1];
+    return state.completedChapters.includes(predId);
+  }
+
+  function changeBook(bookNum) {
+    playSound('click');
+    state.selectedBook = bookNum;
+    saveState();
+    
+    // Update sub title
+    const bookTitle = gameDatabase[bookNum].title;
+    document.getElementById('levelSub').textContent = `${bookTitle} — ${gameDatabase[bookNum].sub}`;
+    
+    renderMap();
   }
 
   // ================= RENDER MAP PATH =================
@@ -1405,18 +1529,24 @@
     const mapPath = document.getElementById('mapPath');
     mapPath.innerHTML = '';
     
-    Object.keys(chapters).forEach(numStr => {
-      const lvl = parseInt(numStr);
-      const ch = chapters[lvl];
-      
+    // Sync Select Dropdown
+    document.getElementById('bookSelect').value = state.selectedBook;
+    
+    const book = gameDatabase[state.selectedBook];
+    document.getElementById('levelSub').textContent = `${book.title} — ${book.sub}`;
+
+    book.chapters.forEach(ch => {
       let lvlState = 'locked';
-      if (lvl < state.currentLevel) lvlState = 'done';
-      else if (lvl === state.currentLevel) lvlState = 'current';
+      if (state.completedChapters.includes(ch.id)) {
+        lvlState = 'done';
+      } else if (isChapterUnlocked(ch.id)) {
+        lvlState = 'current';
+      }
 
       const el = document.createElement('div');
       el.className = `stop ${lvlState}`;
       el.innerHTML = `
-        <div class="stop-marker">${lvl}</div>
+        <div class="stop-marker">${ch.num}</div>
         <div class="stop-card">
           <h3>${ch.title}</h3>
           <p>${ch.desc}</p>
@@ -1426,7 +1556,7 @@
 
       if (lvlState === 'current') {
         el.addEventListener('click', () => {
-          startChapter(lvl);
+          startChapter(ch);
         });
       }
       mapPath.appendChild(el);
@@ -1435,21 +1565,21 @@
 
   // ================= LEVEL NARRATIVE FLOW =================
   let currentDialogIndex = 0;
-  let activeLevelData = null;
+  let activeChapterData = null;
   let typewritingTimer = null;
   let isWriting = false;
   let textToType = "";
   let typedLength = 0;
 
-  function startChapter(lvl) {
-    activeLevelData = chapters[lvl];
+  function startChapter(ch) {
+    activeChapterData = ch;
     currentDialogIndex = 0;
-    document.getElementById('dialogueScene').textContent = activeLevelData.location;
+    document.getElementById('dialogueScene').textContent = ch.location;
     
-    // Set up Dynamic Partner Figure
+    // Set up Partner figure
     const figPartner = document.getElementById('figPartner');
-    figPartner.innerHTML = activeLevelData.partnerSvg;
-    document.getElementById('partnerName').textContent = activeLevelData.partnerName;
+    figPartner.innerHTML = ch.partnerSvg;
+    document.getElementById('partnerName').textContent = ch.partnerName;
 
     // Switch view to dialogue
     switchTab(document.getElementById('tabDialogue'));
@@ -1458,7 +1588,7 @@
   }
 
   function loadDialogueStep() {
-    const step = activeLevelData.dialogues[currentDialogIndex];
+    const step = activeChapterData.dialogues[currentDialogIndex];
     document.getElementById('dialogueSpeaker').textContent = step.speaker;
     
     // Toggle Speaking Highlight animations
@@ -1467,7 +1597,7 @@
     jFig.classList.remove('speaking');
     pFig.classList.remove('speaking');
 
-    if (step.speaker === "Joseph") {
+    if (step.speaker === "Joseph" || step.speaker === "Adam" || step.speaker === "Hénoch" || step.speaker === "Noé" || step.speaker === "Abraham" || step.speaker === "Jacob" || step.speaker === "Moïse" || step.speaker === "Josué" || step.speaker === "David" || step.speaker === "Salomon" || step.speaker === "Élie" || step.speaker === "Esther" || step.speaker === "Daniel" || step.speaker === "Jean-Baptiste" || step.speaker === "Jésus" || step.speaker === "Jésus ressuscité") {
       jFig.classList.add('speaking');
     } else if (step.speaker !== "Narrateur") {
       pFig.classList.add('speaking');
@@ -1496,7 +1626,7 @@
         isWriting = false;
         onDialogueTextComplete();
       }
-    }, 20);
+    }, 15);
   }
 
   function skipTypewriting() {
@@ -1509,11 +1639,9 @@
   }
 
   function onDialogueTextComplete() {
-    // Check if we are at the last dialogue node of the chapter to show choices
-    if (currentDialogIndex === activeLevelData.dialogues.length - 1) {
+    if (currentDialogIndex === activeChapterData.dialogues.length - 1) {
       renderChoices();
     } else {
-      // Just normal narration progression
       const choiceList = document.getElementById('choiceList');
       const nextBtn = document.createElement('button');
       nextBtn.className = 'choice-btn';
@@ -1531,7 +1659,7 @@
     const list = document.getElementById('choiceList');
     list.innerHTML = '';
     
-    activeLevelData.choices.forEach(c => {
+    activeChapterData.choices.forEach(c => {
       const btn = document.createElement('button');
       btn.className = 'choice-btn';
       btn.innerHTML = `
@@ -1545,18 +1673,15 @@
 
   function handleChoiceSelect(choice) {
     playSound('success');
-    // Disable clicks
     document.querySelectorAll('.choice-btn').forEach(b => b.style.pointerEvents = 'none');
     
     // Add Stats
-    state.stats[choice.stat] += choice.val;
+    state.stats[choice.stat] = (state.stats[choice.stat] || 0) + choice.val;
     saveState();
     updateStatsGrid();
     updateRadarChart();
 
-    // Floating stat animation
     triggerFloatingText(`+${choice.val} ${choice.stat}`);
-
     document.getElementById('choiceFeedback').textContent = `Choix validé ! Progression vers l'énigme.`;
 
     setTimeout(() => {
@@ -1577,12 +1702,11 @@
   }
 
   // ================= PUZZLE SYSTEM =================
-  let selectedCards = [];
   let solvedItems = 0;
   let wordOrderSelection = [];
 
   function setupPuzzle() {
-    const p = activeLevelData.puzzle;
+    const p = activeChapterData.puzzle;
     document.getElementById('puzzleIntro').textContent = p.intro;
     
     const container = document.getElementById('puzzleInteractive');
@@ -1592,22 +1716,18 @@
     document.getElementById('puzzleHelpBtn').classList.remove('hidden');
 
     solvedItems = 0;
-    selectedCards = [];
     updatePuzzleProgress(0, 1);
 
     if (p.type === 'word-order') {
-      // Slot for ordered words
       const slot = document.createElement('div');
       slot.className = 'word-slot';
       slot.id = 'wordSlot';
       slot.textContent = 'Déposez les mots ici...';
       container.appendChild(slot);
 
-      // Shuffled words buttons
       const pool = document.createElement('div');
       pool.className = 'word-container';
       
-      // Shuffle helper
       const shuffled = [...p.words].sort(() => Math.random() - 0.5);
       wordOrderSelection = [];
 
@@ -1647,7 +1767,7 @@
       container.appendChild(grid);
       
       document.getElementById('puzzleSubmitBtn').classList.remove('hidden');
-      document.getElementById('puzzleStatus').textContent = "Sélectionne 3 éléments.";
+      document.getElementById('puzzleStatus').textContent = "Sélectionne les éléments correspondants.";
 
     } else if (p.type === 'fill-blank') {
       const wrap = document.createElement('div');
@@ -1659,7 +1779,7 @@
       container.appendChild(wrap);
       
       document.getElementById('puzzleSubmitBtn').classList.remove('hidden');
-      document.getElementById('puzzleStatus').textContent = "Trouve le mot exact.";
+      document.getElementById('puzzleStatus').textContent = "Trouve le mot exact (sans accent).";
 
     } else if (p.type === 'matching') {
       const cols = document.createElement('div');
@@ -1673,7 +1793,6 @@
       rightCol.className = 'puzzle-col';
       rightCol.innerHTML = '<h4>Signification</h4>';
 
-      // Shuffling cards
       const leftItems = p.pairs.map(pair => ({ text: pair.left, id: pair.id }));
       const rightItems = p.pairs.map(pair => ({ text: pair.right, id: pair.id }));
       
@@ -1713,7 +1832,7 @@
     slot.innerHTML = '';
     
     if (wordOrderSelection.length === 0) {
-      slot.textContent = 'Déposez les mots ici... (Cliquez sur un mot placé pour le retirer)';
+      slot.textContent = 'Déposez les mots ici...';
       return;
     }
 
@@ -1737,18 +1856,14 @@
     playSound('click');
 
     const side = card.dataset.side;
-    
-    // Clear selection on the same side
     document.querySelectorAll(`.symbol-card[data-side="${side}"]`).forEach(c => c.classList.remove('selected'));
     card.classList.add('selected');
 
-    // Find if matching card on other side is selected
     const otherSide = side === 'left' ? 'right' : 'left';
     const activeOther = document.querySelector(`.symbol-card[data-side="${otherSide}"].selected`);
     
     if (activeOther) {
       if (card.dataset.id === activeOther.dataset.id) {
-        // Success match
         playSound('success');
         card.classList.remove('selected');
         activeOther.classList.remove('selected');
@@ -1756,7 +1871,7 @@
         activeOther.classList.add('matched');
         
         solvedItems++;
-        const total = activeLevelData.puzzle.pairs.length;
+        const total = activeChapterData.puzzle.pairs.length;
         updatePuzzleProgress(solvedItems, total);
         document.getElementById('puzzleStatus').textContent = `${solvedItems} / ${total} correspondances`;
 
@@ -1764,7 +1879,6 @@
           triggerPuzzleVictory();
         }
       } else {
-        // Wrong match
         playSound('error');
         card.classList.add('wrong');
         activeOther.classList.add('wrong');
@@ -1783,7 +1897,7 @@
   }
 
   function submitPuzzle() {
-    const p = activeLevelData.puzzle;
+    const p = activeChapterData.puzzle;
 
     if (p.type === 'word-order') {
       const sentence = wordOrderSelection.map(w => w.text).join(' ');
@@ -1795,7 +1909,6 @@
       } else {
         playSound('error');
         document.getElementById('puzzleStatus').textContent = "Ordre incorrect, réessaye !";
-        // Reset slot
         wordOrderSelection.forEach(w => w.chipRef.classList.remove('selected-out'));
         wordOrderSelection = [];
         renderWordSlot();
@@ -1810,12 +1923,11 @@
         triggerPuzzleVictory();
       } else {
         playSound('error');
-        document.getElementById('puzzleStatus').textContent = "Mauvaise cargaison. Cherche les indices !";
+        document.getElementById('puzzleStatus').textContent = "Sélection incorrecte. Consulte le Codex !";
         document.querySelectorAll('.option-card.selected').forEach(c => c.classList.remove('selected'));
       }
     } else if (p.type === 'fill-blank') {
       const val = document.getElementById('blankInput').value.trim().toLowerCase();
-      // Clean accents for safety
       const cleanVal = val.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
       
       if (cleanVal === p.answer) {
@@ -1824,7 +1936,7 @@
         triggerPuzzleVictory();
       } else {
         playSound('error');
-        document.getElementById('puzzleStatus').textContent = "Ce n'est pas le bon mot.";
+        document.getElementById('puzzleStatus').textContent = "Ce n'est pas la bonne réponse.";
         document.getElementById('blankInput').value = '';
       }
     }
@@ -1837,25 +1949,21 @@
   function triggerPuzzleVictory() {
     document.getElementById('puzzleStatus').textContent = "Victoire ! Énigme résolue.";
     
-    // Add stats as bonus
+    // Add stats bonus
     state.stats.Discernement += 1;
     updateStatsGrid();
     updateRadarChart();
     triggerFloatingText("+1 Discernement");
 
-    // Unlock next level
-    if (state.currentLevel === activeLevelData.levelNum || state.currentLevel == Object.keys(chapters).length) {
-      // Last level reached
+    // Push chapter to completed
+    if (!state.completedChapters.includes(activeChapterData.id)) {
+      state.completedChapters.push(activeChapterData.id);
     }
     
-    // Unlock wisdom fragment in state
-    if (!state.wisdomUnlocked.includes(state.currentLevel)) {
-      state.wisdomUnlocked.push(state.currentLevel);
-    }
-    
-    // Advance currentLevel
-    if (state.currentLevel < Object.keys(chapters).length + 1) {
-      state.currentLevel++;
+    // Unlock wisdom fragment
+    const chapNumGlobal = chronologicalOrder.indexOf(activeChapterData.id) + 1;
+    if (!state.wisdomUnlocked.includes(chapNumGlobal)) {
+      state.wisdomUnlocked.push(chapNumGlobal);
     }
 
     saveState();
@@ -1863,21 +1971,83 @@
     renderWisdomJournal();
 
     setTimeout(() => {
-      alert("Félicitations ! Tu as terminé ce chapitre avec succès !");
+      alert(`Félicitations ! Tu as terminé le chapitre : ${activeChapterData.title} !`);
       switchTab(document.querySelector('.tab[data-view="view-map"]'));
       playSound('unlock');
     }, 1500);
   }
 
-  // ================= STATS & DYNAMIC RADAR CHART =================
+  // ================= DYNAMIC HEPTAGON RADAR CHART =================
+  function initRadarChart() {
+    const center = { x: 115, y: 105 };
+    const rBase = 85;
+    const svg = document.getElementById('radarSvg');
+    const numAxes = 7;
+    const angles = [];
+    
+    // Calculate 7 angles starting from top vertical (-PI/2)
+    for (let i = 0; i < numAxes; i++) {
+      angles.push(-Math.PI / 2 + i * (2 * Math.PI / numAxes));
+    }
+
+    // Concentric Heptagons
+    const scales = [1, 0.6, 0.3];
+    scales.forEach(scale => {
+      const poly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+      const pointsStr = angles.map(a => {
+        const x = center.x + rBase * scale * Math.cos(a);
+        const y = center.y + rBase * scale * Math.sin(a);
+        return `${x},${y}`;
+      }).join(' ');
+      poly.setAttribute('points', pointsStr);
+      poly.setAttribute('fill', 'none');
+      poly.setAttribute('stroke', '#d8cba0');
+      poly.setAttribute('stroke-width', scale === 0.3 ? '0.5' : '1');
+      if (scale === 0.3) poly.setAttribute('stroke-dasharray', '2');
+      svg.insertBefore(poly, document.getElementById('radarShape'));
+    });
+
+    // Heptagon Axis Lines
+    angles.forEach(a => {
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute('x1', center.x);
+      line.setAttribute('y1', center.y);
+      line.setAttribute('x2', center.x + rBase * Math.cos(a));
+      line.setAttribute('y2', center.y + rBase * Math.sin(a));
+      line.setAttribute('stroke', '#d8cba0');
+      line.setAttribute('stroke-width', '0.5');
+      svg.insertBefore(line, document.getElementById('radarShape'));
+    });
+
+    // Labels
+    const labelsFr = ['Foi', 'Sagesse', 'Courage', 'Discern.', 'Compass.', 'Leader.', 'Obéis.'];
+    angles.forEach((a, i) => {
+      const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      const labelDist = rBase + 12;
+      const x = center.x + labelDist * Math.cos(a);
+      const y = center.y + labelDist * Math.sin(a) + 3;
+      
+      text.setAttribute('x', x);
+      text.setAttribute('y', y);
+      text.setAttribute('text-anchor', Math.abs(Math.cos(a)) < 0.1 ? 'middle' : (Math.cos(a) > 0 ? 'start' : 'end'));
+      text.setAttribute('font-size', '8');
+      text.setAttribute('fill', '#1b263e');
+      text.setAttribute('font-family', 'Work Sans');
+      text.setAttribute('font-weight', '700');
+      text.textContent = labelsFr[i];
+      svg.appendChild(text);
+    });
+  }
+
   function updateStatsGrid() {
-    const keys = ['Foi', 'Sagesse', 'Courage', 'Discernement', 'Compassion'];
+    const keys = ['Foi', 'Sagesse', 'Courage', 'Discernement', 'Compassion', 'Leadership', 'Obéissance'];
     keys.forEach(k => {
       const el = document.getElementById(`stat-${k}`);
       if (el) {
-        const oldVal = parseInt(el.textContent);
-        if (oldVal !== state.stats[k]) {
-          el.textContent = state.stats[k];
+        const val = state.stats[k] || 0;
+        const oldVal = parseInt(el.textContent) || 0;
+        if (oldVal !== val) {
+          el.textContent = val;
           const chip = el.parentElement;
           chip.classList.add('updated');
           setTimeout(() => chip.classList.remove('updated'), 1000);
@@ -1890,20 +2060,15 @@
     const center = { x: 115, y: 105 };
     const maxVal = 10;
     const rBase = 85;
+    const numAxes = 7;
+    const angles = [];
+    for (let i = 0; i < numAxes; i++) {
+      angles.push(-Math.PI / 2 + i * (2 * Math.PI / numAxes));
+    }
     
-    // Pentagon angles corresponding to Foi, Sagesse, Courage, Discernement, Compassion
-    const angles = [
-      -Math.PI / 2,                          // Top (Foi)
-      -Math.PI / 2 + 2 * Math.PI / 5,        // Right Top (Sagesse)
-      -Math.PI / 2 + 4 * Math.PI / 5,        // Right Bottom (Courage)
-      -Math.PI / 2 + 6 * Math.PI / 5,        // Left Bottom (Discernement)
-      -Math.PI / 2 + 8 * Math.PI / 5         // Left Top (Compassion)
-    ];
-    
-    const keys = ['Foi', 'Sagesse', 'Courage', 'Discernement', 'Compassion'];
+    const keys = ['Foi', 'Sagesse', 'Courage', 'Discernement', 'Compassion', 'Leadership', 'Obéissance'];
     const pointsStr = keys.map((k, i) => {
       const val = state.stats[k] || 0;
-      // Clamp stat value to maxVal
       const clampedVal = Math.min(val, maxVal);
       const r = (clampedVal / maxVal) * rBase;
       const x = center.x + r * Math.cos(angles[i]);
@@ -1915,48 +2080,44 @@
   }
 
   // ================= WISDOM JOURNAL RENDER =================
+  const wisdomVerses = [
+    { num: 1, title: "Livre I - Adam & Ève", ref: "Genèse 3:15", text: "« La promesse de vie triomphe toujours du doute. »" },
+    { num: 2, title: "Livre I - Hénoch", ref: "Genèse 5:24", text: "« Marcher avec Dieu dans le silence vaut mieux que courir avec la foule. »" },
+    { num: 3, title: "Livre I - Noé", ref: "Genèse 9:13", text: "« L'obéissance construit des refuges avant que la tempête n'éclate. »" },
+    { num: 4, title: "Livre II - Abraham", ref: "Genèse 15:6", text: "« La foi s'élance vers l'inconnu sur la simple parole du Créateur. »" },
+    { num: 5, title: "Livre II - Isaac", ref: "Genèse 22:8", text: "« La soumission totale ouvre la voie à la providence divine. »" },
+    { num: 6, title: "Livre II - Jacob", ref: "Genèse 32:28", text: "« La lutte avec soi-même et avec Dieu précède la réconciliation. »" },
+    { num: 7, title: "Livre II - Joseph", ref: "Genèse 44:12", text: "« Le pardon est le plus haut degré de la sagesse face à l'injustice. »" }
+  ];
+
   function renderWisdomJournal() {
     const container = document.getElementById('wisdomList');
     container.innerHTML = '';
 
-    Object.keys(chapters).forEach(numStr => {
-      const lvl = parseInt(numStr);
-      const ch = chapters[lvl];
-      const isUnlocked = state.wisdomUnlocked.includes(lvl) || lvl < state.currentLevel;
-
+    wisdomVerses.forEach(wv => {
+      const isUnlocked = state.wisdomUnlocked.includes(wv.num);
       const card = document.createElement('div');
       card.className = `wisdom-card ${isUnlocked ? '' : 'locked'}`;
 
       if (isUnlocked) {
-        // Resolve verse text from Codex database dynamically
-        let verseText = "« L'intégrité face à l'épreuve révèle le plan parfait de l'Éternel. »";
-        if (lvl === 1) verseText = "« La jalousie ronge les os. » (Proverbe 14:30) - Un avertissement gravé dans la solitude.";
-        else if (lvl === 2) verseText = "« Les richesses de Galaad ne valent rien face à la pureté d'un cœur intègre. »";
-        else if (lvl === 3) verseText = "« L'intégrité gardée dans le secret a plus de prix que le pouvoir gagné par compromission. »";
-        else if (lvl === 4) verseText = "« À Dieu seul appartiennent les révélations ; au juste d'en dispenser le discernement. »";
-        else if (lvl === 5) verseText = "« Discerner la disette au milieu de l'abondance, c'est préserver la vie des siens. »";
-        else if (lvl === 6) verseText = "« Administrer avec justice, c'est accomplir le plan d'amour de Dieu pour les nations. »";
-        else if (lvl === 7) verseText = "« Vous aviez médité de me faire du mal, mais Dieu l'a changé en bien. (Genèse 50:20) »";
-
         card.innerHTML = `
-          <div class="wisdom-ref">Chapitre ${lvl} — ${ch.title}</div>
-          <p class="wisdom-verse">${verseText}</p>
+          <div class="wisdom-ref">${wv.title} — ${wv.ref}</div>
+          <p class="wisdom-verse">${wv.text}</p>
         `;
       } else {
         card.innerHTML = `
-          <div class="wisdom-ref">Chapitre ${lvl} — Verrouillé</div>
-          <p class="wisdom-verse">Termine cette étape pour révéler son enseignement.</p>
+          <div class="wisdom-ref">${wv.title} — Verrouillé</div>
+          <p class="wisdom-verse">Termine cette étape pour révéler son fragment de sagesse.</p>
         `;
       }
       container.appendChild(card);
     });
   }
 
-  // ================= CODEX FILTERING =================
+  // ================= CODEX SEARCH =================
   function renderCodex() {
     const list = document.getElementById('codexList');
     list.innerHTML = '';
-    
     codexDatabase.forEach(item => {
       const card = document.createElement('div');
       card.className = 'codex-card';
@@ -1973,7 +2134,6 @@
     const list = document.getElementById('codexList');
     list.innerHTML = '';
 
-    // Clean accents query
     const cleanQuery = query.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
     codexDatabase.forEach(item => {
@@ -1981,7 +2141,6 @@
       const cleanText = item.text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
       
       if (cleanTitle.includes(cleanQuery) || cleanText.includes(cleanQuery)) {
-        // Highlight logic
         let innerHTMLText = item.text;
         if (query.length > 2) {
           const regex = new RegExp(`(${query})`, 'gi');
@@ -2003,11 +2162,14 @@
   function initGame() {
     loadState();
     
-    // Inject level numeric values for reference
-    Object.keys(chapters).forEach(k => {
-      chapters[k].levelNum = parseInt(k);
+    // Inject IDs for books
+    Object.keys(gameDatabase).forEach(bKey => {
+      gameDatabase[bKey].chapters.forEach(ch => {
+        ch.bookNum = parseInt(bKey);
+      });
     });
 
+    initRadarChart();
     updateStatsGrid();
     updateRadarChart();
     renderMap();
