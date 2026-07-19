@@ -662,15 +662,20 @@
   }
   .bible-chapters-bar {
     display: flex;
-    gap: 4px;
+    gap: 5px;
     overflow-x: auto;
-    padding-bottom: 6px;
+    flex-wrap: nowrap;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding: 2px 2px 6px;
     margin-bottom: 10px;
     border-bottom: 1px dashed rgba(212, 175, 55, 0.3);
   }
   .chap-chip {
-    min-width: 26px;
-    height: 24px;
+    min-width: 28px;
+    padding: 0 6px;
+    height: 26px;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -681,6 +686,7 @@
     color: var(--navy);
     cursor: pointer;
     border: 1px solid rgba(0,0,0,0.05);
+    transition: background 0.15s ease, transform 0.1s ease;
   }
   .chap-chip.active {
     background: var(--clay);
@@ -4095,11 +4101,11 @@
 
     activeBibleChapterNum = 1;
 
-    // Render Chapters Bar
+    // Render Chapters Bar (All Chapters of the Selected Book)
     const chaptersBar = document.getElementById('bibleChaptersBar');
     chaptersBar.innerHTML = '';
-    const maxChaptersToShow = Math.min(book.numChaps, 30);
-    for (let c = 1; c <= maxChaptersToShow; c++) {
+    const totalChapters = book.numChaps;
+    for (let c = 1; c <= totalChapters; c++) {
       const chip = document.createElement('div');
       chip.className = `chap-chip ${c === activeBibleChapterNum ? 'active' : ''}`;
       chip.textContent = c;
