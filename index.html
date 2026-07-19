@@ -2687,6 +2687,7 @@
         backBtn.classList.add('hidden');
       } else {
         backBtn.classList.remove('hidden');
+        backBtn.onclick = () => closeAuthOverlay();
       }
     } else if (viewName === 'recover') {
       document.getElementById('authRecoverView').classList.remove('hidden');
@@ -2754,7 +2755,11 @@
   function toggleAccountView() {
     const overlay = document.getElementById('authOverlay');
     if (overlay.classList.contains('hidden')) {
-      showAuthView('profile');
+      if (activeAccount) {
+        showAuthView('profile');
+      } else {
+        showAuthView('register');
+      }
       overlay.classList.remove('hidden');
     } else {
       if (activeAccount || discoveryModeActive) {
