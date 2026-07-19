@@ -35,49 +35,51 @@
     color: var(--ink);
     overflow-x: hidden;
   }
+  body {
+    font-family: 'Work Sans', sans-serif;
+    background: radial-gradient(circle at top, #1c2a47 0%, #080c16 100%);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+    color: var(--ink);
+    overflow-x: hidden;
+  }
   .stage {
     display: flex;
-    gap: 32px;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    justify-content: center;
-    max-width: 1200px;
-    width: 100%;
+    flex-direction: column;
+    width: 100vw;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    max-width: none;
   }
 
-  /* ---------- Phone Frame ---------- */
+  /* ---------- Full Web App Container ---------- */
   .phone {
-    width: 380px;
-    height: 800px;
-    background: #080b11;
-    border-radius: 46px;
-    padding: 14px;
-    box-shadow: 
-      0 25px 60px -15px rgba(0,0,0,0.8), 
-      0 0 0 4px #1b2536,
-      0 0 0 6px var(--gold);
+    width: 100%;
+    min-height: 100vh;
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
     position: relative;
-    border: 1px solid rgba(255,255,255,0.05);
+    border: none;
   }
   .screen {
     width: 100%;
-    height: 100%;
-    border-radius: 34px;
-    overflow: hidden;
+    min-height: 100vh;
+    border-radius: 0;
+    overflow: visible;
     position: relative;
     background: var(--sand-lt);
     display: flex;
     flex-direction: column;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.15);
+    box-shadow: none;
   }
   .notch {
-    position: absolute;
-    top: 0; left: 50%; transform: translateX(-50%);
-    width: 130px; height: 26px;
-    background: #080b11;
-    border-bottom-left-radius: 16px;
-    border-bottom-right-radius: 16px;
-    z-index: 99;
+    display: none !important;
   }
 
   /* ---------- Top Bar ---------- */
@@ -574,7 +576,8 @@
     outline: none;
     font-family: 'Work Sans', sans-serif;
   }
-  .codex-scroll { display: flex; flex-direction: column; gap: 10px; }
+  .codex-scroll { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+  #wisdomList { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
   .codex-card { background: #fffcf4; border: 1px solid rgba(212, 175, 55, 0.25); border-radius: 8px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
   .codex-card h4 { margin: 0 0 4px; font-family: 'Cinzel', serif; font-size: 0.72rem; color: var(--clay); }
   .codex-card p { margin: 0; font-size: 0.7rem; line-height: 1.4; color: var(--ink); }
@@ -1080,40 +1083,38 @@
     margin-bottom: 6px;
   }
 
-  /* ---------- Mobile Responsive Viewport Overrides ---------- */
-  @media (max-width: 600px) {
-    body {
-      padding: 0;
-      align-items: stretch;
-      justify-content: stretch;
-      background: var(--sand-lt);
-    }
-    .stage {
-      gap: 0;
-      width: 100vw;
-      height: 100vh;
-      max-width: none;
-    }
-    .phone {
-      width: 100vw;
-      height: 100vh;
-      border-radius: 0;
-      padding: 0;
-      border: none;
-      box-shadow: none;
-    }
-    .screen {
-      border-radius: 0;
-      box-shadow: none;
-    }
-    .notch {
-      display: none !important;
+  /* ---------- Responsive Web App Breakpoints ---------- */
+  @media (min-width: 768px) {
+    .body-area {
+      padding: 24px 40px;
     }
     .topbar {
-      padding: 18px 14px 12px;
+      padding: 16px 30px;
     }
-    .notes {
-      display: none !important;
+    .topbar h1 {
+      font-size: 1.35rem;
+    }
+    .topbar .sub {
+      font-size: 0.82rem;
+    }
+    .nav-tabs {
+      position: relative;
+      background: var(--navy-2);
+      border-top: 1px solid var(--gold);
+      border-bottom: 1px solid var(--gold);
+    }
+    .codex-wrap, .journal-wrap, .map-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .body-area {
+      padding: 10px;
+    }
+    .topbar {
+      padding: 14px 12px 10px;
     }
     .by-djata-x {
       bottom: 84px;
@@ -1580,83 +1581,6 @@
     </div>
   </div>
 
-  <!-- External Side Information Panel -->
-  <div class="notes">
-    <div id="notesGameInfo">
-      <h2>Chroniques Bibliques</h2>
-      <p>Une aventure interactive inspirée de la Genèse aux Évangiles. Prenez des décisions morales et résolvez des énigmes en vous appuyant sur le Codex biblique.</p>
-      
-      <div class="notes-actions">
-        <div style="font-size:0.7rem; color: var(--gold-soft); font-weight: 600; margin-bottom: 2px;">OPTIONS DE JEU :</div>
-        <button class="btn-reset" onclick="resetGameData()">Réinitialiser la progression</button>
-        <button class="btn-reset" onclick="toggleAdminDashboard(true)" style="background:rgba(212, 175, 55, 0.2); border-color:var(--gold); color:var(--gold-soft); margin-top: 6px; width: 100%;">Espace Admin & CRM</button>
-      </div>
-
-      <div style="margin-top: 18px;">
-        <span class="tag">Radar Heptagone</span>
-        <span class="tag">Synthétiseur Audio natif</span>
-        <span class="tag">Moteur de Dialogue</span>
-        <span class="tag">Base de données Codex</span>
-        <span class="tag">Persistance locale</span>
-      </div>
-    </div>
-
-    <!-- ADMIN DASHBOARD PANEL -->
-    <div id="notesAdminDashboard" class="hidden">
-      <h2>Console Admin & CRM</h2>
-      <p style="font-size:0.7rem; margin-bottom:12px;">Visualisez vos données d'acquisition clients et exportez-les pour vos campagnes marketing.</p>
-      
-      <!-- Stats summary -->
-      <div class="admin-grid-3">
-        <div class="admin-card">
-          <span title="Total inscrits">Joueurs</span>
-          <strong id="adminStatTotalUsers">0</strong>
-        </div>
-        <div class="admin-card">
-          <span title="Consentement marketing">Opt-in %</span>
-          <strong id="adminStatConsentRate">0%</strong>
-        </div>
-        <div class="admin-card">
-          <span title="Nombre de mineurs">Mineurs</span>
-          <strong id="adminStatMinors">0</strong>
-        </div>
-      </div>
-
-      <!-- Segmentation details -->
-      <div class="admin-panel" style="margin-top:10px; padding:10px;">
-        <h3 style="font-size:0.72rem; margin:0 0 6px; border-bottom:1px solid rgba(212,175,55,0.3); font-family: 'Cinzel', serif;">Segmentation Clients</h3>
-        
-        <table class="admin-table">
-          <thead>
-            <tr><th>Valeur Dominante</th><th>Joueurs</th><th>Opt-in (Élig.)</th></tr>
-          </thead>
-          <tbody id="adminSegSpiritual">
-            <!-- Dynamically populated -->
-          </tbody>
-        </table>
-
-        <table class="admin-table" style="margin-top:10px; margin-bottom:0;">
-          <thead>
-            <tr><th>Livre atteint</th><th>Joueurs</th><th>% du total</th></tr>
-          </thead>
-          <tbody id="adminSegBook">
-            <!-- Dynamically populated -->
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Log console for CRM activity -->
-      <h3 style="font-size:0.72rem; color:var(--gold-soft); font-family:'Cinzel',serif; margin:12px 0 4px;">Logs d'Activité CRM</h3>
-      <div class="admin-log-console" id="adminLogConsole">
-        [SYSTEM] Console Admin initialisée. Prête pour export.
-      </div>
-      <!-- Action buttons -->
-      <div class="notes-actions" style="margin-top:10px;">
-        <button class="btn-reset admin-footer-btn" onclick="handleCRMExportCSV()" style="background:var(--gold); color:var(--navy); border:none; font-weight:700;">Exporter Contacts Qualifiés (CSV)</button>
-        <button class="btn-reset admin-footer-btn" onclick="handleCRMSyncAPI()" style="background:rgba(212,175,55,0.1); border-color:var(--gold); color:#fff;">Synchroniser API CRM (Mailchimp/Brevo)</button>
-        <button class="btn-reset admin-footer-btn btn-danger" onclick="toggleAdminDashboard(false)" style="margin-top:8px;">Retour au jeu</button>
-      </div>
-    </div>
   </div>
 </div>
 
