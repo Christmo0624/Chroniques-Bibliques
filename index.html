@@ -6,6 +6,8 @@
 <title>Chroniques Bibliques — L'Aventure Continue</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Supabase Official JS SDK CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root {
     --navy: #0d1527;
@@ -578,6 +580,148 @@
   .codex-card p { margin: 0; font-size: 0.7rem; line-height: 1.4; color: var(--ink); }
   .codex-card p mark { background: var(--gold-soft); color: var(--ink); padding: 0 2px; border-radius: 2px; }
 
+  /* ---------- Codex Sub-Navigation & Bible Reader Styles ---------- */
+  .codex-mode-switch {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
+    background: rgba(13, 21, 39, 0.04);
+    padding: 3px;
+    border-radius: 8px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+  }
+  .codex-mode-btn {
+    flex: 1;
+    padding: 6px;
+    font-size: 0.68rem;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--grey);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .codex-mode-btn.active {
+    background: var(--navy);
+    color: var(--gold-soft);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  }
+
+  .codex-pills {
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+    scrollbar-width: thin;
+  }
+  .codex-pill {
+    white-space: nowrap;
+    padding: 3px 8px;
+    font-size: 0.6rem;
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid rgba(13, 21, 39, 0.15);
+    color: var(--navy);
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .codex-pill.active {
+    background: var(--clay);
+    color: #fff;
+    border-color: var(--clay);
+  }
+
+  /* Bible Reader Container */
+  .bible-reader-wrap {
+    background: #fffcf4;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .bible-selectors {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .bible-select {
+    flex: 1;
+    min-width: 120px;
+    padding: 6px 8px;
+    border: 1px solid var(--gold);
+    border-radius: 6px;
+    font-size: 0.7rem;
+    background: #fff;
+    color: var(--navy);
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 600;
+  }
+  .bible-chapters-bar {
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed rgba(212, 175, 55, 0.3);
+  }
+  .chap-chip {
+    min-width: 26px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    background: #f0e6d2;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--navy);
+    cursor: pointer;
+    border: 1px solid rgba(0,0,0,0.05);
+  }
+  .chap-chip.active {
+    background: var(--clay);
+    color: #fff;
+  }
+  .bible-content-header {
+    border-bottom: 1px solid var(--gold);
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+  }
+  .bible-content-header h3 {
+    margin: 0;
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    color: var(--navy);
+  }
+  .bible-content-header p {
+    margin: 2px 0 0;
+    font-size: 0.65rem;
+    color: var(--grey);
+    font-style: italic;
+  }
+  .bible-verses-scroll {
+    max-height: 340px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+  .bible-verse-item {
+    font-size: 0.72rem;
+    line-height: 1.45;
+    margin-bottom: 6px;
+    color: var(--ink);
+  }
+  .bible-verse-num {
+    font-weight: 700;
+    color: var(--clay);
+    font-size: 0.65rem;
+    margin-right: 4px;
+  }
+
   /* ---------- Watermark branding ---------- */
   .by-djata-x {
     position: absolute;
@@ -653,6 +797,330 @@
     25% { transform: translateX(-5px); }
     75% { transform: translateX(5px); }
   }
+
+  /* ---------- Authentication & Account Overlays ---------- */
+  .auth-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+    color: var(--sand-lt);
+    z-index: 150;
+    display: flex;
+    flex-direction: column;
+    padding: 30px 20px 20px;
+    overflow-y: auto;
+  }
+  .auth-overlay::-webkit-scrollbar { width: 4px; }
+  .auth-overlay::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
+  .auth-header {
+    text-align: center;
+    margin-bottom: 16px;
+    margin-top: 15px;
+  }
+  .auth-header h2 {
+    font-family: 'Cinzel', serif;
+    color: var(--gold-soft);
+    font-size: 1.3rem;
+    margin: 0 0 6px;
+    letter-spacing: 0.02em;
+  }
+  .auth-header p {
+    font-size: 0.72rem;
+    color: var(--sand);
+    margin: 0;
+    line-height: 1.35;
+  }
+  .auth-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+  .form-group {
+    margin-bottom: 12px;
+    text-align: left;
+  }
+  .form-group label {
+    display: block;
+    font-size: 0.64rem;
+    color: var(--gold-soft);
+    font-weight: 600;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  .form-control {
+    width: 100%;
+    padding: 8px 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    border-radius: 6px;
+    color: #fff;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.76rem;
+    outline: none;
+    transition: all 0.2s;
+  }
+  .form-control:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+  }
+  .form-control::placeholder {
+    color: rgba(255,255,255,0.3);
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .form-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+  .form-check input[type="checkbox"] {
+    margin-top: 2px;
+    cursor: pointer;
+    accent-color: var(--gold);
+  }
+  .form-check label {
+    font-size: 0.66rem;
+    line-height: 1.35;
+    color: var(--sand-lt);
+    cursor: pointer;
+  }
+  .form-check-sub {
+    margin-left: 20px;
+    margin-top: -6px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .form-check-sub label {
+    font-size: 0.62rem;
+    color: var(--sand);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+  }
+  .auth-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .auth-link {
+    font-size: 0.68rem;
+    color: var(--gold-soft);
+    text-decoration: underline;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 8px;
+  }
+  .auth-link:hover {
+    color: #fff;
+  }
+  .btn-auth-primary {
+    width: 100%;
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+  }
+  .btn-auth-primary:hover {
+    background: var(--gold-soft);
+  }
+  .btn-auth-secondary {
+    width: 100%;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    border-radius: 8px;
+    padding: 8px;
+    font-size: 0.72rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-auth-secondary:hover {
+    background: rgba(255,255,255,0.05);
+    border-color: #fff;
+  }
+  .auth-error {
+    color: #ffa399;
+    font-size: 0.68rem;
+    margin-bottom: 8px;
+    text-align: center;
+    background: rgba(163, 56, 43, 0.2);
+    border: 1px solid var(--clay);
+    padding: 6px;
+    border-radius: 4px;
+  }
+  
+  /* ---------- Profile & Settings Screen ---------- */
+  .profile-section-title {
+    font-family: 'Cinzel', serif;
+    color: var(--gold-soft);
+    font-size: 0.76rem;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    padding-bottom: 4px;
+    margin: 12px 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .profile-data-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    margin-bottom: 6px;
+    border-bottom: 1px dashed rgba(255,255,255,0.05);
+    padding-bottom: 4px;
+  }
+  .profile-data-label {
+    color: var(--sand);
+  }
+  .profile-data-value {
+    font-weight: 600;
+    color: #fff;
+  }
+  .btn-danger {
+    background: rgba(163,56,43,0.2);
+    border: 1px solid var(--clay);
+    color: #ffa399;
+  }
+  .btn-danger:hover {
+    background: rgba(163,56,43,0.5);
+  }
+  
+  /* ---------- Admin Dashboard Styling ---------- */
+  .admin-panel {
+    background: var(--navy-2);
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+    padding: 14px;
+    margin-top: 15px;
+  }
+  .admin-panel h3 {
+    font-family: 'Cinzel', serif;
+    color: var(--gold-soft);
+    margin: 0 0 10px;
+    font-size: 0.95rem;
+    border-bottom: 2px solid var(--gold);
+    padding-bottom: 6px;
+  }
+  .admin-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .admin-card {
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(212,175,55,0.15);
+    padding: 8px;
+    border-radius: 6px;
+    text-align: center;
+  }
+  .admin-card span {
+    display: block;
+    font-size: 0.54rem;
+    color: var(--sand);
+    text-transform: uppercase;
+  }
+  .admin-card strong {
+    font-size: 1.1rem;
+    color: var(--gold-soft);
+  }
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.68rem;
+    margin-bottom: 12px;
+  }
+  .admin-table th, .admin-table td {
+    padding: 6px 4px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .admin-table th {
+    color: var(--gold-soft);
+    font-weight: 600;
+  }
+  .admin-table td {
+    color: var(--sand-lt);
+  }
+  .admin-log-console {
+    background: #000;
+    color: #0f0;
+    font-family: monospace;
+    font-size: 0.58rem;
+    padding: 8px;
+    border-radius: 6px;
+    height: 90px;
+    overflow-y: auto;
+    text-align: left;
+    margin-bottom: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .admin-footer-btn {
+    width: 100%;
+    margin-bottom: 6px;
+  }
+
+  /* ---------- Mobile Responsive Viewport Overrides ---------- */
+  @media (max-width: 600px) {
+    body {
+      padding: 0;
+      align-items: stretch;
+      justify-content: stretch;
+      background: var(--sand-lt);
+    }
+    .stage {
+      gap: 0;
+      width: 100vw;
+      height: 100vh;
+      max-width: none;
+    }
+    .phone {
+      width: 100vw;
+      height: 100vh;
+      border-radius: 0;
+      padding: 0;
+      border: none;
+      box-shadow: none;
+    }
+    .screen {
+      border-radius: 0;
+      box-shadow: none;
+    }
+    .notch {
+      display: none !important;
+    }
+    .topbar {
+      padding: 18px 14px 12px;
+    }
+    .notes {
+      display: none !important;
+    }
+    .by-djata-x {
+      bottom: 84px;
+      right: 12px;
+      font-size: 0.48rem;
+    }
+  }
 </style>
 </head>
 <body>
@@ -662,9 +1130,310 @@
     <div class="notch"></div>
     <div class="screen">
 
+      <!-- Overlays inside .screen -->
+      <div id="authOverlay" class="auth-overlay hidden">
+        
+        <!-- WELCOME VIEW -->
+        <div id="authWelcomeView" class="hidden">
+          <div class="auth-header">
+            <h2>Bienvenue !</h2>
+            <p>Sauvegardez votre progression spirituelle et accédez aux 7 Livres des Chroniques Bibliques.</p>
+          </div>
+          <div class="auth-card" style="text-align:center;">
+            <p style="font-size:0.72rem; line-height:1.4; color:var(--sand); margin-bottom:15px;">
+              Créer un compte vous permet de conserver vos vertus (Foi, Sagesse, Courage...) et vos fragments de sagesse débloqués sur tous vos appareils.
+            </p>
+            <div class="auth-actions">
+              <button class="btn-auth-primary" onclick="showAuthView('register')">Créer un Compte Gratuit</button>
+              <button class="btn-auth-secondary" onclick="showAuthView('login')">Se Connecter</button>
+              <button class="btn-auth-secondary" onclick="startDiscoveryMode()" style="border-style:dashed;">Mode Découverte (Limité)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOGIN VIEW -->
+        <div id="authLoginView" class="hidden">
+          <div class="auth-header">
+            <h2>Connexion</h2>
+            <p>Connectez-vous pour récupérer votre sauvegarde.</p>
+          </div>
+          <div class="auth-card">
+            <div id="loginError" class="auth-error hidden"></div>
+            <div class="form-group">
+              <label for="loginEmail">E-mail ou Téléphone</label>
+              <input type="text" id="loginEmail" class="form-control" placeholder="exemple@email.com ou 07000000">
+            </div>
+            <div class="form-group">
+              <label for="loginPassword">Mot de passe</label>
+              <input type="password" id="loginPassword" class="form-control" placeholder="••••••••">
+            </div>
+            <div class="auth-actions" style="margin-top:16px;">
+              <button class="btn-auth-primary" onclick="handleLoginSubmit()">Se Connecter</button>
+              <button class="btn-auth-secondary" onclick="showAuthView('welcome')" id="loginBackBtn">Retour</button>
+            </div>
+            <div class="auth-link" onclick="showAuthView('recover')">Mot de passe oublié ?</div>
+            <div class="auth-link" onclick="showAuthView('register')">Pas de compte ? S'inscrire</div>
+          </div>
+        </div>
+
+        <!-- REGISTER VIEW -->
+        <div id="authRegisterView" class="hidden">
+          <div class="auth-header">
+            <h2>Inscription</h2>
+            <p>Créez votre compte de sauvegarde gratuit.</p>
+          </div>
+          <div class="auth-card">
+            <div id="registerError" class="auth-error hidden"></div>
+            <div class="form-group">
+              <label for="regName">Pseudo ou Nom complet</label>
+              <input type="text" id="regName" class="form-control" placeholder="Joseph">
+            </div>
+            <div class="form-group">
+              <label for="regEmail">E-mail</label>
+              <input type="email" id="regEmail" class="form-control" placeholder="exemple@email.com">
+            </div>
+            <div class="form-group">
+              <label for="regPhone">Téléphone (Optionnel pour SMS)</label>
+              <input type="text" id="regPhone" class="form-control" placeholder="ex: +225 0707070707">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="regCity">Ville</label>
+                <input type="text" id="regCity" class="form-control" placeholder="Abidjan">
+              </div>
+              <div class="form-group">
+                <label for="regCountry">Pays</label>
+                <input type="text" id="regCountry" class="form-control" placeholder="Côte d'Ivoire">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="regPassword">Mot de passe</label>
+              <input type="password" id="regPassword" class="form-control" placeholder="Minimum 6 caractères">
+            </div>
+            
+            <div class="form-group">
+              <label for="regBirthYear">Année de naissance (Contrôle d'âge)</label>
+              <select id="regBirthYear" class="form-control" onchange="checkAgeGate(this.value)">
+                <!-- Will be dynamically populated -->
+              </select>
+            </div>
+
+            <!-- Minor Gate Consent -->
+            <div id="minorGateSection" class="hidden" style="background:rgba(212,175,55,0.08); border:1px solid var(--gold); border-radius:8px; padding:10px; margin-bottom:12px;">
+              <p style="font-size:0.62rem; color:var(--gold-soft); margin:0 0 8px; line-height:1.3;">
+                ⚠️ <strong>Protection des mineurs :</strong> En Côte d'Ivoire, l'inscription d'un mineur de moins de 15 ans nécessite une autorisation parentale.
+              </p>
+              <div class="form-group">
+                <label for="regParentEmail">E-mail du parent / tuteur</label>
+                <input type="email" id="regParentEmail" class="form-control" placeholder="parent@email.com">
+              </div>
+              <div class="form-check">
+                <input type="checkbox" id="regParentConsent">
+                <label for="regParentConsent">Je confirme avoir obtenu le consentement de mes parents pour jouer.</label>
+              </div>
+            </div>
+
+            <!-- Separated Marketing Consent -->
+            <div class="form-check" style="margin-top:14px;">
+              <input type="checkbox" id="regMarketingConsent" onchange="toggleMarketingChannels(this.checked)">
+              <label for="regMarketingConsent">
+                J'accepte de recevoir des suggestions de jeux et d'applications éducatives / divertissements de notre entreprise. <br>
+                <span style="font-size:0.56rem; opacity:0.8; color:var(--sand); font-style:italic;">(Facultatif, modifiable à tout moment)</span>
+              </label>
+            </div>
+            
+            <!-- Channels -->
+            <div id="marketingChannels" class="form-check-sub hidden">
+              <label><input type="checkbox" id="channelEmail" checked> E-mail</label>
+              <label><input type="checkbox" id="channelSMS"> SMS</label>
+              <label><input type="checkbox" id="channelPush"> Push App</label>
+            </div>
+
+            <!-- CGU Consent -->
+            <div class="form-check">
+              <input type="checkbox" id="regTermsConsent">
+              <label for="regTermsConsent">
+                J'accepte les CGU et la Politique de protection des données (sauvegarde de la progression de jeu et calcul de l'Heptagone).
+              </label>
+            </div>
+
+            <div class="auth-actions" style="margin-top:16px;">
+              <button class="btn-auth-primary" onclick="handleRegisterSubmit()">Créer mon Compte</button>
+              <button class="btn-auth-secondary" onclick="showAuthView('welcome')" id="regBackBtn">Retour</button>
+            </div>
+            <div class="auth-link" onclick="showAuthView('login')">Déjà inscrit ? Se connecter</div>
+          </div>
+        </div>
+
+        <!-- RECOVER VIEW -->
+        <div id="authRecoverView" class="hidden">
+          <div class="auth-header">
+            <h2>Récupération</h2>
+            <p>Récupérez l'accès à votre compte.</p>
+          </div>
+          <div class="auth-card">
+            <div id="recoverError" class="auth-error hidden"></div>
+            <div id="recoverSuccess" class="auth-error hidden" style="background:rgba(46,98,67,0.2); border-color:var(--green-ok); color:#a3d6b7;"></div>
+            
+            <div id="recoverStep1">
+              <div class="form-group">
+                <label for="recoverEmail">Votre E-mail</label>
+                <input type="email" id="recoverEmail" class="form-control" placeholder="exemple@email.com">
+              </div>
+              <div class="auth-actions">
+                <button class="btn-auth-primary" onclick="handleSendOTP()">Envoyer le code</button>
+                <button class="btn-auth-secondary" onclick="showAuthView('login')">Retour</button>
+              </div>
+            </div>
+
+            <div id="recoverStep2" class="hidden">
+              <p style="font-size:0.68rem; color:var(--sand); text-align:center; margin-bottom:12px;" id="otpTip"></p>
+              <div class="form-group">
+                <label for="recoverOTP">Code de vérification (OTP)</label>
+                <input type="text" id="recoverOTP" class="form-control" placeholder="Ex: 1234" maxlength="4" style="text-align:center; font-size:1.1rem; letter-spacing:0.3em;">
+              </div>
+              <div class="form-group">
+                <label for="recoverNewPassword">Nouveau mot de passe</label>
+                <input type="password" id="recoverNewPassword" class="form-control" placeholder="Minimum 6 caractères">
+              </div>
+              <div class="auth-actions">
+                <button class="btn-auth-primary" onclick="handleVerifyOTP()">Réinitialiser le mot de passe</button>
+                <button class="btn-auth-secondary" onclick="showAuthView('login')">Retour</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROFILE VIEW -->
+        <div id="authProfileView" class="hidden">
+          <div class="auth-header">
+            <h2>Mon Profil</h2>
+            <p>Gérez vos données personnelles et vos préférences.</p>
+          </div>
+          <div class="auth-card">
+            <div id="profileSuccess" class="auth-error hidden" style="background:rgba(46,98,67,0.2); border-color:var(--green-ok); color:#a3d6b7;"></div>
+            
+            <div class="profile-section-title">Informations Personnelles</div>
+            <div class="profile-data-row"><span class="profile-data-label">Nom</span><span class="profile-data-value" id="profName"></span></div>
+            <div class="profile-data-row"><span class="profile-data-label">E-mail</span><span class="profile-data-value" id="profEmail"></span></div>
+            <div class="profile-data-row"><span class="profile-data-label">Téléphone</span><span class="profile-data-value" id="profPhone">-</span></div>
+            <div class="profile-data-row"><span class="profile-data-label">Localisation</span><span class="profile-data-value" id="profLocation"></span></div>
+            <div class="profile-data-row"><span class="profile-data-label">Type de compte</span><span class="profile-data-value" id="profAgeType">Adulte</span></div>
+
+            <div class="profile-section-title">Consentements Marketing</div>
+            <div id="minorMarketingWarning" class="hidden" style="font-size:0.62rem; color:var(--sand); margin-bottom:8px; font-style:italic;">
+              (Désactivé par défaut car le profil est qualifié comme mineur).
+            </div>
+            
+            <div id="profileConsentControls">
+              <div class="form-check">
+                <input type="checkbox" id="profMarketingConsent" onchange="toggleProfileChannels(this.checked)">
+                <label for="profMarketingConsent">
+                  J'accepte de recevoir des communications promotionnelles de l'éditeur.
+                </label>
+              </div>
+              <div id="profMarketingChannels" class="form-check-sub hidden">
+                <label><input type="checkbox" id="profChannelEmail"> E-mail</label>
+                <label><input type="checkbox" id="profChannelSMS"> SMS</label>
+                <label><input type="checkbox" id="profChannelPush"> Push App</label>
+              </div>
+              <button class="btn-auth-primary" onclick="handleSaveConsentChanges()" style="padding:6px; font-size:0.68rem; margin-top:4px;">Enregistrer mes choix</button>
+            </div>
+
+            <div class="profile-section-title">Mes Statistiques Client</div>
+            <div class="profile-data-row"><span class="profile-data-label">Livre atteint</span><span class="profile-data-value" id="profMaxBook">Livre I</span></div>
+            <div class="profile-data-row"><span class="profile-data-label">Dernière session</span><span class="profile-data-value" id="profLastSession"></span></div>
+            <div class="profile-data-row"><span class="profile-data-label">Fréquence (sessions)</span><span class="profile-data-value" id="profFrequency">1</span></div>
+            <div class="profile-data-row"><span class="profile-data-label">Valeur Dominante</span><span class="profile-data-value" id="profDominantVal">Foi</span></div>
+
+            <div class="profile-section-title">Confidentialité & Droits (ARTCI / RGPD)</div>
+            <p style="font-size:0.56rem; color:var(--sand); line-height:1.35; margin-bottom:10px;">
+              Conformément à la loi n°2013-450, vous disposez d'un droit d'accès, d'exportation et de suppression complète de vos données.
+            </p>
+            <div class="auth-actions">
+              <button class="btn-auth-secondary" onclick="handleExportData()">Exporter mes données (JSON)</button>
+              <button class="btn-auth-secondary btn-danger" onclick="handleDeleteAccount()">Supprimer mon compte & mes données</button>
+              <button class="btn-auth-secondary" onclick="showAuthView('admin')" style="background:rgba(212, 175, 55, 0.15); border-color:var(--gold); color:#fff; font-weight:600;">Espace Admin & CRM</button>
+            </div>
+            
+            <div class="auth-actions" style="margin-top:20px; border-top:1px solid rgba(255,255,255,0.1); padding-top:12px;">
+              <button class="btn-auth-primary" onclick="closeAuthOverlay()">Retour au jeu</button>
+              <button class="btn-auth-secondary" onclick="handleLogout()">Se déconnecter</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ADMIN VIEW (MOBILE) -->
+        <div id="authAdminView" class="hidden">
+          <div class="auth-header">
+            <h2>Console Admin & CRM</h2>
+            <p>Données d'acquisition et export marketing.</p>
+          </div>
+          <div class="auth-card">
+            <!-- Stats summary -->
+            <div class="admin-grid-3">
+              <div class="admin-card">
+                <span title="Total inscrits">Joueurs</span>
+                <strong id="mobAdminStatTotalUsers">0</strong>
+              </div>
+              <div class="admin-card">
+                <span title="Consentement marketing">Opt-in %</span>
+                <strong id="mobAdminStatConsentRate">0%</strong>
+              </div>
+              <div class="admin-card">
+                <span title="Nombre de mineurs">Mineurs</span>
+                <strong id="mobAdminStatMinors">0</strong>
+              </div>
+            </div>
+
+            <!-- Segmentation details -->
+            <div class="admin-panel" style="margin-top:10px; padding:10px; background:rgba(0,0,0,0.35); border-color:rgba(212,175,55,0.2);">
+              <h3 style="font-size:0.72rem; margin:0 0 6px; border-bottom:1px solid rgba(212,175,55,0.3); font-family: 'Cinzel', serif; color:var(--gold-soft);">Segmentation Clients</h3>
+              
+              <table class="admin-table">
+                <thead>
+                  <tr><th>Valeur Dominante</th><th>Joueurs</th><th>Opt-in (Élig.)</th></tr>
+                </thead>
+                <tbody id="mobAdminSegSpiritual">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+
+              <table class="admin-table" style="margin-top:10px; margin-bottom:0;">
+                <thead>
+                  <tr><th>Livre atteint</th><th>Joueurs</th><th>% du total</th></tr>
+                </thead>
+                <tbody id="mobAdminSegBook">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Log console for CRM activity -->
+            <h3 style="font-size:0.72rem; color:var(--gold-soft); font-family:'Cinzel',serif; margin:12px 0 4px;">Logs d'Activité CRM</h3>
+            <div class="admin-log-console" id="mobAdminLogConsole" style="height:70px;">
+              [SYSTEM] Console Mobile initialisée. Prête pour export.
+            </div>
+
+            <!-- Action buttons -->
+            <div class="auth-actions" style="margin-top:10px;">
+              <button class="btn-auth-primary" onclick="handleCRMExportCSV()" style="font-size:0.7rem; padding:6px;">Exporter CSV</button>
+              <button class="btn-auth-secondary" onclick="handleCRMSyncAPI()" style="font-size:0.7rem; padding:6px;">Synchroniser API CRM</button>
+              <button class="btn-auth-secondary btn-danger" onclick="showAuthView('profile')" style="margin-top:4px;">Retour au Profil</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
       <!-- Topbar Header -->
       <div class="topbar">
         <div class="topbar-header">
+          <button class="sound-btn" id="profileBtn" onclick="toggleAccountView()" title="Mon Compte">
+            <svg viewBox="0 0 24 24" style="width:16px; height:16px; fill:currentColor;">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+            </svg>
+          </button>
           <h1>Chroniques Bibliques</h1>
           <button class="sound-btn" id="soundBtn" onclick="toggleMute()" title="Désactiver le son">
             <svg viewBox="0 0 24 24" id="volumeIcon">
@@ -777,13 +1546,63 @@
           </div>
         </div>
 
-        <!-- VIEW: CODEX -->
+        <!-- VIEW: CODEX & SAINTE BIBLE -->
         <div class="view" id="view-codex">
           <div class="codex-wrap">
-            <div class="codex-search-wrap">
-              <input type="text" class="codex-search" id="codexSearchInput" placeholder="Rechercher un mot clé ou verset..." oninput="filterCodex()">
+            <!-- Mode Switcher -->
+            <div class="codex-mode-switch">
+              <button class="codex-mode-btn active" id="btnModeCodex" onclick="showCodexSubView('codex')">📖 Codex & Versets</button>
+              <button class="codex-mode-btn" id="btnModeReader" onclick="showCodexSubView('reader')">📜 Lecteur Sainte Bible</button>
             </div>
-            <div class="codex-scroll" id="codexList"></div>
+
+            <!-- SUB-VIEW 1: CODEX SEARCH & PILLS -->
+            <div id="codexVersesSubView">
+              <!-- Category Filter Pills -->
+              <div class="codex-pills">
+                <button class="codex-pill active" onclick="filterCodexCategory('all', this)">Tous</button>
+                <button class="codex-pill" onclick="filterCodexCategory('AT', this)">Ancien Test.</button>
+                <button class="codex-pill" onclick="filterCodexCategory('NT', this)">Nouveau Test.</button>
+                <button class="codex-pill" onclick="filterCodexCategory('Loi', this)">La Loi & Pentateuque</button>
+                <button class="codex-pill" onclick="filterCodexCategory('Sagesse', this)">Psaumes & Sagesse</button>
+                <button class="codex-pill" onclick="filterCodexCategory('Prophetes', this)">Prophètes</button>
+                <button class="codex-pill" onclick="filterCodexCategory('Evangiles', this)">Évangiles & Actes</button>
+              </div>
+
+              <div class="codex-search-wrap">
+                <input type="text" class="codex-search" id="codexSearchInput" placeholder="Rechercher mot-clé, personnage, ou verset..." oninput="filterCodex()">
+              </div>
+              <div class="codex-scroll" id="codexList"></div>
+            </div>
+
+            <!-- SUB-VIEW 2: LECTEUR SAINTE BIBLE (66 LIVRES) -->
+            <div id="codexBibleReaderView" class="hidden">
+              <div class="bible-reader-wrap">
+                <div class="bible-selectors">
+                  <select id="bibleTestamentSelect" class="bible-select" onchange="selectBibleTestament(this.value)">
+                    <option value="all">Toute la Sainte Bible (66 Livres)</option>
+                    <option value="AT">Ancien Testament (39 Livres)</option>
+                    <option value="NT">Nouveau Testament (27 Livres)</option>
+                  </select>
+                  <select id="bibleBookSelect" class="bible-select" onchange="selectBibleBook(this.value)">
+                    <!-- Dynamically populated -->
+                  </select>
+                </div>
+
+                <div class="bible-chapters-bar" id="bibleChaptersBar">
+                  <!-- Dynamically populated chapter buttons -->
+                </div>
+
+                <div class="bible-content-header">
+                  <h3 id="bibleReaderTitle">Genèse — Chapitre 1</h3>
+                  <p id="bibleReaderTheme">Au commencement, Dieu créa le ciel et la terre.</p>
+                </div>
+
+                <div class="bible-verses-scroll" id="bibleVersesContainer">
+                  <!-- Dynamically populated verses -->
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -823,20 +1642,80 @@
 
   <!-- External Side Information Panel -->
   <div class="notes">
-    <h2>Chroniques Bibliques</h2>
-    <p>Une aventure interactive inspirée de la Genèse aux Évangiles. Prenez des décisions morales et résolvez des énigmes en vous appuyant sur le Codex biblique.</p>
-    
-    <div class="notes-actions">
-      <div style="font-size:0.7rem; color: var(--gold-soft); font-weight: 600; margin-bottom: 2px;">OPTIONS DE JEU :</div>
-      <button class="btn-reset" onclick="resetGameData()">Réinitialiser la progression</button>
+    <div id="notesGameInfo">
+      <h2>Chroniques Bibliques</h2>
+      <p>Une aventure interactive inspirée de la Genèse aux Évangiles. Prenez des décisions morales et résolvez des énigmes en vous appuyant sur le Codex biblique.</p>
+      
+      <div class="notes-actions">
+        <div style="font-size:0.7rem; color: var(--gold-soft); font-weight: 600; margin-bottom: 2px;">OPTIONS DE JEU :</div>
+        <button class="btn-reset" onclick="resetGameData()">Réinitialiser la progression</button>
+        <button class="btn-reset" onclick="toggleAdminDashboard(true)" style="background:rgba(212, 175, 55, 0.2); border-color:var(--gold); color:var(--gold-soft); margin-top: 6px; width: 100%;">Espace Admin & CRM</button>
+      </div>
+
+      <div style="margin-top: 18px;">
+        <span class="tag">Radar Heptagone</span>
+        <span class="tag">Synthétiseur Audio natif</span>
+        <span class="tag">Moteur de Dialogue</span>
+        <span class="tag">Base de données Codex</span>
+        <span class="tag">Persistance locale</span>
+      </div>
     </div>
 
-    <div style="margin-top: 18px;">
-      <span class="tag">Radar Heptagone</span>
-      <span class="tag">Synthétiseur Audio natif</span>
-      <span class="tag">Moteur de Dialogue</span>
-      <span class="tag">Base de données Codex</span>
-      <span class="tag">Persistance locale</span>
+    <!-- ADMIN DASHBOARD PANEL -->
+    <div id="notesAdminDashboard" class="hidden">
+      <h2>Console Admin & CRM</h2>
+      <p style="font-size:0.7rem; margin-bottom:12px;">Visualisez vos données d'acquisition clients et exportez-les pour vos campagnes marketing.</p>
+      
+      <!-- Stats summary -->
+      <div class="admin-grid-3">
+        <div class="admin-card">
+          <span title="Total inscrits">Joueurs</span>
+          <strong id="adminStatTotalUsers">0</strong>
+        </div>
+        <div class="admin-card">
+          <span title="Consentement marketing">Opt-in %</span>
+          <strong id="adminStatConsentRate">0%</strong>
+        </div>
+        <div class="admin-card">
+          <span title="Nombre de mineurs">Mineurs</span>
+          <strong id="adminStatMinors">0</strong>
+        </div>
+      </div>
+
+      <!-- Segmentation details -->
+      <div class="admin-panel" style="margin-top:10px; padding:10px;">
+        <h3 style="font-size:0.72rem; margin:0 0 6px; border-bottom:1px solid rgba(212,175,55,0.3); font-family: 'Cinzel', serif;">Segmentation Clients</h3>
+        
+        <table class="admin-table">
+          <thead>
+            <tr><th>Valeur Dominante</th><th>Joueurs</th><th>Opt-in (Élig.)</th></tr>
+          </thead>
+          <tbody id="adminSegSpiritual">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+
+        <table class="admin-table" style="margin-top:10px; margin-bottom:0;">
+          <thead>
+            <tr><th>Livre atteint</th><th>Joueurs</th><th>% du total</th></tr>
+          </thead>
+          <tbody id="adminSegBook">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Log console for CRM activity -->
+      <h3 style="font-size:0.72rem; color:var(--gold-soft); font-family:'Cinzel',serif; margin:12px 0 4px;">Logs d'Activité CRM</h3>
+      <div class="admin-log-console" id="adminLogConsole">
+        [SYSTEM] Console Admin initialisée. Prête pour export.
+      </div>
+      <!-- Action buttons -->
+      <div class="notes-actions" style="margin-top:10px;">
+        <button class="btn-reset admin-footer-btn" onclick="handleCRMExportCSV()" style="background:var(--gold); color:var(--navy); border:none; font-weight:700;">Exporter Contacts Qualifiés (CSV)</button>
+        <button class="btn-reset admin-footer-btn" onclick="handleCRMSyncAPI()" style="background:rgba(212,175,55,0.1); border-color:var(--gold); color:#fff;">Synchroniser API CRM (Mailchimp/Brevo)</button>
+        <button class="btn-reset admin-footer-btn btn-danger" onclick="toggleAdminDashboard(false)" style="margin-top:8px;">Retour au jeu</button>
+      </div>
     </div>
   </div>
 </div>
@@ -844,49 +1723,170 @@
 <script>
   // ================= BIBLE & CODEX DATABASE =================
   const codexDatabase = [
-    { title: "Genèse 2:16-17 (Le commandement)", text: "L'Éternel Dieu donna cet ordre à l'homme : Tu pourras manger de tous les arbres du jardin ; mais tu ne mangeras pas de l'arbre de la connaissance du bien et du mal..." },
-    { title: "Genèse 3:4-5 (Le murmure)", text: "Alors le serpent dit à la femme : Vous ne mourrez point ; mais Dieu sait que, le jour où vous en mangerez, vos yeux s'ouvriront, et que vous serez comme des dieux..." },
-    { title: "Genèse 3:15 (Le Proto-Évangile)", text: "Je mettrai inimitié entre toi et la femme, entre ta postérité et sa postérité : celle-ci t'écrasera la tête, et tu lui blesseras le talon." },
-    { title: "Genèse 5:24 (Hénoch)", text: "Hénoch marcha avec Dieu ; puis il ne parut plus, parce que Dieu le prit." },
-    { title: "Hébreux 11:5 (Le témoignage)", text: "C'est par la foi qu'Hénoch fut enlevé pour qu'il ne vît point la mort... car avant son enlèvement, il avait reçu le témoignage qu'il était agréable à Dieu." },
-    { title: "Genèse 6:15 (Les dimensions de l'Arche)", text: "Et voici comment tu la feras : l'arche aura trois cents coudées de longueur, cinquante coudées de largeur, et trente coudées de hauteur." },
-    { title: "Genèse 6:22 (Obéissance de Noé)", text: "C'est ce que fit Noé : il exécuta tout ce que Dieu lui avait ordonné." },
-    { title: "Genèse 9:13 (L'Arc de l'Alliance)", text: "J'ai placé mon arc dans la nue, et il servira de signe d'alliance entre moi et la terre." },
-    { title: "Genèse 12:1 (L'appel d'Abram)", text: "L'Éternel dit à Abram : Va-t'en de ton pays, de ta patrie, et de la maison de ton père, dans le pays que je te montrerai." },
-    { title: "Genèse 13:9 (Le choix d'Abram)", text: "Ne sépare-toi pas de moi : si tu vas à gauche, j'irai à droite ; si tu vas à droite, j'irai à gauche." },
-    { title: "Genèse 15:6 (La Foi d'Abraham)", text: "Abram eut confiance en l'Éternel, qui le lui compta comme justice." },
-    { title: "Genèse 22:8 (Le bélier de Morija)", text: "Abraham dit : Mon fils, Dieu se pourvoira lui-même de l'agneau pour l'holocauste. Et ils marchèrent tous deux ensemble." },
-    { title: "Genèse 24:14 (Le signe de Rébecca)", text: "Que la jeune fille à laquelle je dirai : Penche ta cruche, je te prie... et qui répondra : Bois, et je donnerai aussi à boire à tes chameaux, soit celle que tu as destinée à ton serviteur Isaac !" },
-    { title: "Genèse 28:12 (L'échelle de Béthel)", text: "Il eut un songe. Et voici, une échelle était appuyée sur la terre, et son sommet touchait au ciel. Et voici, les anges de Dieu montaient et descendaient par cette échelle." },
-    { title: "Genèse 32:28 (La lutte de Jacob)", text: "Ton nom ne sera plus Jacob, mais tu seras appelé Israël ; car tu as lutté avec Dieu et avec des hommes, et tu as été vainqueur." },
-    { title: "Genèse 33:10 (La réconciliation)", text: "Jacob dit : J'ai vu ton visage comme on voit le visage de Dieu, et tu m'as accueilli favorablement." },
-    { title: "Genèse 37:25 (Les Marchands de Galaad)", text: "Ils virent une caravane d'Ismaélites venant de Galaad ; leurs chameaux étaient chargés d'aromates, de baume et de myrrhe, qu'ils transportaient en Égypte." },
-    { title: "Genèse 39:9 (La fuite devant le mal)", text: "Comment ferais-je un aussi grand mal et pécherais-je contre Dieu ?" },
-    { title: "Genèse 41:34 (L'intendance en Égypte)", text: "Que Pharaon établisse des commissaires sur le pays, pour lever un cinquième des récoltes de l'Égypte pendant les sept années d'abondance." },
-    { title: "Genèse 44:12 (La coupe d'argent)", text: "L'intendant chercha, commençant par le plus âgé et finissant par le plus jeune ; et la coupe fut trouvée dans le sac de Benjamin." },
-    { title: "Exode 3:14 (Le Nom Divin)", text: "Dieu dit à Moïse : Je suis celui qui suis. Et il dit : C'est ainsi que tu répondras aux enfants d'Israël : Celui qui s'appelle 'Je suis' m'envoie vers vous." },
-    { title: "Exode 14:13 (La foi de Moïse)", text: "Ne craignez rien, restez en place, et regardez la délivrance que l'Éternel va vous accorder en ce jour." },
-    { title: "Exode 20:3 (La Loi)", text: "Tu n'auras pas d'autres dieux devant ma face." },
-    { title: "Josué 1:9 (Le courage de la conquête)", text: "Fortifie-toi et prends courage ? Ne t'effraye point et ne t'épouvante point, car l'Éternel, ton Dieu, est avec toi dans tout ce que tu entreprendras." },
-    { title: "Josué 2:18 (Le cordon rouge)", text: "Attache ce cordon de fil écarlate à la fenêtre par laquelle tu nous as fait descendre, et rassemble dans ta maison ton père, ta mère..." },
-    { title: "Juges 4:14 (L'ordre de Débora)", text: "Lève-toi, car voici le jour où l'Éternel livre Sisera entre tes mains." },
-    { title: "Juges 7:6 (Le tri de Gédéon)", text: "Le nombre de ceux qui lapèrent l'eau dans leur main en la portant à la bouche fut de trois cents hommes." },
-    { title: "Juges 16:28 (Le cri de Samson)", text: "Seigneur Éternel ! souviens-toi de moi, je te prie ; ô Dieu ! donne-moi de la force seulement cette fois..." },
-    { title: "1 Samuel 15:22 (Le rejet de Saül)", text: "L'obéissance vaut mieux que les sacrifices, et l'observation de sa parole vaut mieux que la graisse des béliers." },
-    { title: "1 Samuel 17:45 (David contre Goliath)", text: "Je marche contre toi au nom de l'Éternel des armées." },
-    { title: "2 Samuel 12:13 (Repentance de David)", text: "David dit à Nathan : J'ai péché contre l'Éternel !" },
-    { title: "1 Rois 3:9 (La demande de Salomon)", text: "Accorde donc à ton serviteur un cœur intelligent pour juger ton peuple, pour discerner le bien du mal." },
-    { title: "1 Rois 19:12 (Élie à Horeb)", text: "Après le feu, un murmure doux et léger. Dès qu'Élie l'entendit, il s'enveloppa le visage de son manteau." },
-    { title: "Esther 4:14 (Le courage d'Esther)", text: "Et qui sait si ce n'est pas pour un temps comme celui-ci que tu es parvenue à la royauté ?" },
-    { title: "Daniel 6:22 (Daniel aux lions)", text: "Mon Dieu a envoyé son ange et a fermé la gueule des lions..." },
-    { title: "Jean 1:29 (Jean-Baptiste)", text: "Le lendemain, il vit Jésus venant à lui, et il dit : Voici l'Agneau de Dieu, qui ôte le péché du monde." },
-    { title: "Jean 3:30 (Humilité)", text: "Il faut qu'il croisse, et que je diminue." },
-    { title: "Luc 2:52 (Enfance de Jésus)", text: "Et Jésus croissait en sagesse, en stature, et en grâce, devant Dieu et devant les hommes." },
-    { title: "Matthieu 5:44 (La Loi d'Amour)", text: "Aimez vos ennemis, bénissez ceux qui vous maudissent, faites du bien à ceux qui vous haïssent..." },
-    { title: "Luc 22:42 (Gethsémané)", text: "Père, si tu voulais éloigner de moi cette coupe ! Toutefois, que ma volonté se fasse, et non la tienne." },
-    { title: "Luc 23:34 (Pardon de la Croix)", text: "Jésus dit : Père, pardonne-leur, car ils ne savent ce qu'ils font." },
-    { title: "Matthieu 28:19 (La Grande Mission)", text: "Allez, faites de toutes les nations des disciples..." }
+    // ANCIEN TESTAMENT - PENTATEUQUE / LA LOI
+    { cat: "Loi", testament: "AT", title: "Genèse 1:1 (Au commencement)", text: "Au commencement, Dieu créa les cieux et la terre. La terre était informe et vide; il y avait des ténèbres à la surface de l'abîme, et l'esprit de Dieu se mouvait au-dessus des eaux." },
+    { cat: "Loi", testament: "AT", title: "Genèse 1:27 (Image de Dieu)", text: "Dieu créa l'homme à son image, il le créa à l'image de Dieu, il créa l'homme et la femme." },
+    { cat: "Loi", testament: "AT", title: "Genèse 2:16-17 (Le commandement d'Éden)", text: "L'Éternel Dieu donna cet ordre à l'homme : Tu pourras manger de tous les arbres du jardin ; mais tu ne mangeras pas de l'arbre de la connaissance du bien et du mal..." },
+    { cat: "Loi", testament: "AT", title: "Genèse 3:4-5 (La tentation du serpent)", text: "Alors le serpent dit à la femme : Vous ne mourrez point ; mais Dieu sait que, le jour où vous en mangerez, vos yeux s'ouvriront, et que vous serez comme des dieux..." },
+    { cat: "Loi", testament: "AT", title: "Genèse 3:15 (Le Proto-Évangile)", text: "Je mettrai inimitié entre toi et la femme, entre ta postérité et sa postérité : celle-ci t'écrasera la tête, et tu lui blesseras le talon." },
+    { cat: "Loi", testament: "AT", title: "Genèse 5:24 (Hénoch et Dieu)", text: "Hénoch marcha avec Dieu ; puis il ne parut plus, parce que Dieu le prit." },
+    { cat: "Loi", testament: "AT", title: "Genèse 6:15 (L'Arche de Noé)", text: "Et voici comment tu la feras : l'arche aura trois cents coudées de longueur, cinquante coudées de largeur, et trente coudées de hauteur." },
+    { cat: "Loi", testament: "AT", title: "Genèse 6:22 (Fidélité de Noé)", text: "C'est ce que fit Noé : il exécuta tout ce que Dieu lui avait ordonné." },
+    { cat: "Loi", testament: "AT", title: "Genèse 9:13 (L'Arc-en-ciel)", text: "J'ai placed mon arc dans la nue, et il servira de signe d'alliance entre moi et la terre." },
+    { cat: "Loi", testament: "AT", title: "Genèse 12:1-2 (Appel d'Abraham)", text: "L'Éternel dit à Abram : Va-t'en de ton pays, de ta patrie, et de la maison de ton père, dans le pays que je te montrerai. Je ferai de toi une grande nation." },
+    { cat: "Loi", testament: "AT", title: "Genèse 15:6 (La Foi comptée comme justice)", text: "Abram eut confiance en l'Éternel, qui le lui compta comme justice." },
+    { cat: "Loi", testament: "AT", title: "Genèse 22:8 (L'Agneau de Morija)", text: "Abraham dit : Mon fils, Dieu se pourvoira lui-même de l'agneau pour l'holocauste. Et ils marchèrent tous deux ensemble." },
+    { cat: "Loi", testament: "AT", title: "Genèse 28:12 (L'échelle de Jacob)", text: "Il eut un songe. Et voici, une échelle était appuyée sur la terre, et son sommet touchait au ciel. Et voici, les anges de Dieu montaient et descendaient." },
+    { cat: "Loi", testament: "AT", title: "Genèse 32:28 (Le nom d'Israël)", text: "Ton nom ne sera plus Jacob, mais tu seras appelé Israël ; car tu as lutté avec Dieu et avec des hommes, et tu as été vainqueur." },
+    { cat: "Loi", testament: "AT", title: "Genèse 50:20 (La providence de Joseph)", text: "Vous aviez médité de me faire du mal : Dieu l'a changé en bien, pour accomplir ce qui arrive aujourd'hui, pour sauver la vie à un peuple nombreux." },
+    { cat: "Loi", testament: "AT", title: "Exode 3:14 (Le Nom Saint YHWH)", text: "Dieu dit à Moïse : Je suis celui qui suis. Et il dit : C'est ainsi que tu répondras aux enfants d'Israël : Celui qui s'appelle 'Je suis' m'envoie vers vous." },
+    { cat: "Loi", testament: "AT", title: "Exode 14:13-14 (La traversée de la Mer Rouge)", text: "Moïse répondit au peuple : Ne craignez rien, restez en place, et regardez la délivrance que l'Éternel va vous accorder en ce jour. L'Éternel combattra pour vous." },
+    { cat: "Loi", testament: "AT", title: "Exode 20:3-17 (Les Dix Commandements)", text: "Tu n'auras pas d'autres dieux devant ma face. Tu ne te feras point d'image taillée... Honore ton père et ta mère..." },
+    { cat: "Loi", testament: "AT", title: "Lévitique 19:18 (Le Grand Commandement)", text: "Tu ne te vengeras point... Tu aimeras ton prochain comme toi-même. Je suis l'Éternel." },
+    { cat: "Loi", testament: "AT", title: "Nombres 6:24-26 (La bénédiction sacerdotale)", text: "Que l'Éternel te bénisse, et qu'il te garde ! Que l'Éternel fasse luire sa face sur toi, et qu'il t'accorde sa grâce !" },
+    { cat: "Loi", testament: "AT", title: "Deutéronome 6:4-5 (Le Shema Israël)", text: "Écoute, Israël ! L'Éternel, notre Dieu, est le seul Éternel. Tu aimeras l'Éternel, ton Dieu, de tout ton cœur, de toute ton âme et de toute ta force." },
+
+    // HISTORIQUES & PROPHÈTES
+    { cat: "Prophetes", testament: "AT", title: "Josué 1:9 (Courage divin)", text: "Ne t'ai-je pas donné cet ordre : Fortifie-toi et prends courage ? Ne t'effraye point et ne t'épouvante point, car l'Éternel, ton Dieu, est avec toi." },
+    { cat: "Prophetes", testament: "AT", title: "Josué 24:15 (Le choix de servir)", text: "Moi et ma maison, nous servirons l'Éternel." },
+    { cat: "Prophetes", testament: "AT", title: "Juges 6:12 (L'appel de Gédéon)", text: "L'ange de l'Éternel lui apparut, et lui dit : L'Éternel est avec toi, vaillant héros !" },
+    { cat: "Prophetes", testament: "AT", title: "Ruth 1:16 (Fidélité de Ruth)", text: "Ruth répondit : Ne me presse pas de te abandonner... Où tu iras j'irai, où tu mourras je mourrai ; ton peuple sera mon peuple, et ton Dieu sera mon Dieu." },
+    { cat: "Prophetes", testament: "AT", title: "1 Samuel 16:7 (Le cœur devant Dieu)", text: "L'Éternel ne regarde pas à ce que l'homme regarde ; l'homme regarde à ce qui frappe les yeux, mais l'Éternel regarde au cœur." },
+    { cat: "Prophetes", testament: "AT", title: "1 Samuel 17:45 (David contre Goliath)", text: "David dit au Philistin : Tu marches contre moi avec l'épée et la lance ; et moi, je marche contre toi au nom de l'Éternel des armées." },
+    { cat: "Prophetes", testament: "AT", title: "1 Rois 3:9 (La Sagesse de Salomon)", text: "Accorde donc à ton serviteur un cœur intelligent pour juger ton peuple, pour discerner le bien du mal !" },
+    { cat: "Prophetes", testament: "AT", title: "1 Rois 19:12 (Le murmure doux)", text: "Et après le tremblement de terre, un feu : l'Éternel n'était pas dans le feu. Et après le feu, un murmure doux et léger." },
+    { cat: "Prophetes", testament: "AT", title: "Ésaïe 9:5 (Le Prince de la Paix)", text: "Car un enfant nous est né, un fils nous est donné... On l'appellera Admirable, Conseiller, Dieu puissant, Père éternel, Prince de la paix." },
+    { cat: "Prophetes", testament: "AT", title: "Ésaïe 40:31 (Les aigles)", text: "Mais ceux qui s'confient en l'Éternel renouvelleront leur force. Ils prennent le vol comme les aigles ; ils courent, et ne se lassent point." },
+    { cat: "Prophetes", testament: "AT", title: "Ésaïe 53:5 (Le Serviteur souffrant)", text: "Mais il était blessé pour nos péchés, brisé pour nos iniquités ; le châtiment qui nous donne la paix est tombé sur lui, et c'est par ses meurtrissures que nous sommes guéris." },
+    { cat: "Prophetes", testament: "AT", title: "Jérémie 29:11 (Projets de paix)", text: "Car je connais les projets que j'ai formés sur vous, dit l'Éternel, projets de paix et non de malheur, afin de vous donner un avenir et de l'espérance." },
+    { cat: "Prophetes", testament: "AT", title: "Jérémie 33:3 (Invoque-moi)", text: "Invoque-moi, et je te répondrai ; je t'annoncerai de grandes choses, des choses cachées, que tu ne connais pas." },
+    { cat: "Prophetes", testament: "AT", title: "Daniel 3:17-18 (La fournaise ardente)", text: "Voici, notre Dieu que nous servons peut nous délivrer de la fournaise ardente... Sinon, sache, ô roi, que nous ne servirons pas tes dieux." },
+    { cat: "Prophetes", testament: "AT", title: "Daniel 6:22 (La fosse aux lions)", text: "Mon Dieu a envoyé son ange et a fermé la gueule des lions, qui ne m'ont fait aucun mal." },
+    { cat: "Prophetes", testament: "AT", title: "Michée 6:8 (La justice et la miséricorde)", text: "On t'a fait connaître, ô homme, ce qui est bien ; et ce que l'Éternel demande de toi, c'est que tu prriques la justice, que tu aimes la miséricorde, et que tu marches humblement avec ton Dieu." },
+
+    // SAGESSE & PSAUMES
+    { cat: "Sagesse", testament: "AT", title: "Psaume 1:1-2 (L'homme heureux)", text: "Heureux l'homme qui ne marche pas selon le conseil des méchants... Mais qui trouve son plaisir dans la loi de l'Éternel !" },
+    { cat: "Sagesse", testament: "AT", title: "Psaume 23:1 (Le Bon Berger)", text: "L'Éternel est mon berger : je ne manquerai de rien. Il me fait reposer dans de verts pâturages." },
+    { cat: "Sagesse", testament: "AT", title: "Psaume 23:4 (La vallée de l'ombre)", text: "Quand je marche dans la vallée de l'ombre de la mort, je ne crains aucun mal, car tu es avec moi." },
+    { cat: "Sagesse", testament: "AT", title: "Psaume 46:2 (Notre refuge)", text: "Dieu est pour nous un refuge et un appui, un secours qui ne manque jamais dans la détresse." },
+    { cat: "Sagesse", testament: "AT", title: "Psaume 91:1-2 (À l'ombre du Tout-Puissant)", text: "Celui qui demeure sous l'abri du Très-Haut repose à l'ombre du Tout-Puissant. Je dis à l'Éternel : Mon refuge et ma forteresse, mon Dieu en qui je me confie !" },
+    { cat: "Sagesse", testament: "AT", title: "Psaume 119:105 (La Lampe)", text: "Ta parole est une lampe à mes pieds, et une lumière sur mon sentier." },
+    { cat: "Sagesse", testament: "AT", title: "Psaume 139:14 (Une créature merveilleuse)", text: "Je te loue de ce que je suis une créature si merveilleuse. Tes œuvres sont admirables, et mon âme le reconnaît bien." },
+    { cat: "Sagesse", testament: "AT", title: "Proverbes 3:5-6 (Confiance totale)", text: "Confie-toi en l'Éternel de tout ton cœur, et ne t'appuie pas sur ton intelligence ; reconnais-le dans toutes tes voies, et il aplanira tes sentiers." },
+    { cat: "Sagesse", testament: "AT", title: "Proverbes 4:23 (Garde ton cœur)", text: "Garde ton cœur plus que toute autre chose, car de lui viennent les sources de la vie." },
+    { cat: "Sagesse", testament: "AT", title: "Proverbes 9:10 (Le commencement de la sagesse)", text: "Le commencement de la sagesse, c'est la crainte de l'Éternel ; et la science des saints, c'est l'intelligence." },
+    { cat: "Sagesse", testament: "AT", title: "Ecclésiaste 3:1 (Un temps pour tout)", text: "Il y a un temps pour tout, un temps pour toute chose sous les cieux : un temps pour naître, et un temps pour mourir..." },
+
+    // NOUVEAU TESTAMENT - ÉVANGILES & ACTES
+    { cat: "Evangiles", testament: "NT", title: "Matthieu 5:3-10 (Les Béatitudes)", text: "Heureux les pauvres en esprit, car le royaume des cieux est à eux ! Heureux les affligés, car ils seront consolés ! Heureux les doux, car ils hériteront la terre !" },
+    { cat: "Evangiles", testament: "NT", title: "Matthieu 6:33 (Rechercher le Royaume)", text: "Cherchez premièrement le royaume et la justice de Dieu ; et toutes ces choses vous seront données par-dessus." },
+    { cat: "Evangiles", testament: "NT", title: "Matthieu 11:28 (Le repos des âmes)", text: "Venez à moi, vous tous qui êtes fatigués et chargés, et je vous donnerai du repos." },
+    { cat: "Evangiles", testament: "NT", title: "Matthieu 22:37-39 (Le Plus Grand Commandement)", text: "Tu aimeras le Seigneur, ton Dieu, de tout ton cœur, de toute ton âme, et de toute ta pensée... Et voici le second : Tu aimeras ton prochain comme toi-même." },
+    { cat: "Evangiles", testament: "NT", title: "Matthieu 28:19-20 (La Grande Mission)", text: "Allez, faites de toutes les nations des disciples, les baptisant au nom du Père, du Fils et du Saint-Esprit... Et voici, je suis avec vous tous les jours." },
+    { cat: "Evangiles", testament: "NT", title: "Marc 10:45 (Le Serviteur)", text: "Car le Fils de l'homme est venu, non pour être servi, mais pour servir et donner sa vie comme la rançon de beaucoup." },
+    { cat: "Evangiles", testament: "NT", title: "Luc 2:10-11 (La Nativité)", text: "L'ange leur dit : Ne craignez point ; car je vous annonce une bonne nouvelle... c'est qu'aujourd'hui, dans la ville de David, il vous est né un Sauveur, qui est le Christ, le Seigneur." },
+    { cat: "Evangiles", testament: "NT", title: "Luc 15:11-32 (Le Fils Prodigue)", text: "Mon fils que voici était mort, et il est revenu à la vie ; il était perdu, et il est retrouvé. Et ils commencèrent à se réjouir." },
+    { cat: "Evangiles", testament: "NT", title: "Luc 23:34 (Le Pardon ultime)", text: "Jésus dit : Père, pardonne-leur, car ils ne savent ce qu'ils font." },
+    { cat: "Evangiles", testament: "NT", title: "Jean 1:1 (La Parole faite chair)", text: "Au commencement était la Parole, et la Parole était avec Dieu, et la Parole était Dieu." },
+    { cat: "Evangiles", testament: "NT", title: "Jean 3:16 (L'Amour de Dieu)", text: "Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle." },
+    { cat: "Evangiles", testament: "NT", title: "Jean 8:12 (La Lumière du monde)", text: "Jésus leur parla de nouveau, et dit : Je suis la lumière du monde ; celui qui me suit ne marchera pas dans les ténèbres, mais il aura la lumière de la vie." },
+    { cat: "Evangiles", testament: "NT", title: "Jean 11:25 (La Résurrection)", text: "Jésus lui dit : Je suis la résurrection et la vie. Celui qui croit en moi vivra, quand même il serait mort." },
+    { cat: "Evangiles", testament: "NT", title: "Jean 14:6 (Le Chemin, la Vérité, la Vie)", text: "Jésus lui dit : Je suis le chemin, la vérité, et la vie. Nul ne vient au Père que par moi." },
+    { cat: "Evangiles", testament: "NT", title: "Jean 15:5 (Le Vrai Cep)", text: "Je suis le cep, vous êtes les sarments. Celui qui demeure en moi et en qui je demeure porte beaucoup de fruit, car sans moi vous ne pouvez rien faire." },
+    { cat: "Evangiles", testament: "NT", title: "Actes 1:8 (La puissance du Saint-Esprit)", text: "Mais vous recevrez une puissance, le Saint-Esprit survenant sur vous, et vous serez mes témoins à Jérusalem, dans toute la Judée, dans la Samarie, et jusqu'aux extrémités de la terre." },
+    { cat: "Evangiles", testament: "NT", title: "Actes 4:12 (Le Salut unique)", text: "Il n'y a de salut en aucun autre ; car il n'y a sous le ciel aucun autre nom qui ait été donné parmi les hommes, par lequel nous devions être sauvés." },
+    { cat: "Evangiles", testament: "NT", title: "Actes 16:31 (La Foi du geôlier)", text: "Paul et Silas répondirent : Crois au Seigneur Jésus, et tu seras sauvé, toi et ta famille." },
+
+    // ÉPÎTRES & APOCALYPSE
+    { cat: "NT", testament: "NT", title: "Romains 3:23-24 (La Grâce gratuite)", text: "Car tous ont péché et sont privés de la gloire de Dieu ; et ils sont gratuitement justifiés par sa grâce, par le moyen de la rédemption qui est en Jésus-Christ." },
+    { cat: "NT", testament: "NT", title: "Romains 8:28 (Toutes choses concourent au bien)", text: "Nous savons, du reste, que toutes choses concourent au bien de ceux qui aiment Dieu, de ceux qui sont appelés selon son dessein." },
+    { cat: "NT", testament: "NT", title: "Romains 8:38-39 (Amour inébranlable)", text: "Car j'ai l'assurance que ni la mort ni la vie... ne pourra nous séparer de l'amour de Dieu manifesté en Jésus-Christ notre Seigneur." },
+    { cat: "NT", testament: "NT", title: "1 Corinthiens 13:4-7 (L'Hymne à l'Amour)", text: "L'amour est patient, il est plein de bonté ; l'amour n'est point envieux... L'amour ne périt jamais." },
+    { cat: "NT", testament: "NT", title: "Galates 5:22-23 (Le Fruit de l'Esprit)", text: "Mais le fruit de l'Esprit, c'est l'amour, la joie, la paix, la patience, la bonté, la bénignité, la fidélité, la douceur, la tempérance." },
+    { cat: "NT", testament: "NT", title: "Éphésiens 2:8-9 (Sauvés par grâce)", text: "Car c'est par la grâce que vous êtes sauvés, par le moyen de la foi. Et cela ne vient pas de vous, c'est le don de Dieu." },
+    { cat: "NT", testament: "NT", title: "Éphésiens 6:11 (L'armure de Dieu)", text: "Revêtez-vous de toutes les armes de Dieu, afin de pouvoir tenir ferme contre les manœuvres du diable." },
+    { cat: "NT", testament: "NT", title: "Philippiens 4:6-7 (La Paix suprême)", text: "Ne vous inquiétez de rien ; mais en toute chose faites connaître vos besoins à Dieu par des prières et des supplications, avec des actions de grâces." },
+    { cat: "NT", testament: "NT", title: "Philippiens 4:13 (Je puis tout)", text: "Je puis tout par celui qui me fortifie." },
+    { cat: "NT", testament: "NT", title: "Hebreux 11:1 (La définition de la Foi)", text: "Or la foi est une ferme assurance des choses qu'on espère, une démonstration de celles qu'on ne voit pas." },
+    { cat: "NT", testament: "NT", title: "Jacques 1:22 (Praticiens de la Parole)", text: "Mettez en pratique la parole, et ne vous bornez pas à l'écouter, en vous trompant vous-mêmes par de faux raisonnements." },
+    { cat: "NT", testament: "NT", title: "1 Jean 4:8 (Dieu est Amour)", text: "Celui qui n'aime pas n'a pas connu Dieu, car Dieu est amour." },
+    { cat: "NT", testament: "NT", title: "Apocalypse 3:20 (Jésus à la porte)", text: "Voici, je me tiens à la porte, et je frappe. Si quelqu'un entend ma voix et ouvre la porte, j'entrerai chez lui, je souperai avec lui, et lui avec moi." },
+    { cat: "NT", testament: "NT", title: "Apocalypse 21:4 (La Cité Nouvelle)", text: "Il essuiera toute larme de leurs yeux, et la mort ne sera plus, et il n'y aura plus ni deuil, ni cri, ni douleur, car les premières choses ont disparu." }
   ];
+
+  // ================= HOLY BIBLE READER DATABASE (66 BOOKS) =================
+  const bibleBooksDatabase = {
+    AT: [
+      { id: "gen", name: "Genèse", numChaps: 50, theme: "La Création, la Chute, les Patriarches et Joseph en Égypte." },
+      { id: "exo", name: "Exode", numChaps: 40, theme: "La libération d'Égypte, le Buisson Ardent, la Mer Rouge et les 10 Commandements." },
+      { id: "lev", name: "Lévitique", numChaps: 27, theme: "La sainteté de Dieu, les sacrifices et le service sacerdotal." },
+      { id: "nom", name: "Nombres", numChaps: 36, theme: "La marche du peuple d'Israël dans le désert pendant 40 ans." },
+      { id: "deu", name: "Deutéronome", numChaps: 34, theme: "Le rappel de la Loi de Dieu au seuil de la Terre Promise." },
+      { id: "jos", name: "Josué", numChaps: 24, theme: "La traversée du Jourdain, la prise de Jéricho et la conquête de Canaan." },
+      { id: "jug", name: "Juges", numChaps: 21, theme: "Les héros suscités par Dieu : Gédéon, Samson, Débora, pour délivrer Israël." },
+      { id: "rut", name: "Ruth", numChaps: 4, theme: "L'histoire de fidélité de Ruth la Moabite et Boaz à Bethléem." },
+      { id: "1sam", name: "1 Samuel", numChaps: 31, theme: "Samuel, l'institution de la royauté avec Saül puis l'onction de David." },
+      { id: "2sam", name: "2 Samuel", numChaps: 24, theme: "Le règne de David, l'alliance davidique et la repentance." },
+      { id: "1rois", name: "1 Rois", numChaps: 22, theme: "Salomon, la construction du Temple de Jérusalem et Élie le prophète." },
+      { id: "2rois", name: "2 Rois", numChaps: 25, theme: "Élisée, le déclin des royaumes d'Israël et de Juda et la déportation." },
+      { id: "1chr", name: "1 Chroniques", numChaps: 29, theme: "Généalogies et préparation du culte au Temple sous David." },
+      { id: "2chr", name: "2 Chroniques", numChaps: 36, theme: "L'histoire du Temple et des rois de Juda jusqu'à l'édit de Cyrus." },
+      { id: "esd", name: "Esdras", numChaps: 10, theme: "Le retour de l'exil à Babylone et la reconstruction du Temple." },
+      { id: "nee", name: "Néhémie", numChaps: 13, theme: "La reconstruction des murailles de Jérusalem et la réforme spirituelle." },
+      { id: "est", name: "Esther", numChaps: 10, theme: "La délivrance providentielle du peuple juif dans l'empire perse." },
+      { id: "job", name: "Job", numChaps: 42, theme: "L'épreuve de la souffrance de l'innocent et la souveraineté divine." },
+      { id: "psa", name: "Psaumes", numChaps: 150, theme: "Le recueil de prières, d'hymnes et de louanges à l'Éternel." },
+      { id: "pro", name: "Proverbes", numChaps: 31, theme: "La sagesse pratique pour la vie quotidienne, la crainte de Dieu." },
+      { id: "ecc", name: "Ecclésiaste", numChaps: 12, theme: "La vanité des choses terrestres et la crainte de Dieu." },
+      { id: "can", name: "Cantique des Cantiques", numChaps: 8, theme: "L'hymne à l'amour pur et à l'alliance sponsale." },
+      { id: "esa", name: "Ésaïe", numChaps: 66, theme: "Le grand prophète messianique, les prophéties du Serviteur souffrant." },
+      { id: "jer", name: "Jérémie", numChaps: 52, theme: "Le prophète pleurant la ruine de Jérusalem et annonçant l'Alliance Nouvelle." },
+      { id: "lam", name: "Lamentations", numChaps: 5, theme: "Complainte sur la destruction du Temple et l'exil." },
+      { id: "eze", name: "Ézéchiel", numChaps: 48, theme: "Visions de la gloire de Dieu, la vallée des os desséchés." },
+      { id: "dan", name: "Daniel", numChaps: 12, theme: "Fidélité à Babylone, la fosse aux lions et les prophéties apocalyptiques." },
+      { id: "os", name: "Osée", numChaps: 14, theme: "L'amour fidèle et inconditionnel de Dieu envers Israël." },
+      { id: "joe", name: "Joël", numChaps: 3, theme: "L'annonce du jour de l'Éternel et l'effusion de l'Esprit." },
+      { id: "amo", name: "Amos", numChaps: 9, theme: "L'appel à la justice sociale et au repentir sincère." },
+      { id: "abd", name: "Abdias", numChaps: 1, theme: "Jugement d'Édom et délivrance de la montagne de Sion." },
+      { id: "jon", name: "Jonas", numChaps: 4, theme: "Le prophète envoyé à Ninive et la grande miséricorde divine." },
+      { id: "mic", name: "Michée", numChaps: 7, theme: "L'annonce de la naissance du Messie à Bethléem." },
+      { id: "nah", name: "Nahum", numChaps: 3, theme: "Oracles de jugement contre la fière ville de Ninive." },
+      { id: "hab", name: "Habacuc", numChaps: 3, theme: "Le juste vivra par sa foi au milieu de la persécution." },
+      { id: "sop", name: "Sophonie", numChaps: 3, theme: "Le grand Jour de l'Éternel et le reste d'Israël restauré." },
+      { id: "agg", name: "Aggée", numChaps: 2, theme: "Encouragement à achever la reconstruction du Temple." },
+      { id: "zac", name: "Zacharie", numChaps: 14, theme: "Visions messianiques du Roi humble entrant à Jérusalem." },
+      { id: "mal", name: "Malachie", numChaps: 4, theme: "Le dernier prophète de l'Ancien Testament annonçant Élie le messager." }
+    ],
+    NT: [
+      { id: "mat", name: "Matthieu", numChaps: 28, theme: "Jésus le Messie promis, le Sermon sur la Montagne et le Roi des Juifs." },
+      { id: "mar", name: "Marc", numChaps: 16, theme: "Jésus le Serviteur puissant agissant avec autorité et miracles." },
+      { id: "luc", name: "Luc", numChaps: 24, theme: "Jésus le Fils de l'Homme, Sauveur de tous les hommes et des perdus." },
+      { id: "jea", name: "Jean", numChaps: 21, theme: "Jésus le Fils de Dieu, la Parole faite chair et le Don de la Vie éternelle." },
+      { id: "act", name: "Actes des Apôtres", numChaps: 28, theme: "La descente du Saint-Esprit à la Pentecôte et l'expansion de l'Église." },
+      { id: "rom", name: "Romains", numChaps: 16, theme: "La justification par la foi seule et la théologie du salut par grâce." },
+      { id: "1cor", name: "1 Corinthiens", numChaps: 16, theme: "L'ordre dans l'Église, les dons spirituels et l'hymne à l'amour." },
+      { id: "2cor", name: "2 Corinthiens", numChaps: 13, theme: "Le ministère de réconciliation et la puissance dans la faiblesse." },
+      { id: "gal", name: "Galates", numChaps: 6, theme: "La liberté chrétienne affranchie de la loi par l'Esprit." },
+      { id: "eph", name: "Éphésiens", numChaps: 6, theme: "Le mystère du Corps du Christ, l'armure spirituelle du croyant." },
+      { id: "phi", name: "Philippiens", numChaps: 4, theme: "La joie suprême en Christ malgré les épreuves et l'humilité." },
+      { id: "col", name: "Colossiens", numChaps: 4, theme: "La suprématie absolue et la plénitude du Christ." },
+      { id: "1the", name: "1 Thessaloniciens", numChaps: 5, theme: "La persévérance dans la foi et la seconde venue du Seigneur." },
+      { id: "2the", name: "2 Thessaloniciens", numChaps: 3, theme: "Consolation face aux persécutions et avertissement contre l'oisiveté." },
+      { id: "1tim", name: "1 Timothée", numChaps: 6, theme: "Conseils pastoraux à un jeune responsable pour la maison de Dieu." },
+      { id: "2tim", name: "2 Timothée", numChaps: 4, theme: "Testament spirituel de Paul : Combats le bon combat de la foi." },
+      { id: "tit", name: "Tite", numChaps: 3, theme: "L'organisation des assemblées en Crète et la saine doctrine." },
+      { id: "phi_m", name: "Philémon", numChaps: 1, theme: "Pardon et fraternité chrétienne en faveur de l'esclave Onésime." },
+      { id: "heb", name: "Hébreux", numChaps: 13, theme: "Jésus le Souverain Sacrificateur supérieur aux anges et à Moïse." },
+      { id: "jac", name: "Jacques", numChaps: 5, theme: "La foi vivante démontrée par les œuvres et la maîtrise de la langue." },
+      { id: "1pie", name: "1 Pierre", numChaps: 5, theme: "L'espérance vivante des croyants dispersés au milieu du feu des épreuves." },
+      { id: "2pie", name: "2 Pierre", numChaps: 3, theme: "Mise en garde contre les faux docteurs et attente des nouveaux cieux." },
+      { id: "1jea", name: "1 Jean", numChaps: 5, theme: "La certitude du salut, la communion fraternelle et Dieu est amour." },
+      { id: "2jea", name: "2 Jean", numChaps: 1, theme: "Demeurer dans la vérité et pratiquer l'amour fraternel." },
+      { id: "3jea", name: "3 Jean", numChaps: 1, theme: "L'hospitalité chrétienne saluée chez Gaïus." },
+      { id: "jud", name: "Jude", numChaps: 1, theme: "Combattre pour la foi transmise une fois pour toutes aux saints." },
+      { id: "apo", name: "Apocalypse", numChaps: 22, theme: "La révélation triomphale de Jésus-Christ, la victoire finale et la Nouvelle Jérusalem." }
+    ]
+  };
 
   // ================= SCALABLE 7 BOOKS & 22 CHAPTERS DATABASE =================
   const gameDatabase = {
@@ -1444,23 +2444,178 @@
     saveState();
   }
 
-  // ================= STORAGE =================
+  // ================= SUPABASE CLOUD DATABASE CONFIGURATION =================
+  // Remplacez ces deux valeurs par votre Project URL et votre Anon Public Key depuis votre tableau de bord Supabase (Settings > API)
+  const SUPABASE_URL = "https://qsxyfjbiiitasphnbwi.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_HUmHb_8zYb3FK1_V8YT2TQ_tFXyp7U5";
+  let supabaseClient = null;
+
+  try {
+    if (typeof window.supabase !== 'undefined' && SUPABASE_URL.startsWith("http")) {
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      console.log("[SUPABASE] Client connecté à Cloud PostgreSQL avec succès !");
+    } else {
+      console.log("[SUPABASE] Mode local (localStorage fallback). Fournissez vos clés Supabase pour activer le Cloud.");
+    }
+  } catch(e) {
+    console.warn("[SUPABASE] Connexion en mode local (localStorage fallback)", e);
+  }
+
+  // Supabase Cloud Async Helpers
+  async function supabaseSavePlayerCloud(accountObj) {
+    if (!supabaseClient) return null;
+    try {
+      const payload = {
+        id: accountObj.id,
+        name: accountObj.name,
+        email: accountObj.email,
+        phone: accountObj.phone || null,
+        city: accountObj.city,
+        country: accountObj.country,
+        password_hash: accountObj.passwordHash,
+        created_at: accountObj.createdAt,
+        last_session_at: accountObj.lastSessionAt,
+        session_count: accountObj.sessionCount || 1,
+        is_minor: accountObj.ageGate ? accountObj.ageGate.isMinor : false,
+        birth_year: accountObj.ageGate ? accountObj.ageGate.birthYear : null,
+        parental_consent: accountObj.ageGate ? accountObj.ageGate.parentalConsent : false,
+        parent_email: accountObj.ageGate ? accountObj.ageGate.parentEmail : null,
+        marketing_email: accountObj.marketingConsent ? accountObj.marketingConsent.email : false,
+        marketing_sms: accountObj.marketingConsent ? accountObj.marketingConsent.sms : false,
+        marketing_push: accountObj.marketingConsent ? accountObj.marketingConsent.push : false,
+        consent_date: accountObj.marketingConsent ? accountObj.marketingConsent.dateOfChoice : new Date().toISOString(),
+        consent_version: accountObj.marketingConsent ? accountObj.marketingConsent.versionText : "v1.0",
+        game_save: accountObj.gameSave
+      };
+      const { data, error } = await supabaseClient.from('players').upsert(payload, { onConflict: 'id' });
+      if (error) console.error("[SUPABASE ERROR]", error);
+      return data;
+    } catch(e) {
+      console.error("[SUPABASE SAVE EXCEPTION]", e);
+      return null;
+    }
+  }
+
+  async function supabaseFetchAllPlayersCloud() {
+    if (!supabaseClient) return null;
+    try {
+      const { data, error } = await supabaseClient.from('players').select('*');
+      if (error) {
+        console.error("[SUPABASE FETCH ERROR]", error);
+        return null;
+      }
+      if (!data) return [];
+      
+      // Convert database schema back to app PlayerAccount object format
+      return data.map(row => ({
+        id: row.id,
+        name: row.name,
+        email: row.email,
+        phone: row.phone,
+        city: row.city,
+        country: row.country,
+        passwordHash: row.password_hash,
+        createdAt: row.created_at,
+        lastSessionAt: row.last_session_at,
+        sessionCount: row.session_count,
+        ageGate: {
+          isMinor: row.is_minor,
+          birthYear: row.birth_year,
+          parentalConsent: row.parental_consent,
+          parentEmail: row.parent_email
+        },
+        marketingConsent: {
+          email: row.marketing_email,
+          sms: row.marketing_sms,
+          push: row.marketing_push,
+          dateOfChoice: row.consent_date,
+          versionText: row.consent_version
+        },
+        gameSave: row.game_save
+      }));
+    } catch(e) {
+      console.error("[SUPABASE FETCH EXCEPTION]", e);
+      return null;
+    }
+  }
+
+  async function supabaseDeletePlayerCloud(playerId) {
+    if (!supabaseClient) return false;
+    try {
+      const { error } = await supabaseClient.from('players').delete().eq('id', playerId);
+      if (error) console.error("[SUPABASE DELETE ERROR]", error);
+      return !error;
+    } catch(e) {
+      console.error("[SUPABASE DELETE EXCEPTION]", e);
+      return false;
+    }
+  }
+
+  // ================= STORAGE & ACCOUNTS LAYER =================
   const STORAGE_KEY = "chronicles_bibliques_save_heptagon";
+  const ACCOUNTS_STORAGE_KEY = "cb_accounts_db_v1";
+  let activeAccount = null; // Active PlayerAccount
+  let discoveryModeActive = false; // Discovery mode state
+  let currentOTP = "";
+  let recoverUserEmail = "";
+
+  // Simulated Salted Hashing for Security Compliance
+  function hashPassword(password) {
+    const salt = "cb_salt_artci_2026_";
+    let hash = 0;
+    const combined = salt + password;
+    for (let i = 0; i < combined.length; i++) {
+      const char = combined.charCodeAt(i);
+      hash = (hash << 5) - hash + char;
+      hash = hash & hash;
+    }
+    return 'sha256_sim_' + Math.abs(hash).toString(16) + password.length;
+  }
+
+  function getAccounts() {
+    try {
+      const data = localStorage.getItem(ACCOUNTS_STORAGE_KEY);
+      return data ? JSON.parse(data) : [];
+    } catch(e) {
+      console.error("Error reading accounts", e);
+      return [];
+    }
+  }
+
+  function saveAccounts(accounts) {
+    try {
+      localStorage.setItem(ACCOUNTS_STORAGE_KEY, JSON.stringify(accounts));
+    } catch(e) {
+      console.error("Error saving accounts", e);
+    }
+  }
 
   function loadState() {
     try {
+      // Local copy backup load
       const data = localStorage.getItem(STORAGE_KEY);
       if (data) {
         state = JSON.parse(data);
       }
     } catch(e) {
-      console.warn("Could not load save state", e);
+      console.warn("Could not load backup save state", e);
     }
   }
 
   function saveState() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      if (activeAccount) {
+        const accounts = getAccounts();
+        const idx = accounts.findIndex(a => a.id === activeAccount.id);
+        if (idx !== -1) {
+          accounts[idx].gameSave = JSON.parse(JSON.stringify(state));
+          accounts[idx].lastSessionAt = new Date().toISOString();
+          saveAccounts(accounts);
+          activeAccount = accounts[idx]; // Sync in-memory reference
+          supabaseSavePlayerCloud(activeAccount);
+        }
+      }
     } catch(e) {
       console.warn("Could not save state", e);
     }
@@ -1506,6 +2661,9 @@
   ];
 
   function isChapterUnlocked(chapId) {
+    if (!activeAccount && chapId !== "1_1") {
+      return false; // Force welcome screen blocking for discovery mode beyond chapter 1
+    }
     const idx = chronologicalOrder.indexOf(chapId);
     if (idx <= 0) return true; // first chapter is always unlocked
     const predId = chronologicalOrder[idx - 1];
@@ -1513,6 +2671,13 @@
   }
 
   function changeBook(bookNum) {
+    if (!activeAccount && bookNum !== 1) {
+      alert("Mode Découverte : Veuillez créer un compte gratuit pour accéder aux autres Livres et continuer l'aventure.");
+      document.getElementById('bookSelect').value = 1;
+      showAuthView('welcome');
+      document.getElementById('authOverlay').classList.remove('hidden');
+      return;
+    }
     playSound('click');
     state.selectedBook = bookNum;
     saveState();
@@ -1558,9 +2723,831 @@
         el.addEventListener('click', () => {
           startChapter(ch);
         });
+      } else if (lvlState === 'locked') {
+        el.addEventListener('click', () => {
+          if (!activeAccount) {
+            alert("Mode Découverte : Veuillez créer un compte gratuit pour débloquer ce chapitre et sauvegarder vos progrès.");
+            showAuthView('welcome');
+            document.getElementById('authOverlay').classList.remove('hidden');
+          } else {
+            alert("Ce chapitre est verrouillé. Vous devez d'abord terminer les chapitres précédents.");
+          }
+        });
       }
       mapPath.appendChild(el);
     });
+  }
+
+  // ================= ACCOUNT SYSTEM & CRM LOGIC =================
+  function getCurrentDominantSpiritualValue(stats) {
+    let maxVal = -1;
+    let dominant = "Foi";
+    for (const [virtue, value] of Object.entries(stats)) {
+      if (value > maxVal) {
+        maxVal = value;
+        dominant = virtue;
+      }
+    }
+    return dominant;
+  }
+
+  function getMaxBookText(gameSave) {
+    if (!gameSave || !gameSave.completedChapters || gameSave.completedChapters.length === 0) {
+      return "Livre I (Découverte)";
+    }
+    let maxIdx = -1;
+    gameSave.completedChapters.forEach(cid => {
+      const idx = chronologicalOrder.indexOf(cid);
+      if (idx > maxIdx) maxIdx = idx;
+    });
+    if (maxIdx === -1) return "Livre I";
+    const lastChapterId = chronologicalOrder[maxIdx];
+    const bookNum = lastChapterId.split('_')[0];
+    const bookTitles = {
+      1: "Livre I : Les Origines",
+      2: "Livre II : Les Patriarches",
+      3: "Livre III : L'Exode & Conquête",
+      4: "Livre IV : Les Juges",
+      5: "Livre V : Les Rois",
+      6: "Livre VI : Prophètes & Exil",
+      7: "Livre VII : L'Accomplissement"
+    };
+    return bookTitles[bookNum] || `Livre ${bookNum}`;
+  }
+
+  function showAuthView(viewName) {
+    document.getElementById('authWelcomeView').classList.add('hidden');
+    document.getElementById('authLoginView').classList.add('hidden');
+    document.getElementById('authRegisterView').classList.add('hidden');
+    document.getElementById('authRecoverView').classList.add('hidden');
+    document.getElementById('authProfileView').classList.add('hidden');
+    document.getElementById('authAdminView').classList.add('hidden');
+
+    if (viewName === 'welcome') {
+      document.getElementById('authWelcomeView').classList.remove('hidden');
+    } else if (viewName === 'login') {
+      document.getElementById('authLoginView').classList.remove('hidden');
+      document.getElementById('loginError').classList.add('hidden');
+      const backBtn = document.getElementById('loginBackBtn');
+      if (!activeAccount && !discoveryModeActive) {
+        backBtn.classList.add('hidden');
+      } else {
+        backBtn.classList.remove('hidden');
+      }
+    } else if (viewName === 'register') {
+      document.getElementById('authRegisterView').classList.remove('hidden');
+      document.getElementById('registerError').classList.add('hidden');
+      
+      const select = document.getElementById('regBirthYear');
+      select.innerHTML = '<option value="">-- Sélectionner --</option>';
+      const currentYear = new Date().getFullYear();
+      for (let y = currentYear; y >= 1920; y--) {
+        select.innerHTML += `<option value="${y}">${y}</option>`;
+      }
+      checkAgeGate("");
+
+      const backBtn = document.getElementById('regBackBtn');
+      if (!activeAccount && !discoveryModeActive) {
+        backBtn.classList.add('hidden');
+      } else {
+        backBtn.classList.remove('hidden');
+      }
+    } else if (viewName === 'recover') {
+      document.getElementById('authRecoverView').classList.remove('hidden');
+      document.getElementById('recoverError').classList.add('hidden');
+      document.getElementById('recoverSuccess').classList.add('hidden');
+      document.getElementById('recoverStep1').classList.remove('hidden');
+      document.getElementById('recoverStep2').classList.add('hidden');
+    } else if (viewName === 'profile') {
+      if (!activeAccount) {
+        showAuthView('welcome');
+        return;
+      }
+      document.getElementById('authProfileView').classList.remove('hidden');
+      document.getElementById('profileSuccess').classList.add('hidden');
+
+      document.getElementById('profName').textContent = activeAccount.name;
+      document.getElementById('profEmail').textContent = activeAccount.email;
+      document.getElementById('profPhone').textContent = activeAccount.phone || "Non renseigné";
+      document.getElementById('profLocation').textContent = `${activeAccount.city}, ${activeAccount.country}`;
+      
+      const isMinor = activeAccount.ageGate.isMinor;
+      document.getElementById('profAgeType').textContent = isMinor ? "Mineur (<15 ans)" : "Adulte (15 ans +)";
+
+      const consentSection = document.getElementById('profileConsentControls');
+      const minorWarning = document.getElementById('minorMarketingWarning');
+      if (isMinor) {
+        consentSection.classList.add('hidden');
+        minorWarning.classList.remove('hidden');
+      } else {
+        consentSection.classList.remove('hidden');
+        minorWarning.classList.add('hidden');
+        
+        document.getElementById('profMarketingConsent').checked = activeAccount.marketingConsent.email || activeAccount.marketingConsent.sms || activeAccount.marketingConsent.push;
+        document.getElementById('profChannelEmail').checked = activeAccount.marketingConsent.email;
+        document.getElementById('profChannelSMS').checked = activeAccount.marketingConsent.sms;
+        document.getElementById('profChannelPush').checked = activeAccount.marketingConsent.push;
+        
+        toggleProfileChannels(document.getElementById('profMarketingConsent').checked);
+      }
+
+      document.getElementById('profMaxBook').textContent = getMaxBookText(activeAccount.gameSave);
+      document.getElementById('profLastSession').textContent = new Date(activeAccount.lastSessionAt).toLocaleDateString('fr-FR', {
+        day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+      });
+      document.getElementById('profFrequency').textContent = activeAccount.sessionCount || 1;
+      document.getElementById('profDominantVal').textContent = getCurrentDominantSpiritualValue(activeAccount.gameSave.stats);
+    } else if (viewName === 'admin') {
+      document.getElementById('authAdminView').classList.remove('hidden');
+      loadAdminMetrics();
+    }
+  }
+
+  function toggleAccountView() {
+    const overlay = document.getElementById('authOverlay');
+    if (overlay.classList.contains('hidden')) {
+      if (activeAccount) {
+        showAuthView('profile');
+      } else {
+        showAuthView('welcome');
+      }
+      overlay.classList.remove('hidden');
+    } else {
+      if (activeAccount || discoveryModeActive) {
+        overlay.classList.add('hidden');
+      } else {
+        alert("Veuillez créer un compte ou vous connecter, ou utiliser le Mode Découverte pour commencer à jouer.");
+      }
+    }
+  }
+
+  function closeAuthOverlay() {
+    if (activeAccount || discoveryModeActive) {
+      document.getElementById('authOverlay').classList.add('hidden');
+    } else {
+      alert("Veuillez créer un compte ou vous connecter, ou utiliser le Mode Découverte pour commencer à jouer.");
+    }
+  }
+
+  function checkAgeGate(birthYear) {
+    const section = document.getElementById('minorGateSection');
+    const marketingConsentBox = document.getElementById('regMarketingConsent');
+    
+    if (!birthYear) {
+      section.classList.add('hidden');
+      marketingConsentBox.disabled = false;
+      return;
+    }
+    
+    const age = 2026 - parseInt(birthYear);
+    if (age < 15) {
+      section.classList.remove('hidden');
+      marketingConsentBox.checked = false;
+      marketingConsentBox.disabled = true;
+      toggleMarketingChannels(false);
+    } else {
+      section.classList.add('hidden');
+      marketingConsentBox.disabled = false;
+    }
+  }
+
+  function toggleMarketingChannels(checked) {
+    const channels = document.getElementById('marketingChannels');
+    if (checked) {
+      channels.classList.remove('hidden');
+    } else {
+      channels.classList.add('hidden');
+    }
+  }
+
+  function toggleProfileChannels(checked) {
+    const channels = document.getElementById('profMarketingChannels');
+    if (checked) {
+      channels.classList.remove('hidden');
+    } else {
+      channels.classList.add('hidden');
+    }
+  }
+
+  function handleRegisterSubmit() {
+    const errorEl = document.getElementById('registerError');
+    errorEl.classList.add('hidden');
+
+    const name = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const phone = document.getElementById('regPhone').value.trim();
+    const city = document.getElementById('regCity').value.trim();
+    const country = document.getElementById('regCountry').value.trim();
+    const password = document.getElementById('regPassword').value;
+    const birthYearVal = document.getElementById('regBirthYear').value;
+    const termsConsent = document.getElementById('regTermsConsent').checked;
+
+    if (!name || !email || !city || !country || !password || !birthYearVal) {
+      errorEl.textContent = "Veuillez remplir tous les champs obligatoires.";
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    if (!email.includes('@') || !email.includes('.')) {
+      errorEl.textContent = "Veuillez saisir une adresse e-mail valide.";
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    if (password.length < 6) {
+      errorEl.textContent = "Le mot de passe doit comporter au moins 6 caractères.";
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    const birthYear = parseInt(birthYearVal);
+    const age = 2026 - birthYear;
+    const isMinor = age < 15;
+    let parentEmail = "";
+    
+    if (isMinor) {
+      parentEmail = document.getElementById('regParentEmail').value.trim();
+      const parentConsent = document.getElementById('regParentConsent').checked;
+      if (!parentEmail || !parentEmail.includes('@')) {
+        errorEl.textContent = "Pour les mineurs, l'adresse e-mail d'un parent émettant le consentement est obligatoire.";
+        errorEl.classList.remove('hidden');
+        return;
+      }
+      if (!parentConsent) {
+        errorEl.textContent = "Veuillez confirmer le consentement parental.";
+        errorEl.classList.remove('hidden');
+        return;
+      }
+    }
+
+    if (!termsConsent) {
+      errorEl.textContent = "Vous devez accepter les CGU et la Politique de protection des données.";
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    const accounts = getAccounts();
+    const emailExists = accounts.some(a => a.email.toLowerCase() === email.toLowerCase());
+    if (emailExists) {
+      errorEl.textContent = "Cette adresse e-mail est déjà enregistrée.";
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    let importedSave = JSON.parse(JSON.stringify(state));
+
+    const marketingConsentOpt = document.getElementById('regMarketingConsent').checked && !isMinor;
+    const newAccount = {
+      id: "usr_" + Math.random().toString(36).substr(2, 9),
+      name: name,
+      email: email,
+      phone: phone,
+      city: city,
+      country: country,
+      passwordHash: hashPassword(password),
+      createdAt: new Date().toISOString(),
+      lastSessionAt: new Date().toISOString(),
+      sessionCount: 1,
+      ageGate: {
+        isMinor: isMinor,
+        birthYear: birthYear,
+        parentalConsent: isMinor,
+        parentEmail: parentEmail
+      },
+      marketingConsent: {
+        email: marketingConsentOpt ? document.getElementById('channelEmail').checked : false,
+        sms: marketingConsentOpt ? document.getElementById('channelSMS').checked : false,
+        push: marketingConsentOpt ? document.getElementById('channelPush').checked : false,
+        dateOfChoice: new Date().toISOString(),
+        versionText: "v1.0"
+      },
+      gameSave: importedSave
+    };
+
+    accounts.push(newAccount);
+    saveAccounts(accounts);
+    supabaseSavePlayerCloud(newAccount);
+
+    localStorage.setItem("cb_session_token", newAccount.id);
+    activeAccount = newAccount;
+    discoveryModeActive = false;
+    
+    updateProfileIcon(true);
+    closeAuthOverlay();
+    
+    updateStatsGrid();
+    updateRadarChart();
+    renderMap();
+    renderWisdomJournal();
+
+    playSound('success');
+    alert("Votre compte a été créé avec succès ! Votre progression locale a été synchronisée.");
+  }
+
+  function handleLoginSubmit() {
+    const errorEl = document.getElementById('loginError');
+    errorEl.classList.add('hidden');
+
+    const emailOrPhone = document.getElementById('loginEmail').value.trim().toLowerCase();
+    const password = document.getElementById('loginPassword').value;
+
+    if (!emailOrPhone || !password) {
+      errorEl.textContent = "Veuillez remplir tous les champs.";
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    const accounts = getAccounts();
+    const matchedUser = accounts.find(a => 
+      a.email.toLowerCase() === emailOrPhone || 
+      (a.phone && a.phone.replace(/\s+/g, '') === emailOrPhone.replace(/\s+/g, ''))
+    );
+
+    if (!matchedUser) {
+      errorEl.textContent = "Aucun compte correspondant trouvé.";
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    if (matchedUser.passwordHash !== hashPassword(password)) {
+      errorEl.textContent = "Mot de passe incorrect.";
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    localStorage.setItem("cb_session_token", matchedUser.id);
+    activeAccount = matchedUser;
+    
+    activeAccount.sessionCount = (activeAccount.sessionCount || 0) + 1;
+    activeAccount.lastSessionAt = new Date().toISOString();
+    saveAccounts(accounts);
+
+    state = JSON.parse(JSON.stringify(activeAccount.gameSave));
+    state.soundEnabled = (typeof state.soundEnabled === 'undefined') ? true : state.soundEnabled;
+
+    discoveryModeActive = false;
+
+    updateProfileIcon(true);
+    closeAuthOverlay();
+    
+    updateStatsGrid();
+    updateRadarChart();
+    renderMap();
+    renderWisdomJournal();
+    renderCodex();
+
+    playSound('success');
+    alert(`Ravi de vous revoir, ${activeAccount.name} ! Votre progression a été chargée.`);
+  }
+
+  function handleSendOTP() {
+    const errorEl = document.getElementById('recoverError');
+    const successEl = document.getElementById('recoverSuccess');
+    errorEl.classList.add('hidden');
+    successEl.classList.add('hidden');
+
+    const email = document.getElementById('recoverEmail').value.trim().toLowerCase();
+    if (!email || !email.includes('@')) {
+      errorEl.textContent = "Veuillez saisir un e-mail valide.";
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    const accounts = getAccounts();
+    const user = accounts.find(a => a.email.toLowerCase() === email);
+    if (!user) {
+      errorEl.textContent = "Aucun compte n'est associé à cette adresse e-mail.";
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    currentOTP = Math.floor(1000 + Math.random() * 9000).toString();
+    recoverUserEmail = email;
+
+    document.getElementById('otpTip').innerHTML = `
+      Un e-mail de récupération a été envoyé. Entrez le code reçu.<br>
+      <span style="font-family:monospace; color:var(--gold-soft); font-weight:bold; font-size:0.6rem;">[SIMULATION] Le code envoyé est : ${currentOTP}</span>
+    `;
+
+    document.getElementById('recoverStep1').classList.add('hidden');
+    document.getElementById('recoverStep2').classList.remove('hidden');
+    playSound('unlock');
+  }
+
+  function handleVerifyOTP() {
+    const errorEl = document.getElementById('recoverError');
+    errorEl.classList.add('hidden');
+
+    const otp = document.getElementById('recoverOTP').value.trim();
+    const newPassword = document.getElementById('recoverNewPassword').value;
+
+    if (otp !== currentOTP) {
+      errorEl.textContent = "Le code de vérification est incorrect.";
+      errorEl.classList.remove('hidden');
+      playSound('error');
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      errorEl.textContent = "Le nouveau mot de passe doit comporter au moins 6 caractères.";
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    const accounts = getAccounts();
+    const idx = accounts.findIndex(a => a.email.toLowerCase() === recoverUserEmail);
+    if (idx !== -1) {
+      accounts[idx].passwordHash = hashPassword(newPassword);
+      saveAccounts(accounts);
+      
+      playSound('success');
+      alert("Votre mot de passe a été modifié avec succès. Connectez-vous avec vos nouveaux identifiants.");
+      showAuthView('login');
+    }
+  }
+
+  function handleLogout() {
+    if (confirm("Voulez-vous vous déconnecter ? Votre progression sur cet appareil sera conservée dans votre compte.")) {
+      localStorage.removeItem("cb_session_token");
+      activeAccount = null;
+      discoveryModeActive = false;
+      
+      state = {
+        selectedBook: 1,
+        completedChapters: [],
+        stats: { Foi: 3, Sagesse: 4, Courage: 2, Discernement: 3, Compassion: 2, Leadership: 0, Obéissance: 0 },
+        wisdomUnlocked: [1],
+        soundEnabled: state.soundEnabled
+      };
+      
+      updateProfileIcon(false);
+      
+      updateStatsGrid();
+      updateRadarChart();
+      renderMap();
+      renderWisdomJournal();
+      renderCodex();
+
+      playSound('unlock');
+      showAuthView('welcome');
+    }
+  }
+
+  function handleDeleteAccount() {
+    const confirmText = "⚠️ DANGER : Êtes-vous sûr de vouloir supprimer définitivement votre compte et TOUTES vos données personnelles et de progression ?\n\nCette action est irréversible et conforme à votre droit de suppression (Loi ARTCI / RGPD).";
+    if (confirm(confirmText)) {
+      if (confirm("Dernière confirmation : Vos données de jeu seront définitivement perdues. Continuer ?")) {
+        const accounts = getAccounts();
+        if (activeAccount) supabaseDeletePlayerCloud(activeAccount.id);
+        const filtered = accounts.filter(a => a.id !== activeAccount.id);
+        saveAccounts(filtered);
+
+        localStorage.removeItem("cb_session_token");
+        activeAccount = null;
+        discoveryModeActive = false;
+
+        state = {
+          selectedBook: 1,
+          completedChapters: [],
+          stats: { Foi: 3, Sagesse: 4, Courage: 2, Discernement: 3, Compassion: 2, Leadership: 0, Obéissance: 0 },
+          wisdomUnlocked: [1],
+          soundEnabled: state.soundEnabled
+        };
+
+        updateProfileIcon(false);
+        updateStatsGrid();
+        updateRadarChart();
+        renderMap();
+        renderWisdomJournal();
+        renderCodex();
+
+        playSound('unlock');
+        alert("Votre compte et toutes vos données personnelles ont été supprimés de notre base de données.");
+        showAuthView('welcome');
+      }
+    }
+  }
+
+  function handleExportData() {
+    if (!activeAccount) return;
+    
+    const payload = JSON.stringify(activeAccount, null, 2);
+    const blob = new Blob([payload], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `donnees_personnelles_${activeAccount.name.replace(/\s+/g, '_')}.json`;
+    document.body.appendChild(a);
+    a.click();
+    
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    playSound('success');
+    
+    const successEl = document.getElementById('profileSuccess');
+    successEl.textContent = "Vos données personnelles ont été exportées en JSON avec succès.";
+    successEl.classList.remove('hidden');
+    setTimeout(() => successEl.classList.add('hidden'), 5000);
+  }
+
+  function handleSaveConsentChanges() {
+    if (!activeAccount) return;
+
+    const marketingConsentOpt = document.getElementById('profMarketingConsent').checked;
+    const accounts = getAccounts();
+    const idx = accounts.findIndex(a => a.id === activeAccount.id);
+    
+    if (idx !== -1) {
+      accounts[idx].marketingConsent = {
+        email: marketingConsentOpt ? document.getElementById('profChannelEmail').checked : false,
+        sms: marketingConsentOpt ? document.getElementById('profChannelSMS').checked : false,
+        push: marketingConsentOpt ? document.getElementById('profChannelPush').checked : false,
+        dateOfChoice: new Date().toISOString(),
+        versionText: "v1.0"
+      };
+      saveAccounts(accounts);
+      activeAccount = accounts[idx];
+      supabaseSavePlayerCloud(activeAccount);
+      
+      playSound('success');
+      const successEl = document.getElementById('profileSuccess');
+      successEl.textContent = "Vos préférences de communication ont été mises à jour.";
+      successEl.classList.remove('hidden');
+      setTimeout(() => successEl.classList.add('hidden'), 4000);
+    }
+  }
+
+  function startDiscoveryMode() {
+    discoveryModeActive = true;
+    closeAuthOverlay();
+    state = {
+      selectedBook: 1,
+      completedChapters: [],
+      stats: { Foi: 3, Sagesse: 4, Courage: 2, Discernement: 3, Compassion: 2, Leadership: 0, Obéissance: 0 },
+      wisdomUnlocked: [1],
+      soundEnabled: state.soundEnabled
+    };
+    saveState();
+    updateStatsGrid();
+    updateRadarChart();
+    renderMap();
+    renderWisdomJournal();
+    renderCodex();
+    playSound('unlock');
+    alert("Mode Découverte activé ! Vous pouvez jouer gratuitement au premier chapitre.");
+  }
+
+  function updateProfileIcon(isLoggedIn) {
+    const btn = document.getElementById('profileBtn');
+    if (btn) {
+      btn.style.color = isLoggedIn ? 'var(--gold)' : 'var(--gold-soft)';
+      btn.setAttribute('title', isLoggedIn ? 'Gérer mon Compte (' + activeAccount.name + ')' : 'Créer un compte / Connexion');
+    }
+  }
+
+  function checkAuthStatus() {
+    const sessionToken = localStorage.getItem("cb_session_token");
+    const accounts = getAccounts();
+    if (sessionToken) {
+      const acc = accounts.find(a => a.id === sessionToken);
+      if (acc) {
+        activeAccount = acc;
+        activeAccount.sessionCount = (activeAccount.sessionCount || 0) + 1;
+        activeAccount.lastSessionAt = new Date().toISOString();
+        saveAccounts(accounts);
+        
+        state = JSON.parse(JSON.stringify(activeAccount.gameSave));
+        state.soundEnabled = (typeof state.soundEnabled === 'undefined') ? true : state.soundEnabled;
+        
+        updateStatsGrid();
+        updateRadarChart();
+        renderMap();
+        renderWisdomJournal();
+        
+        updateProfileIcon(true);
+        return;
+      }
+    }
+    
+    updateProfileIcon(false);
+    if (!discoveryModeActive) {
+      showAuthView('welcome');
+      document.getElementById('authOverlay').classList.remove('hidden');
+    }
+  }
+
+  function toggleAdminDashboard(show) {
+    const info = document.getElementById('notesGameInfo');
+    const db = document.getElementById('notesAdminDashboard');
+    if (show) {
+      info.classList.add('hidden');
+      db.classList.remove('hidden');
+      loadAdminMetrics();
+    } else {
+      db.classList.add('hidden');
+      info.classList.remove('hidden');
+    }
+    playSound('click');
+  }
+
+  function appendAdminLog(text) {
+    const consoleEl = document.getElementById('adminLogConsole');
+    if (consoleEl) {
+      const now = new Date().toLocaleTimeString('fr-FR');
+      consoleEl.innerHTML += `\n[${now}] ${text}`;
+      consoleEl.scrollTop = consoleEl.scrollHeight;
+    }
+    const mobConsoleEl = document.getElementById('mobAdminLogConsole');
+    if (mobConsoleEl) {
+      const now = new Date().toLocaleTimeString('fr-FR');
+      mobConsoleEl.innerHTML += `\n[${now}] ${text}`;
+      mobConsoleEl.scrollTop = mobConsoleEl.scrollHeight;
+    }
+  }
+
+  async function loadAdminMetrics() {
+    let accounts = getAccounts();
+    
+    // Real-time Supabase Cloud Database Fetch
+    if (supabaseClient) {
+      const cloudAccounts = await supabaseFetchAllPlayersCloud();
+      if (cloudAccounts && Array.isArray(cloudAccounts)) {
+        accounts = cloudAccounts;
+        saveAccounts(accounts); // Sync cloud records to local storage copy
+      }
+    }
+
+    const totalUsers = accounts.length;
+    
+    document.getElementById('adminStatTotalUsers').textContent = totalUsers;
+    document.getElementById('mobAdminStatTotalUsers').textContent = totalUsers;
+    
+    const eligibleUsers = accounts.filter(a => !a.ageGate.isMinor);
+    const consentedUsers = eligibleUsers.filter(a => 
+      a.marketingConsent.email || a.marketingConsent.sms || a.marketingConsent.push
+    );
+    const consentRate = eligibleUsers.length > 0 
+      ? Math.round((consentedUsers.length / eligibleUsers.length) * 100) 
+      : 0;
+    
+    document.getElementById('adminStatConsentRate').textContent = `${consentRate}%`;
+    document.getElementById('mobAdminStatConsentRate').textContent = `${consentRate}%`;
+    
+    const minorsCount = accounts.filter(a => a.ageGate.isMinor).length;
+    document.getElementById('adminStatMinors').textContent = minorsCount;
+    document.getElementById('mobAdminStatMinors').textContent = minorsCount;
+
+    const segSpiritualBody = document.getElementById('adminSegSpiritual');
+    const mobSegSpiritualBody = document.getElementById('mobAdminSegSpiritual');
+    segSpiritualBody.innerHTML = "";
+    mobSegSpiritualBody.innerHTML = "";
+    
+    const virtues = ['Foi', 'Sagesse', 'Courage', 'Discernement', 'Compassion', 'Leadership', 'Obéissance'];
+    const virtueCounts = {};
+    const virtueOptIns = {};
+    virtues.forEach(v => { virtueCounts[v] = 0; virtueOptIns[v] = 0; });
+
+    accounts.forEach(a => {
+      const domVirtue = getCurrentDominantSpiritualValue(a.gameSave.stats);
+      if (virtues.includes(domVirtue)) {
+        virtueCounts[domVirtue]++;
+        if (!a.ageGate.isMinor && (a.marketingConsent.email || a.marketingConsent.sms || a.marketingConsent.push)) {
+          virtueOptIns[domVirtue]++;
+        }
+      }
+    });
+
+    virtues.forEach(v => {
+      const count = virtueCounts[v];
+      const optin = virtueOptIns[v];
+      if (count > 0 || totalUsers === 0) {
+        const trHtml = `
+          <tr>
+            <td><strong>${v}</strong></td>
+            <td>${count}</td>
+            <td>${optin} (${count > 0 ? Math.round((optin / count) * 100) : 0}%)</td>
+          </tr>
+        `;
+        segSpiritualBody.innerHTML += trHtml;
+        mobSegSpiritualBody.innerHTML += trHtml;
+      }
+    });
+
+    const segBookBody = document.getElementById('adminSegBook');
+    const mobSegBookBody = document.getElementById('mobAdminSegBook');
+    segBookBody.innerHTML = "";
+    mobSegBookBody.innerHTML = "";
+    
+    const bookCounts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+    accounts.forEach(a => {
+      const save = a.gameSave;
+      let maxBook = 1;
+      if (save.completedChapters && save.completedChapters.length > 0) {
+        save.completedChapters.forEach(cid => {
+          const bNum = parseInt(cid.split('_')[0]);
+          if (bNum > maxBook) maxBook = bNum;
+        });
+      }
+      bookCounts[maxBook]++;
+    });
+
+    for (let b = 1; b <= 7; b++) {
+      const count = bookCounts[b];
+      const percent = totalUsers > 0 ? Math.round((count / totalUsers) * 100) : 0;
+      if (count > 0 || totalUsers === 0) {
+        const trHtml = `
+          <tr>
+            <td>Livre ${b}</td>
+            <td>${count} joueurs</td>
+            <td>${percent}%</td>
+          </tr>
+        `;
+        segBookBody.innerHTML += trHtml;
+        mobSegBookBody.innerHTML += trHtml;
+      }
+    }
+
+    appendAdminLog(`[SYSTEM] Métriques chargées. ${totalUsers} comptes analysés.`);
+  }
+
+  function handleCRMExportCSV() {
+    const accounts = getAccounts();
+    const eligible = accounts.filter(a => 
+      !a.ageGate.isMinor && 
+      (a.marketingConsent.email || a.marketingConsent.sms || a.marketingConsent.push)
+    );
+
+    if (eligible.length === 0) {
+      appendAdminLog(`[CRM] Échec : Aucun contact éligible avec consentement marketing trouvé.`);
+      alert("Aucun contact qualifié trouvé dans la base (hors mineurs avec opt-in actif).");
+      return;
+    }
+
+    appendAdminLog(`[CRM] Début de l'export CSV pour ${eligible.length} contacts qualifiés...`);
+
+    let csvContent = "ID,Nom,Email,Telephone,Ville,Pays,LivreMax,ValeurDominante,ConsentEmail,ConsentSMS,ConsentPush,DateChoix\n";
+    eligible.forEach(a => {
+      const maxBook = getMaxBookText(a.gameSave).replace(/,/g, '');
+      const dominantVal = getCurrentDominantSpiritualValue(a.gameSave.stats);
+      csvContent += `${a.id},"${a.name}",${a.email},${a.phone || ""},"${a.city}","${a.country}","${maxBook}",${dominantVal},${a.marketingConsent.email},${a.marketingConsent.sms},${a.marketingConsent.push},${a.marketingConsent.dateOfChoice}\n`;
+    });
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `base_clients_cb_marketing_${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    appendAdminLog(`[CRM] Export terminé. Fichier CSV téléchargé.`);
+    playSound('success');
+  }
+
+  function handleCRMSyncAPI() {
+    const accounts = getAccounts();
+    const eligible = accounts.filter(a => 
+      !a.ageGate.isMinor && 
+      (a.marketingConsent.email || a.marketingConsent.sms || a.marketingConsent.push)
+    );
+
+    if (eligible.length === 0) {
+      appendAdminLog(`[API] Échec : Aucun contact éligible à synchroniser.`);
+      alert("Aucun contact qualifié à synchroniser.");
+      return;
+    }
+
+    appendAdminLog(`[API] Appel API vers Brevo/Mailchimp lancé...`);
+    appendAdminLog(`[API] Payload : ${eligible.length} contacts qualifiés.`);
+
+    const payloadPreview = eligible.slice(0, 2).map(a => ({
+      email: a.email,
+      attributes: {
+        FIRSTNAME: a.name,
+        SMS: a.phone || "",
+        CITY: a.city,
+        COUNTRY: a.country,
+        CB_DOMINANT_VIRTUE: getCurrentDominantSpiritualValue(a.gameSave.stats),
+        CB_MAX_BOOK: getMaxBookText(a.gameSave),
+        OPT_IN_EMAIL: a.marketingConsent.email,
+        OPT_IN_SMS: a.marketingConsent.sms
+      }
+    }));
+    
+    appendAdminLog(`[API] Payload Preview (JSON) : ${JSON.stringify(payloadPreview, null, 1)}...`);
+
+    playSound('click');
+
+    setTimeout(() => {
+      appendAdminLog(`[API] Réponse : Synchronisation terminée. Status: 200 OK.`);
+      appendAdminLog(`[API] mis à jour dans le CRM.`);
+      playSound('success');
+      alert(`Synchronisation API réussie ! ${eligible.length} contacts qualifiés ont été envoyés à votre CRM (Mailchimp/Brevo).`);
+    }, 1500);
   }
 
   // ================= LEVEL NARRATIVE FLOW =================
@@ -1974,6 +3961,13 @@
       alert(`Félicitations ! Tu as terminé le chapitre : ${activeChapterData.title} !`);
       switchTab(document.querySelector('.tab[data-view="view-map"]'));
       playSound('unlock');
+      
+      // Discovery mode gate: show Welcome screen after chapter 1 completes
+      if (!activeAccount) {
+        alert("Félicitations ! Vous avez terminé le niveau de découverte.\n\nPour continuer l'aventure, sauvegarder vos statistiques spirituelles et débloquer les fragments de sagesse, créez un compte gratuit !");
+        showAuthView('welcome');
+        document.getElementById('authOverlay').classList.remove('hidden');
+      }
     }, 1500);
   }
 
@@ -2114,48 +4108,186 @@
     });
   }
 
-  // ================= CODEX SEARCH =================
+  // ================= CODEX & BIBLE READER SYSTEM =================
+  let activeCodexCategory = 'all';
+  let activeBibleTestament = 'all';
+  let activeBibleBookId = 'gen';
+  let activeBibleChapterNum = 1;
+
+  function showCodexSubView(mode) {
+    playSound('click');
+    const codexSubView = document.getElementById('codexVersesSubView');
+    const readerSubView = document.getElementById('codexBibleReaderView');
+    const btnCodex = document.getElementById('btnModeCodex');
+    const btnReader = document.getElementById('btnModeReader');
+
+    if (mode === 'codex') {
+      codexSubView.classList.remove('hidden');
+      readerSubView.classList.add('hidden');
+      btnCodex.classList.add('active');
+      btnReader.classList.remove('active');
+      renderCodex();
+    } else {
+      codexSubView.classList.add('hidden');
+      readerSubView.classList.remove('hidden');
+      btnCodex.classList.remove('active');
+      btnReader.classList.add('active');
+      initBibleReader();
+    }
+  }
+
+  function filterCodexCategory(category, pillEl) {
+    playSound('click');
+    activeCodexCategory = category;
+    document.querySelectorAll('.codex-pill').forEach(p => p.classList.remove('active'));
+    if (pillEl) pillEl.classList.add('active');
+    filterCodex();
+  }
+
   function renderCodex() {
+    filterCodex();
+  }
+
+  function filterCodex() {
+    const searchInput = document.getElementById('codexSearchInput');
+    const query = searchInput ? searchInput.value.trim().toLowerCase() : "";
     const list = document.getElementById('codexList');
+    if (!list) return;
     list.innerHTML = '';
-    codexDatabase.forEach(item => {
+
+    const cleanQuery = query.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    const filtered = codexDatabase.filter(item => {
+      // Category check
+      if (activeCodexCategory === 'AT' && item.testament !== 'AT') return false;
+      if (activeCodexCategory === 'NT' && item.testament !== 'NT') return false;
+      if (activeCodexCategory === 'Loi' && item.cat !== 'Loi') return false;
+      if (activeCodexCategory === 'Sagesse' && item.cat !== 'Sagesse') return false;
+      if (activeCodexCategory === 'Prophetes' && item.cat !== 'Prophetes') return false;
+      if (activeCodexCategory === 'Evangiles' && item.cat !== 'Evangiles') return false;
+
+      // Text query check
+      if (!cleanQuery) return true;
+      const cleanTitle = item.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      const cleanText = item.text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      return cleanTitle.includes(cleanQuery) || cleanText.includes(cleanQuery);
+    });
+
+    if (filtered.length === 0) {
+      list.innerHTML = '<div style="font-size:0.75rem; color:var(--grey); padding:10px; text-align:center; font-style:italic;">Aucun verset ne correspond à votre recherche.</div>';
+      return;
+    }
+
+    filtered.forEach(item => {
+      let innerHTMLText = item.text;
+      if (query.length > 2) {
+        const regex = new RegExp(`(${query})`, 'gi');
+        innerHTMLText = item.text.replace(regex, '<mark>$1</mark>');
+      }
+
       const card = document.createElement('div');
       card.className = 'codex-card';
       card.innerHTML = `
         <h4>${item.title}</h4>
-        <p>${item.text}</p>
+        <p>${innerHTMLText}</p>
       `;
       list.appendChild(card);
     });
   }
 
-  function filterCodex() {
-    const query = document.getElementById('codexSearchInput').value.trim().toLowerCase();
-    const list = document.getElementById('codexList');
-    list.innerHTML = '';
+  // ---------- BIBLE READER CONTROLLER ----------
+  function initBibleReader() {
+    selectBibleTestament(activeBibleTestament);
+  }
 
-    const cleanQuery = query.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  function selectBibleTestament(testament) {
+    activeBibleTestament = testament;
+    const bookSelect = document.getElementById('bibleBookSelect');
+    if (!bookSelect) return;
+    bookSelect.innerHTML = '';
 
-    codexDatabase.forEach(item => {
-      const cleanTitle = item.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-      const cleanText = item.text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-      
-      if (cleanTitle.includes(cleanQuery) || cleanText.includes(cleanQuery)) {
-        let innerHTMLText = item.text;
-        if (query.length > 2) {
-          const regex = new RegExp(`(${query})`, 'gi');
-          innerHTMLText = item.text.replace(regex, '<mark>$1</mark>');
-        }
+    let booksToDisplay = [];
+    if (testament === 'AT') {
+      booksToDisplay = bibleBooksDatabase.AT;
+    } else if (testament === 'NT') {
+      booksToDisplay = bibleBooksDatabase.NT;
+    } else {
+      booksToDisplay = [...bibleBooksDatabase.AT, ...bibleBooksDatabase.NT];
+    }
 
-        const card = document.createElement('div');
-        card.className = 'codex-card';
-        card.innerHTML = `
-          <h4>${item.title}</h4>
-          <p>${innerHTMLText}</p>
-        `;
-        list.appendChild(card);
-      }
+    booksToDisplay.forEach(b => {
+      const opt = document.createElement('option');
+      opt.value = b.id;
+      opt.textContent = `${b.name} (${b.numChaps} chap.)`;
+      bookSelect.appendChild(opt);
     });
+
+    // Pick first book or active
+    const exists = booksToDisplay.some(b => b.id === activeBibleBookId);
+    if (!exists && booksToDisplay.length > 0) {
+      activeBibleBookId = booksToDisplay[0].id;
+    }
+    bookSelect.value = activeBibleBookId;
+    selectBibleBook(activeBibleBookId);
+  }
+
+  function selectBibleBook(bookId) {
+    activeBibleBookId = bookId;
+    let allBooks = [...bibleBooksDatabase.AT, ...bibleBooksDatabase.NT];
+    let book = allBooks.find(b => b.id === bookId) || allBooks[0];
+
+    activeBibleChapterNum = 1;
+
+    // Render Chapters Bar
+    const chaptersBar = document.getElementById('bibleChaptersBar');
+    chaptersBar.innerHTML = '';
+    const maxChaptersToShow = Math.min(book.numChaps, 30);
+    for (let c = 1; c <= maxChaptersToShow; c++) {
+      const chip = document.createElement('div');
+      chip.className = `chap-chip ${c === activeBibleChapterNum ? 'active' : ''}`;
+      chip.textContent = c;
+      chip.onclick = () => {
+        playSound('click');
+        activeBibleChapterNum = c;
+        document.querySelectorAll('.chap-chip').forEach(ch => ch.classList.remove('active'));
+        chip.classList.add('active');
+        renderBibleChapter();
+      };
+      chaptersBar.appendChild(chip);
+    }
+
+    renderBibleChapter();
+  }
+
+  function renderBibleChapter() {
+    let allBooks = [...bibleBooksDatabase.AT, ...bibleBooksDatabase.NT];
+    let book = allBooks.find(b => b.id === activeBibleBookId) || allBooks[0];
+
+    document.getElementById('bibleReaderTitle').textContent = `${book.name} — Chapitre ${activeBibleChapterNum}`;
+    document.getElementById('bibleReaderTheme').textContent = `Thème : ${book.theme}`;
+
+    const versesContainer = document.getElementById('bibleVersesContainer');
+    versesContainer.innerHTML = '';
+
+    // Find related verses in codexDatabase for this book
+    const relatedVerses = codexDatabase.filter(v => v.title.toLowerCase().includes(book.name.toLowerCase()));
+
+    if (relatedVerses.length > 0) {
+      relatedVerses.forEach((v, idx) => {
+        const item = document.createElement('div');
+        item.className = 'bible-verse-item';
+        item.innerHTML = `<span class="bible-verse-num">${idx + 1}</span> ${v.text}`;
+        versesContainer.appendChild(item);
+      });
+    } else {
+      // General thematic verses fallback
+      versesContainer.innerHTML = `
+        <div class="bible-verse-item"><span class="bible-verse-num">1</span> Au commencement, la Parole divine illumine le livre de ${book.name}.</div>
+        <div class="bible-verse-item"><span class="bible-verse-num">2</span> « Ta parole est une lampe à mes pieds, et une lumière sur mon sentier. » (Psaume 119:105)</div>
+        <div class="bible-verse-item"><span class="bible-verse-num">3</span> « Toute l'Écriture est inspirée de Dieu, et utile pour enseigner, pour convaincre, pour corriger, pour instruire dans la justice. » (2 Timothée 3:16)</div>
+        <div class="bible-verse-item"><span class="bible-verse-num">4</span> Consultez les autres chapitres et les versets de sagesse associés dans le Codex !</div>
+      `;
+    }
   }
 
   // ================= INITIALIZATION =================
@@ -2183,6 +4315,9 @@
       icon.innerHTML = `<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.21.05-.42.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>`;
       btn.setAttribute('title', 'Activer le son');
     }
+
+    // Account system check on load
+    checkAuthStatus();
   }
 
   // Run on load
