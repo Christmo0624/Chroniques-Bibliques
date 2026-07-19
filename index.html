@@ -1353,7 +1353,6 @@
             <div class="auth-actions">
               <button class="btn-auth-secondary" onclick="handleExportData()">Exporter mes données (JSON)</button>
               <button class="btn-auth-secondary btn-danger" onclick="handleDeleteAccount()">Supprimer mon compte & mes données</button>
-              <button class="btn-auth-secondary" onclick="showAuthView('admin')" style="background:rgba(212, 175, 55, 0.15); border-color:var(--gold); color:#fff; font-weight:600;">Espace Admin & CRM</button>
             </div>
             
             <div class="auth-actions" style="margin-top:20px; border-top:1px solid rgba(255,255,255,0.1); padding-top:12px;">
@@ -1363,65 +1362,6 @@
           </div>
         </div>
 
-        <!-- ADMIN VIEW (MOBILE) -->
-        <div id="authAdminView" class="hidden">
-          <div class="auth-header">
-            <h2>Console Admin & CRM</h2>
-            <p>Données d'acquisition et export marketing.</p>
-          </div>
-          <div class="auth-card">
-            <!-- Stats summary -->
-            <div class="admin-grid-3">
-              <div class="admin-card">
-                <span title="Total inscrits">Joueurs</span>
-                <strong id="mobAdminStatTotalUsers">0</strong>
-              </div>
-              <div class="admin-card">
-                <span title="Consentement marketing">Opt-in %</span>
-                <strong id="mobAdminStatConsentRate">0%</strong>
-              </div>
-              <div class="admin-card">
-                <span title="Nombre de mineurs">Mineurs</span>
-                <strong id="mobAdminStatMinors">0</strong>
-              </div>
-            </div>
-
-            <!-- Segmentation details -->
-            <div class="admin-panel" style="margin-top:10px; padding:10px; background:rgba(0,0,0,0.35); border-color:rgba(212,175,55,0.2);">
-              <h3 style="font-size:0.72rem; margin:0 0 6px; border-bottom:1px solid rgba(212,175,55,0.3); font-family: 'Cinzel', serif; color:var(--gold-soft);">Segmentation Clients</h3>
-              
-              <table class="admin-table">
-                <thead>
-                  <tr><th>Valeur Dominante</th><th>Joueurs</th><th>Opt-in (Élig.)</th></tr>
-                </thead>
-                <tbody id="mobAdminSegSpiritual">
-                  <!-- Dynamically populated -->
-                </tbody>
-              </table>
-
-              <table class="admin-table" style="margin-top:10px; margin-bottom:0;">
-                <thead>
-                  <tr><th>Livre atteint</th><th>Joueurs</th><th>% du total</th></tr>
-                </thead>
-                <tbody id="mobAdminSegBook">
-                  <!-- Dynamically populated -->
-                </tbody>
-              </table>
-            </div>
-
-            <!-- Log console for CRM activity -->
-            <h3 style="font-size:0.72rem; color:var(--gold-soft); font-family:'Cinzel',serif; margin:12px 0 4px;">Logs d'Activité CRM</h3>
-            <div class="admin-log-console" id="mobAdminLogConsole" style="height:70px;">
-              [SYSTEM] Console Mobile initialisée. Prête pour export.
-            </div>
-
-            <!-- Action buttons -->
-            <div class="auth-actions" style="margin-top:10px;">
-              <button class="btn-auth-primary" onclick="handleCRMExportCSV()" style="font-size:0.7rem; padding:6px;">Exporter CSV</button>
-              <button class="btn-auth-secondary" onclick="handleCRMSyncAPI()" style="font-size:0.7rem; padding:6px;">Synchroniser API CRM</button>
-              <button class="btn-auth-secondary btn-danger" onclick="showAuthView('profile')" style="margin-top:4px;">Retour au Profil</button>
-            </div>
-          </div>
         </div>
 
       </div>

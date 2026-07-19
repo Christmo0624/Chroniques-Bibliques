@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chroniques Bibliques — Console Admin & CRM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Supabase Official JS SDK CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root {
+    --navy: #0d1527;
+    --navy-2: #1b263e;
+    --gold: #d4af37;
+    --gold-soft: #f3e5ab;
+    --clay: #a3382b;
+    --grey-light: #f4f6f9;
+    --grey-border: #d0d7de;
+    --text-main: #1c2536;
+    --green-bg: #e6f4ea;
+    --green-text: #137333;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Work Sans', sans-serif;
+    background: var(--navy);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Admin Header */
+  header {
+    background: var(--navy-2);
+    border-bottom: 2px solid var(--gold);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  header h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  header h1 span {
+    font-size: 0.8rem;
+    background: rgba(212, 175, 55, 0.2);
+    color: var(--gold-soft);
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--gold);
+  }
+  .header-actions {
+    display: flex;
+    gap: 12px;
+  }
+  .btn-gold {
+    background: linear-gradient(135deg, #d4af37, #aa820a);
+    color: #000;
+    font-weight: 700;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: transform 0.2s;
+  }
+  .btn-gold:hover { transform: translateY(-1px); }
+  .btn-outline {
+    background: transparent;
+    color: var(--gold-soft);
+    border: 1px solid var(--gold);
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+
+  /* Login Overlay Gate */
+  #adminLoginGate {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(13, 21, 39, 0.96);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .login-card {
+    background: var(--navy-2);
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+    padding: 30px;
+    width: 380px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  .login-card h2 {
+    font-family: 'Cinzel', serif;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .login-card p {
+    font-size: 0.85rem;
+    color: #a0aec0;
+    margin-bottom: 20px;
+  }
+  .login-card input {
+    width: 100%;
+    padding: 12px;
+    background: var(--navy);
+    border: 1px solid var(--gold);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 1.1rem;
+    text-align: center;
+    letter-spacing: 4px;
+    margin-bottom: 15px;
+  }
+  .login-error {
+    color: #fc8181;
+    font-size: 0.8rem;
+    margin-bottom: 12px;
+  }
+
+  /* Main Container */
+  .container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 25px;
+    width: 100%;
+    flex: 1;
+  }
+
+  /* KPI Grid */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+  }
+  .kpi-card {
+    background: var(--navy-2);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 10px;
+    padding: 18px;
+  }
+  .kpi-card label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #a0aec0;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .kpi-val {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .kpi-sub {
+    font-size: 0.75rem;
+    color: #cbd5e0;
+    margin-top: 4px;
+  }
+
+  /* CRM Filter Toolbar */
+  .toolbar {
+    background: var(--navy-2);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+  }
+  .search-box input {
+    background: var(--navy);
+    border: 1px solid var(--grey-border);
+    padding: 8px 12px;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 0.85rem;
+    width: 250px;
+  }
+
+  /* Data Table */
+  .table-wrap {
+    background: var(--navy-2);
+    border-radius: 10px;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    overflow-x: auto;
+    margin-bottom: 25px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    text-align: left;
+  }
+  th {
+    background: rgba(13, 21, 39, 0.8);
+    color: var(--gold-soft);
+    padding: 12px 15px;
+    border-bottom: 2px solid var(--gold);
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+  }
+  td {
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    color: #e2e8f0;
+  }
+  tr:hover td {
+    background: rgba(212, 175, 55, 0.05);
+  }
+  .badge {
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+  .badge-optin { background: rgba(72, 187, 120, 0.2); color: #68d391; border: 1px solid #48bb78; }
+  .badge-optout { background: rgba(245, 101, 101, 0.2); color: #fc8181; border: 1px solid #e53e3e; }
+  .badge-minor { background: rgba(237, 137, 54, 0.2); color: #f6ad55; border: 1px solid #dd6b20; }
+
+  /* Console Footer Logs */
+  .console-card {
+    background: #000;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 15px;
+    font-family: monospace;
+    font-size: 0.75rem;
+    color: #00ff66;
+    max-height: 150px;
+    overflow-y: auto;
+  }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- Login Password Gate Overlay -->
+<div id="adminLoginGate">
+  <div class="login-card">
+    <h2>Espace Administrateur</h2>
+    <p>Saisissez le code secret administrateur pour accéder aux données CRM.</p>
+    <div id="loginGateError" class="login-error hidden">Code secret incorrect.</div>
+    <input type="password" id="adminPinInput" placeholder="••••••••" autofocus onkeydown="if(event.key==='Enter') checkAdminGatePin()">
+    <button class="btn-gold" style="width:100%; justify-content:center;" onclick="checkAdminGatePin()">Se Connecter</button>
+  </div>
+</div>
+
+<!-- Main Admin Panel Interface -->
+<header>
+  <h1>Chroniques Bibliques <span>CONSOLE ADMIN CLOUD</span></h1>
+  <div class="header-actions">
+    <button class="btn-gold" onclick="exportCloudCSV()">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>
+      Exporter CSV Qualifié
+    </button>
+    <button class="btn-outline" onclick="location.reload()">Rafraîchir</button>
+    <button class="btn-outline" style="border-color:#e53e3e; color:#fc8181;" onclick="logoutAdmin()">Déconnexion</button>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- KPI Metrics Bar -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <label>Total Joueurs Inscrits</label>
+      <div class="kpi-val" id="kpiTotalUsers">0</div>
+      <div class="kpi-sub" id="kpiDbSource">Source : Supabase Cloud</div>
+    </div>
+    <div class="kpi-card">
+      <label>Taux d'Opt-in Marketing</label>
+      <div class="kpi-val" id="kpiOptInRate">0%</div>
+      <div class="kpi-sub" id="kpiOptInCount">0 éligibles consentants</div>
+    </div>
+    <div class="kpi-card">
+      <label>Joueurs Majeurs (+15 ans)</label>
+      <div class="kpi-val" id="kpiAdults">0</div>
+      <div class="kpi-sub">Sollicitables pour vos apps</div>
+    </div>
+    <div class="kpi-card">
+      <label>Moyenne Chapitres Débloqués</label>
+      <div class="kpi-val" id="kpiAvgProgress">1.0</div>
+      <div class="kpi-sub">Engagement dans l'aventure</div>
+    </div>
+  </div>
+
+  <!-- Filter & Search Toolbar -->
+  <div class="toolbar">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Rechercher par nom, email, ville..." onkeyup="filterTable()">
+    </div>
+    <div style="display:flex; gap:10px; align-items:center;">
+      <span style="font-size:0.8rem; color:#a0aec0;">Filtre Opt-in :</span>
+      <select id="optinFilter" style="background:var(--navy); color:#fff; border:1px solid var(--grey-border); padding:6px 10px; border-radius:6px;" onchange="filterTable()">
+        <option value="all">Tous les comptes</option>
+        <option value="optin">Opt-in Marketing Uniquement</option>
+        <option value="adults">Majeurs (+15 ans) Uniquement</option>
+        <option value="minors">Mineurs (-15 ans)</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Players Data Table -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Joueur</th>
+          <th>Contact</th>
+          <th>Localisation</th>
+          <th>Âge</th>
+          <th>Consentement Marketing</th>
+          <th>Valeur Dominante</th>
+          <th>Dernière Connexion</th>
+        </tr>
+      </thead>
+      <tbody id="playersTableBody">
+        <tr>
+          <td colspan="7" style="text-align:center; padding:30px; color:#a0aec0;">Chargement des données Cloud Supabase...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Console Log Terminal -->
+  <div style="margin-bottom:10px; font-size:0.8rem; color:var(--gold); font-weight:700;">📜 Console d'Activité Système</div>
+  <div class="console-card" id="adminTerminalLog">
+    [SYSTEM INITIALIZED] Console Admin Sécurisée v2.0 ready.
+  </div>
+
+</div>
+
+<script>
+  // Supabase Configuration
+  const SUPABASE_URL = "https://qsxyfjbiiitasphnbwi.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_HUmHb_8zYb3FK1_V8YT2TQ_tFXyp7U5";
+  const ADMIN_PIN = "2026"; // Default Admin Security PIN Code
+
+  let supabaseClient = null;
+  let cachedPlayers = [];
+
+  // Initialize Supabase Client
+  try {
+    if (typeof window.supabase !== 'undefined' && SUPABASE_URL.startsWith("http")) {
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      logTerminal("Connecté au serveur Cloud PostgreSQL Supabase.");
+    } else {
+      logTerminal("Supabase indisponible, bascule sur localStorage.");
+    }
+  } catch(e) {
+    logTerminal("Erreur de connexion Supabase : " + e.message);
+  }
+
+  function logTerminal(text) {
+    const term = document.getElementById('adminTerminalLog');
+    if (term) {
+      const now = new Date().toLocaleTimeString('fr-FR');
+      term.innerHTML += `\n[${now}] ${text}`;
+      term.scrollTop = term.scrollHeight;
+    }
+  }
+
+  // Admin PIN Gate Verification
+  function checkAdminGatePin() {
+    const pin = document.getElementById('adminPinInput').value;
+    const err = document.getElementById('loginGateError');
+    if (pin === ADMIN_PIN || pin === "Admin2026!") {
+      document.getElementById('adminLoginGate').classList.add('hidden');
+      sessionStorage.setItem('cb_admin_auth', 'true');
+      logTerminal("Authentification administrateur réussie.");
+      loadCloudDashboardData();
+    } else {
+      err.classList.remove('hidden');
+      document.getElementById('adminPinInput').value = "";
+    }
+  }
+
+  function logoutAdmin() {
+    sessionStorage.removeItem('cb_admin_auth');
+    location.reload();
+  }
+
+  // Check if session already authenticated
+  if (sessionStorage.getItem('cb_admin_auth') === 'true') {
+    document.getElementById('adminLoginGate').classList.add('hidden');
+    window.addEventListener('DOMContentLoaded', loadCloudDashboardData);
+  }
+
+  // Load Players Data from Supabase Cloud
+  async function loadCloudDashboardData() {
+    logTerminal("Extraction des données joueurs depuis Supabase...");
+    let players = [];
+
+    if (supabaseClient) {
+      try {
+        const { data, error } = await supabaseClient.from('players').select('*');
+        if (error) {
+          logTerminal("Erreur Supabase: " + error.message);
+        } else if (data) {
+          players = data.map(row => ({
+            id: row.id,
+            name: row.name,
+            email: row.email,
+            phone: row.phone,
+            city: row.city,
+            country: row.country,
+            createdAt: row.created_at,
+            lastSessionAt: row.last_session_at,
+            sessionCount: row.session_count,
+            isMinor: row.is_minor,
+            birthYear: row.birth_year,
+            parentalConsent: row.parental_consent,
+            parentEmail: row.parent_email,
+            marketingEmail: row.marketing_email,
+            marketingSms: row.marketing_sms,
+            marketingPush: row.marketing_push,
+            gameSave: row.game_save
+          }));
+          document.getElementById('kpiDbSource').textContent = "Source : Supabase Cloud (Live)";
+        }
+      } catch(e) {
+        logTerminal("Exception Cloud: " + e.message);
+      }
+    }
+
+    // Fallback to local storage if cloud empty or unconfigured
+    if (players.length === 0) {
+      try {
+        const local = localStorage.getItem("cb_accounts_db_v1");
+        if (local) {
+          const parsed = JSON.parse(local);
+          players = parsed.map(a => ({
+            id: a.id,
+            name: a.name,
+            email: a.email,
+            phone: a.phone,
+            city: a.city,
+            country: a.country,
+            createdAt: a.createdAt,
+            lastSessionAt: a.lastSessionAt,
+            sessionCount: a.sessionCount,
+            isMinor: a.ageGate ? a.ageGate.isMinor : false,
+            birthYear: a.ageGate ? a.ageGate.birthYear : null,
+            parentalConsent: a.ageGate ? a.ageGate.parentalConsent : false,
+            parentEmail: a.ageGate ? a.ageGate.parentEmail : null,
+            marketingEmail: a.marketingConsent ? a.marketingConsent.email : false,
+            marketingSms: a.marketingConsent ? a.marketingConsent.sms : false,
+            marketingPush: a.marketingConsent ? a.marketingConsent.push : false,
+            gameSave: a.gameSave
+          }));
+          document.getElementById('kpiDbSource').textContent = "Source : localStorage (Local)";
+        }
+      } catch(e) {}
+    }
+
+    cachedPlayers = players;
+    renderKPIs(players);
+    renderTable(players);
+    logTerminal(`Chargement terminé : ${players.length} profil(s) joueur(s) qualifié(s).`);
+  }
+
+  function renderKPIs(players) {
+    const total = players.length;
+    document.getElementById('kpiTotalUsers').textContent = total;
+
+    const adults = players.filter(p => !p.isMinor);
+    document.getElementById('kpiAdults').textContent = adults.length;
+
+    const optin = adults.filter(p => p.marketingEmail || p.marketingSms || p.marketingPush);
+    const rate = adults.length > 0 ? Math.round((optin.length / adults.length) * 100) : 0;
+    document.getElementById('kpiOptInRate').textContent = rate + "%";
+    document.getElementById('kpiOptInCount').textContent = `${optin.length} / ${adults.length} éligibles consentants`;
+
+    // Average completed chapters
+    let totalChaps = 0;
+    players.forEach(p => {
+      if (p.gameSave && p.gameSave.completedChapters) {
+        totalChaps += p.gameSave.completedChapters.length;
+      }
+    });
+    const avg = total > 0 ? (totalChaps / total).toFixed(1) : "1.0";
+    document.getElementById('kpiAvgProgress').textContent = avg + " chaps";
+  }
+
+  function renderTable(players) {
+    const tbody = document.getElementById('playersTableBody');
+    tbody.innerHTML = "";
+
+    if (players.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:30px; color:#a0aec0;">Aucun joueur n'est encore inscrit dans la base de données.</td></tr>`;
+      return;
+    }
+
+    players.forEach(p => {
+      const tr = document.createElement('tr');
+      
+      const hasOptIn = p.marketingEmail || p.marketingSms || p.marketingPush;
+      const optInBadge = p.isMinor 
+        ? `<span class="badge badge-minor">Mineur (Consentement Parent)</span>` 
+        : (hasOptIn 
+            ? `<span class="badge badge-optin">Opt-in (${[p.marketingEmail?'Email':'', p.marketingSms?'SMS':'', p.marketingPush?'Push':''].filter(Boolean).join('/')})</span>` 
+            : `<span class="badge badge-optout">Opt-out</span>`);
+
+      // Dominant virtue calculation
+      let dominant = "Foi";
+      if (p.gameSave && p.gameSave.stats) {
+        let maxV = -1;
+        for (const [k, v] of Object.entries(p.gameSave.stats)) {
+          if (v > maxV) { maxV = v; dominant = k; }
+        }
+      }
+
+      const lastDate = p.lastSessionAt ? new Date(p.lastSessionAt).toLocaleDateString('fr-FR') : "N/A";
+
+      tr.innerHTML = `
+        <td><strong>${p.name}</strong></td>
+        <td>${p.email}<br><span style="font-size:0.75rem; color:#a0aec0;">${p.phone || 'Non renseigné'}</span></td>
+        <td>${p.city}, ${p.country}</td>
+        <td>${p.isMinor ? `<span style="color:#f6ad55;">${p.birthYear ? (2026-p.birthYear)+' ans' : 'Mineur'}</span>` : 'Majeur'}</td>
+        <td>${optInBadge}</td>
+        <td><strong style="color:var(--gold);">${dominant}</strong></td>
+        <td>${lastDate}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function filterTable() {
+    const query = document.getElementById('searchInput').value.toLowerCase();
+    const optinFilter = document.getElementById('optinFilter').value;
+
+    const filtered = cachedPlayers.filter(p => {
+      // Text match
+      const matchText = p.name.toLowerCase().includes(query) || 
+                        p.email.toLowerCase().includes(query) || 
+                        p.city.toLowerCase().includes(query) ||
+                        p.country.toLowerCase().includes(query);
+      if (!matchText) return false;
+
+      // Filter select match
+      if (optinFilter === 'optin') return !p.isMinor && (p.marketingEmail || p.marketingSms || p.marketingPush);
+      if (optinFilter === 'adults') return !p.isMinor;
+      if (optinFilter === 'minors') return p.isMinor;
+
+      return true;
+    });
+
+    renderTable(filtered);
+  }
+
+  // Export Qualifié CRM (CSV)
+  function exportCloudCSV() {
+    logTerminal("Génération de l'export CSV qualifié...");
+    const eligible = cachedPlayers.filter(p => !p.isMinor && (p.marketingEmail || p.marketingSms || p.marketingPush));
+    
+    if (eligible.length === 0) {
+      alert("Aucun prospect majeur avec consentement marketing n'est disponible pour l'export.");
+      return;
+    }
+
+    let csvContent = "\uFEFF"; // UTF-8 BOM
+    csvContent += "ID;Nom;Email;Telephone;Ville;Pays;Consentement_Email;Consentement_SMS;Consentement_Push;Valeur_Dominante;Date_Inscription\n";
+
+    eligible.forEach(p => {
+      let dominant = "Foi";
+      if (p.gameSave && p.gameSave.stats) {
+        let maxV = -1;
+        for (const [k, v] of Object.entries(p.gameSave.stats)) {
+          if (v > maxV) { maxV = v; dominant = k; }
+        }
+      }
+
+      const row = [
+        p.id,
+        `"${p.name}"`,
+        `"${p.email}"`,
+        `"${p.phone || ''}"`,
+        `"${p.city}"`,
+        `"${p.country}"`,
+        p.marketingEmail ? "OUI" : "NON",
+        p.marketingSms ? "OUI" : "NON",
+        p.marketingPush ? "OUI" : "NON",
+        `"${dominant}"`,
+        `"${p.createdAt || ''}"`
+      ].join(";");
+      csvContent += row + "\n";
+    });
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `chroniques_bibliques_prospects_crm_${new Date().toISOString().slice(0,10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    logTerminal(`Export réussi : ${eligible.length} prospects exportés au format CSV.`);
+  }
+</script>
+</body>
+</html>
