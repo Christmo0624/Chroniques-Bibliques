@@ -1309,57 +1309,70 @@
         <!-- PROFILE VIEW -->
         <div id="authProfileView" class="hidden">
           <div class="auth-header">
-            <h2>Mon Profil</h2>
+            <h2>Mon Profil & Compte</h2>
             <p>Gérez vos données personnelles et vos préférences.</p>
           </div>
           <div class="auth-card">
             <div id="profileSuccess" class="auth-error hidden" style="background:rgba(46,98,67,0.2); border-color:var(--green-ok); color:#a3d6b7;"></div>
             
-            <div class="profile-section-title">Informations Personnelles</div>
-            <div class="profile-data-row"><span class="profile-data-label">Nom</span><span class="profile-data-value" id="profName"></span></div>
-            <div class="profile-data-row"><span class="profile-data-label">E-mail</span><span class="profile-data-value" id="profEmail"></span></div>
-            <div class="profile-data-row"><span class="profile-data-label">Téléphone</span><span class="profile-data-value" id="profPhone">-</span></div>
-            <div class="profile-data-row"><span class="profile-data-label">Localisation</span><span class="profile-data-value" id="profLocation"></span></div>
-            <div class="profile-data-row"><span class="profile-data-label">Type de compte</span><span class="profile-data-value" id="profAgeType">Adulte</span></div>
-
-            <div class="profile-section-title">Consentements Marketing</div>
-            <div id="minorMarketingWarning" class="hidden" style="font-size:0.62rem; color:var(--sand); margin-bottom:8px; font-style:italic;">
-              (Désactivé par défaut car le profil est qualifié comme mineur).
-            </div>
-            
-            <div id="profileConsentControls">
-              <div class="form-check">
-                <input type="checkbox" id="profMarketingConsent" onchange="toggleProfileChannels(this.checked)">
-                <label for="profMarketingConsent">
-                  J'accepte de recevoir des communications promotionnelles de l'éditeur.
-                </label>
+            <!-- Discovery Mode Banner for Non-Logged-In Players -->
+            <div id="discoveryModeBanner" class="hidden" style="background:rgba(212,175,55,0.12); border:1px solid var(--gold); border-radius:8px; padding:12px; margin-bottom:14px; text-align:center;">
+              <h3 style="font-family:'Cinzel',serif; font-size:0.82rem; color:var(--gold-soft); margin:0 0 6px;">Mode Découverte (Sans Compte)</h3>
+              <p style="font-size:0.68rem; color:var(--sand); margin-bottom:10px; line-height:1.4;">Vous jouez actuellement en mode invité. Créez un compte gratuit pour sauvegarder votre progression spirituelle et vos vertus sur tous vos appareils.</p>
+              <div class="auth-actions">
+                <button class="btn-auth-primary" onclick="showAuthView('register')">Créer un Compte Gratuit</button>
+                <button class="btn-auth-secondary" onclick="showAuthView('login')">Se Connecter à mon Compte</button>
               </div>
-              <div id="profMarketingChannels" class="form-check-sub hidden">
-                <label><input type="checkbox" id="profChannelEmail"> E-mail</label>
-                <label><input type="checkbox" id="profChannelSMS"> SMS</label>
-                <label><input type="checkbox" id="profChannelPush"> Push App</label>
-              </div>
-              <button class="btn-auth-primary" onclick="handleSaveConsentChanges()" style="padding:6px; font-size:0.68rem; margin-top:4px;">Enregistrer mes choix</button>
             </div>
 
-            <div class="profile-section-title">Mes Statistiques Client</div>
-            <div class="profile-data-row"><span class="profile-data-label">Livre atteint</span><span class="profile-data-value" id="profMaxBook">Livre I</span></div>
-            <div class="profile-data-row"><span class="profile-data-label">Dernière session</span><span class="profile-data-value" id="profLastSession"></span></div>
-            <div class="profile-data-row"><span class="profile-data-label">Fréquence (sessions)</span><span class="profile-data-value" id="profFrequency">1</span></div>
-            <div class="profile-data-row"><span class="profile-data-label">Valeur Dominante</span><span class="profile-data-value" id="profDominantVal">Foi</span></div>
+            <!-- Logged-in Profile Details -->
+            <div id="loggedInProfileSection">
+              <div class="profile-section-title">Informations Personnelles</div>
+              <div class="profile-data-row"><span class="profile-data-label">Nom</span><span class="profile-data-value" id="profName"></span></div>
+              <div class="profile-data-row"><span class="profile-data-label">E-mail</span><span class="profile-data-value" id="profEmail"></span></div>
+              <div class="profile-data-row"><span class="profile-data-label">Téléphone</span><span class="profile-data-value" id="profPhone">-</span></div>
+              <div class="profile-data-row"><span class="profile-data-label">Localisation</span><span class="profile-data-value" id="profLocation"></span></div>
+              <div class="profile-data-row"><span class="profile-data-label">Type de compte</span><span class="profile-data-value" id="profAgeType">Adulte</span></div>
 
-            <div class="profile-section-title">Confidentialité & Droits (ARTCI / RGPD)</div>
-            <p style="font-size:0.56rem; color:var(--sand); line-height:1.35; margin-bottom:10px;">
-              Conformément à la loi n°2013-450, vous disposez d'un droit d'accès, d'exportation et de suppression complète de vos données.
-            </p>
-            <div class="auth-actions">
-              <button class="btn-auth-secondary" onclick="handleExportData()">Exporter mes données (JSON)</button>
-              <button class="btn-auth-secondary btn-danger" onclick="handleDeleteAccount()">Supprimer mon compte & mes données</button>
+              <div class="profile-section-title">Consentements Marketing</div>
+              <div id="minorMarketingWarning" class="hidden" style="font-size:0.62rem; color:var(--sand); margin-bottom:8px; font-style:italic;">
+                (Désactivé par défaut car le profil est qualifié comme mineur).
+              </div>
+              
+              <div id="profileConsentControls">
+                <div class="form-check">
+                  <input type="checkbox" id="profMarketingConsent" onchange="toggleProfileChannels(this.checked)">
+                  <label for="profMarketingConsent">
+                    J'accepte de recevoir des communications promotionnelles de l'éditeur.
+                  </label>
+                </div>
+                <div id="profMarketingChannels" class="form-check-sub hidden">
+                  <label><input type="checkbox" id="profChannelEmail"> E-mail</label>
+                  <label><input type="checkbox" id="profChannelSMS"> SMS</label>
+                  <label><input type="checkbox" id="profChannelPush"> Push App</label>
+                </div>
+                <button class="btn-auth-primary" onclick="handleSaveConsentChanges()" style="padding:6px; font-size:0.68rem; margin-top:4px;">Enregistrer mes choix</button>
+              </div>
+
+              <div class="profile-section-title">Mes Statistiques Client</div>
+              <div class="profile-data-row"><span class="profile-data-label">Livre atteint</span><span class="profile-data-value" id="profMaxBook">Livre I</span></div>
+              <div class="profile-data-row"><span class="profile-data-label">Dernière session</span><span class="profile-data-value" id="profLastSession"></span></div>
+              <div class="profile-data-row"><span class="profile-data-label">Fréquence (sessions)</span><span class="profile-data-value" id="profFrequency">1</span></div>
+              <div class="profile-data-row"><span class="profile-data-label">Valeur Dominante</span><span class="profile-data-value" id="profDominantVal">Foi</span></div>
+
+              <div class="profile-section-title">Confidentialité & Droits (ARTCI / RGPD)</div>
+              <p style="font-size:0.56rem; color:var(--sand); line-height:1.35; margin-bottom:10px;">
+                Conformément à la loi n°2013-450, vous disposez d'un droit d'accès, d'exportation et de suppression complète de vos données.
+              </p>
+              <div class="auth-actions">
+                <button class="btn-auth-secondary" onclick="handleExportData()">Exporter mes données (JSON)</button>
+                <button class="btn-auth-secondary btn-danger" onclick="handleDeleteAccount()">Supprimer mon compte & mes données</button>
+              </div>
             </div>
             
             <div class="auth-actions" style="margin-top:20px; border-top:1px solid rgba(255,255,255,0.1); padding-top:12px;">
               <button class="btn-auth-primary" onclick="closeAuthOverlay()">Retour au jeu</button>
-              <button class="btn-auth-secondary" onclick="handleLogout()">Se déconnecter</button>
+              <button class="btn-auth-secondary" id="profileLogoutBtn" onclick="handleLogout()">Se déconnecter</button>
             </div>
           </div>
         </div>
@@ -2682,44 +2695,56 @@
       document.getElementById('recoverStep1').classList.remove('hidden');
       document.getElementById('recoverStep2').classList.add('hidden');
     } else if (viewName === 'profile') {
-      if (!activeAccount) {
-        showAuthView('welcome');
-        return;
-      }
       document.getElementById('authProfileView').classList.remove('hidden');
       document.getElementById('profileSuccess').classList.add('hidden');
 
-      document.getElementById('profName').textContent = activeAccount.name;
-      document.getElementById('profEmail').textContent = activeAccount.email;
-      document.getElementById('profPhone').textContent = activeAccount.phone || "Non renseigné";
-      document.getElementById('profLocation').textContent = `${activeAccount.city}, ${activeAccount.country}`;
-      
-      const isMinor = activeAccount.ageGate.isMinor;
-      document.getElementById('profAgeType').textContent = isMinor ? "Mineur (<15 ans)" : "Adulte (15 ans +)";
+      const discoveryBanner = document.getElementById('discoveryModeBanner');
+      const profileSection = document.getElementById('loggedInProfileSection');
+      const logoutBtn = document.getElementById('profileLogoutBtn');
 
-      const consentSection = document.getElementById('profileConsentControls');
-      const minorWarning = document.getElementById('minorMarketingWarning');
-      if (isMinor) {
-        consentSection.classList.add('hidden');
-        minorWarning.classList.remove('hidden');
+      if (!activeAccount) {
+        // Discovery Mode / Guest Player
+        discoveryBanner.classList.remove('hidden');
+        profileSection.classList.add('hidden');
+        if (logoutBtn) logoutBtn.classList.add('hidden');
       } else {
-        consentSection.classList.remove('hidden');
-        minorWarning.classList.add('hidden');
-        
-        document.getElementById('profMarketingConsent').checked = activeAccount.marketingConsent.email || activeAccount.marketingConsent.sms || activeAccount.marketingConsent.push;
-        document.getElementById('profChannelEmail').checked = activeAccount.marketingConsent.email;
-        document.getElementById('profChannelSMS').checked = activeAccount.marketingConsent.sms;
-        document.getElementById('profChannelPush').checked = activeAccount.marketingConsent.push;
-        
-        toggleProfileChannels(document.getElementById('profMarketingConsent').checked);
-      }
+        // Registered & Logged-In User
+        discoveryBanner.classList.add('hidden');
+        profileSection.classList.remove('hidden');
+        if (logoutBtn) logoutBtn.classList.remove('hidden');
 
-      document.getElementById('profMaxBook').textContent = getMaxBookText(activeAccount.gameSave);
-      document.getElementById('profLastSession').textContent = new Date(activeAccount.lastSessionAt).toLocaleDateString('fr-FR', {
-        day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
-      });
-      document.getElementById('profFrequency').textContent = activeAccount.sessionCount || 1;
-      document.getElementById('profDominantVal').textContent = getCurrentDominantSpiritualValue(activeAccount.gameSave.stats);
+        document.getElementById('profName').textContent = activeAccount.name;
+        document.getElementById('profEmail').textContent = activeAccount.email;
+        document.getElementById('profPhone').textContent = activeAccount.phone || "Non renseigné";
+        document.getElementById('profLocation').textContent = `${activeAccount.city}, ${activeAccount.country}`;
+        
+        const isMinor = activeAccount.ageGate.isMinor;
+        document.getElementById('profAgeType').textContent = isMinor ? "Mineur (<15 ans)" : "Adulte (15 ans +)";
+
+        const consentSection = document.getElementById('profileConsentControls');
+        const minorWarning = document.getElementById('minorMarketingWarning');
+        if (isMinor) {
+          consentSection.classList.add('hidden');
+          minorWarning.classList.remove('hidden');
+        } else {
+          consentSection.classList.remove('hidden');
+          minorWarning.classList.add('hidden');
+          
+          document.getElementById('profMarketingConsent').checked = activeAccount.marketingConsent.email || activeAccount.marketingConsent.sms || activeAccount.marketingConsent.push;
+          document.getElementById('profChannelEmail').checked = activeAccount.marketingConsent.email;
+          document.getElementById('profChannelSMS').checked = activeAccount.marketingConsent.sms;
+          document.getElementById('profChannelPush').checked = activeAccount.marketingConsent.push;
+          
+          toggleProfileChannels(document.getElementById('profMarketingConsent').checked);
+        }
+
+        document.getElementById('profMaxBook').textContent = getMaxBookText(activeAccount.gameSave);
+        document.getElementById('profLastSession').textContent = new Date(activeAccount.lastSessionAt).toLocaleDateString('fr-FR', {
+          day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
+        document.getElementById('profFrequency').textContent = activeAccount.sessionCount || 1;
+        document.getElementById('profDominantVal').textContent = getCurrentDominantSpiritualValue(activeAccount.gameSave.stats);
+      }
     } else if (viewName === 'admin') {
       document.getElementById('authAdminView').classList.remove('hidden');
       loadAdminMetrics();
@@ -2729,11 +2754,7 @@
   function toggleAccountView() {
     const overlay = document.getElementById('authOverlay');
     if (overlay.classList.contains('hidden')) {
-      if (activeAccount) {
-        showAuthView('profile');
-      } else {
-        showAuthView('welcome');
-      }
+      showAuthView('profile');
       overlay.classList.remove('hidden');
     } else {
       if (activeAccount || discoveryModeActive) {
@@ -3165,8 +3186,38 @@
   function updateProfileIcon(isLoggedIn) {
     const btn = document.getElementById('profileBtn');
     if (btn) {
-      btn.style.color = isLoggedIn ? 'var(--gold)' : 'var(--gold-soft)';
-      btn.setAttribute('title', isLoggedIn ? 'Gérer mon Compte (' + activeAccount.name + ')' : 'Créer un compte / Connexion');
+      if (isLoggedIn && activeAccount) {
+        const firstName = activeAccount.name.split(' ')[0];
+        btn.style.display = 'inline-flex';
+        btn.style.alignItems = 'center';
+        btn.style.gap = '4px';
+        btn.style.background = 'rgba(212, 175, 55, 0.15)';
+        btn.style.border = '1px solid var(--gold)';
+        btn.style.padding = '3px 8px';
+        btn.style.borderRadius = '12px';
+        btn.innerHTML = `
+          <svg viewBox="0 0 24 24" style="width:13px; height:13px; fill:var(--gold-soft);">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+          </svg>
+          <span style="font-size:0.68rem; font-weight:700; color:var(--gold-soft);">${firstName}</span>
+        `;
+        btn.setAttribute('title', 'Gérer mon Compte (' + activeAccount.name + ')');
+      } else {
+        btn.style.display = 'inline-flex';
+        btn.style.alignItems = 'center';
+        btn.style.gap = '4px';
+        btn.style.background = 'transparent';
+        btn.style.border = '1px solid rgba(212, 175, 55, 0.3)';
+        btn.style.padding = '3px 8px';
+        btn.style.borderRadius = '12px';
+        btn.innerHTML = `
+          <svg viewBox="0 0 24 24" style="width:13px; height:13px; fill:var(--gold-soft);">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+          </svg>
+          <span style="font-size:0.65rem; color:var(--sand-lt);">Compte</span>
+        `;
+        btn.setAttribute('title', 'Créer un compte / Connexion');
+      }
     }
   }
 
