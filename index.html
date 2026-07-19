@@ -67,7 +67,7 @@
     border-radius: 0;
     overflow: hidden;
     position: relative;
-    background: var(--sand-lt);
+    background: var(--navy);
     display: flex;
     flex-direction: column;
     box-shadow: none;
@@ -219,12 +219,14 @@
 
   /* ---------- Bottom Tab Bar ---------- */
   .tabbar {
-    height: 76px;
-    background: var(--navy);
+    height: 68px;
+    padding-bottom: env(safe-area-inset-bottom, 6px);
+    background: linear-gradient(180deg, var(--navy-2) 0%, var(--navy) 100%);
     border-top: 2px solid var(--gold);
     display: flex;
     flex-shrink: 0;
     z-index: 80;
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.3);
   }
   .tab {
     flex: 1;
@@ -1354,8 +1356,6 @@
               <button class="btn-auth-secondary" onclick="handleLogout()">Se déconnecter</button>
             </div>
           </div>
-        </div>
-
         </div>
 
       </div>
