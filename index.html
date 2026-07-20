@@ -4174,40 +4174,76 @@
     renderBibleChapter();
   }
 
-  function renderBibleChapter() {
+  // ---------- FULL BIBLE DATASET ENGINE ----------
+  let fullBibleData = null;
+
+  async function loadFullBibleData() {
+    if (fullBibleData) return fullBibleData;
+    try {
+      const res = await fetch('./bible_data.json');
+      if (res.ok) {
+        fullBibleData = await res.json();
+        return fullBibleData;
+      }
+    } catch (e) {
+      console.warn("Local bible_data.json fetch note:", e);
+    }
+    return null;
+  }
+
+  async function renderBibleChapter() {
     let allBooks = [...bibleBooksDatabase.AT, ...bibleBooksDatabase.NT];
     let book = allBooks.find(b => b.id === activeBibleBookId) || allBooks[0];
 
-    document.getElementById('bibleReaderTitle').textContent = `${book.name} — Chapitre ${activeBibleChapterNum}`;
-    document.getElementById('bibleReaderTheme').textContent = `Thème : ${book.theme}`;
-
     const versesContainer = document.getElementById('bibleVersesContainer');
+    versesContainer.innerHTML = `<div style="text-align:center; padding:20px; color:var(--clay); font-style:italic;">Chargement des versets de ${book.name} chapitre ${activeBibleChapterNum}...</div>`;
+
+    const bData = await loadFullBibleData();
+    
+    // Calculate book numerical index (1 to 66)
+    const bookIndex = allBooks.findIndex(b => b.id === activeBibleBookId) + 1;
+    const chapVerses = (bData && bData[bookIndex] && bData[bookIndex][activeBibleChapterNum]) 
+      ? bData[bookIndex][activeBibleChapterNum] 
+      : null;
+
+    document.getElementById('bibleReaderTitle').textContent = `${book.name} — Chapitre ${activeBibleChapterNum}`;
+    document.getElementById('bibleReaderTheme').textContent = chapVerses 
+      ? `Thème : ${book.theme} (${chapVerses.length} versets)`
+      : `Thème : ${book.theme}`;
+
     versesContainer.innerHTML = '';
 
-    // Find related verses in codexDatabase for this book
-    const relatedVerses = codexDatabase.filter(v => v.title.toLowerCase().includes(book.name.toLowerCase()));
-
-    if (relatedVerses.length > 0) {
-      relatedVerses.forEach((v, idx) => {
+    if (chapVerses && chapVerses.length > 0) {
+      chapVerses.forEach((verseText, idx) => {
         const item = document.createElement('div');
         item.className = 'bible-verse-item';
-        item.innerHTML = `<span class="bible-verse-num">${idx + 1}</span> ${v.text}`;
+        item.innerHTML = `<span class="bible-verse-num">${idx + 1}</span> ${verseText}`;
         versesContainer.appendChild(item);
       });
     } else {
-      // General thematic verses fallback
-      versesContainer.innerHTML = `
-        <div class="bible-verse-item"><span class="bible-verse-num">1</span> Au commencement, la Parole divine illumine le livre de ${book.name}.</div>
-        <div class="bible-verse-item"><span class="bible-verse-num">2</span> « Ta parole est une lampe à mes pieds, et une lumière sur mon sentier. » (Psaume 119:105)</div>
-        <div class="bible-verse-item"><span class="bible-verse-num">3</span> « Toute l'Écriture est inspirée de Dieu, et utile pour enseigner, pour convaincre, pour corriger, pour instruire dans la justice. » (2 Timothée 3:16)</div>
-        <div class="bible-verse-item"><span class="bible-verse-num">4</span> Consultez les autres chapitres et les versets de sagesse associés dans le Codex !</div>
-      `;
+      // Fallback codex related verses
+      const relatedVerses = codexDatabase.filter(v => v.title.toLowerCase().includes(book.name.toLowerCase()));
+      if (relatedVerses.length > 0) {
+        relatedVerses.forEach((v, idx) => {
+          const item = document.createElement('div');
+          item.className = 'bible-verse-item';
+          item.innerHTML = `<span class="bible-verse-num">${idx + 1}</span> ${v.text}`;
+          versesContainer.appendChild(item);
+        });
+      } else {
+        versesContainer.innerHTML = `
+          <div class="bible-verse-item"><span class="bible-verse-num">1</span> Au commencement, la Parole divine illumine le livre de ${book.name}.</div>
+          <div class="bible-verse-item"><span class="bible-verse-num">2</span> « Ta parole est une lampe à mes pieds, et une lumière sur mon sentier. » (Psaume 119:105)</div>
+          <div class="bible-verse-item"><span class="bible-verse-num">3</span> « Toute l'Écriture est inspirée de Dieu, et utile pour enseigner, pour convaincre, pour corriger, pour instruire dans la justice. » (2 Timothée 3:16)</div>
+        `;
+      }
     }
   }
 
   // ================= INITIALIZATION =================
   function initGame() {
     loadState();
+    loadFullBibleData(); // Preload 66-book Bible dataset
     
     // Inject IDs for books
     Object.keys(gameDatabase).forEach(bKey => {
