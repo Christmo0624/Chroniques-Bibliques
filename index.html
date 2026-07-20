@@ -2755,11 +2755,7 @@
   function toggleAccountView() {
     const overlay = document.getElementById('authOverlay');
     if (overlay.classList.contains('hidden')) {
-      if (activeAccount) {
-        showAuthView('profile');
-      } else {
-        showAuthView('register');
-      }
+      showAuthView('profile');
       overlay.classList.remove('hidden');
     } else {
       if (activeAccount || discoveryModeActive) {
