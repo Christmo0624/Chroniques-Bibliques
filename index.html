@@ -2677,7 +2677,7 @@
     document.getElementById('authRegisterView').classList.add('hidden');
     document.getElementById('authRecoverView').classList.add('hidden');
     document.getElementById('authProfileView').classList.add('hidden');
-    document.getElementById('authAdminView').classList.add('hidden');
+    document.getElementById('authAdminView')?.classList.add('hidden');
 
     if (viewName === 'welcome') {
       document.getElementById('authWelcomeView').classList.remove('hidden');
@@ -2767,8 +2767,8 @@
         document.getElementById('profDominantVal').textContent = getCurrentDominantSpiritualValue(activeAccount.gameSave.stats);
       }
     } else if (viewName === 'admin') {
-      document.getElementById('authAdminView').classList.remove('hidden');
-      loadAdminMetrics();
+      document.getElementById('authAdminView')?.classList.remove('hidden');
+      if (typeof loadAdminMetrics === 'function') loadAdminMetrics();
     }
   }
 
